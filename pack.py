@@ -1,5 +1,5 @@
 class Pack:	
-	"""A pack object."""
+	"""A pack object!?"""
 	cards = []
 	
 	def __init__(self, cardnums):
