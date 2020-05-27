@@ -50,7 +50,7 @@ function manaSpan(cost, loc) {
 }
 
 function cardString(cardname) {
-	var arrows = "<span class='arrows'><a href='javascript:addToDeck(\"" +cardname + "\")' class='addlink'>▼</a><a href='javascript:pullFromDeck(\"" + cardname + "\")' class='droplink'>▲</a></span>"
+	var arrows = '<span class="arrows"><a href="javascript:addToDeck(\'' +cardname.replace("'", "\\'") + '\')" class="addlink">▼</a><a href="javascript:pullFromDeck(\'' + cardname.replace("'", "\\'") + '\')" class="droplink">▲</a></span>'
 	var manacost = manaSpan(getCost(cardname), 'vert');
 	if (cardname.indexOf("//") == -1) {
 		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}

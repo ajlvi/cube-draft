@@ -1,12 +1,16 @@
 from pack import *
+from time import time
 
-class Player:	
+picktimes = {15: 75, 14: 70, 13: 65, 12: 60, 11: 55, 10: 50, 9: 45, 8: 40, 7: 35, 6: 30, 5: 25, 4: 20, 3: 15, 2: 10, 1: 5}
+
+class Player:
 	def __init__(self, handle):
 		self.handle = handle
 		self.queue = []
 		self.chosen = []
 		self.activePack = None
 		self.unopened = []
+		self.opentime = 0
 
 	def __repr__(self):
 		out = f"Player {self.handle} participating in draft."
@@ -31,16 +35,28 @@ class Player:
 	def queueLen(self): return len(self.queue)
 	
 	def chosenLen(self): return len(self.chosen)
+	
+	def timeLeft(self):
+		"""Returns -1 if we're waiting. Otherwise determines how much time
+		should be left based on cards in active pack."""
+		if not self.hasPack(): return -1
+		return picktimes[len(self.activePack)] - (time() - self.opentime)
+		
+	def isDelinquent(self):
+		"""Says `yes` presently if you're more than three seconds beyond the limit."""
+		return self.timeLeft() < -3
 		
 	def pullFromQueue(self):
 		assert self.activePack == None
 		self.activePack = self.queue[0]
 		self.queue = self.queue[1:]
+		self.opentime = time()
 
 	def startNewPack(self):
 		assert self.activePack == None
 		self.activePack = self.unopened[0]
 		self.unopened = self.unopened[1:]
+		self.opentime = time()
 
 	def receivePack(self, pack):
 		if self.activePack == None: self.activePack = pack
