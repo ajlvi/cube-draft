@@ -10,7 +10,7 @@ class Player:
 		self.chosen = []
 		self.activePack = None
 		self.unopened = []
-		self.opentime = 0
+		self.opentime = 0 #refreshes each time a pack is opened
 
 	def __repr__(self):
 		out = f"Player {self.handle} participating in draft."
