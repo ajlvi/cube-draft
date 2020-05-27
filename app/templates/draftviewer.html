@@ -1,0 +1,144 @@
+<html><head><title>Cube draft</title>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cubedraft.css') }}">
+
+<script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='card-choosing.js') }}"></script>
+<script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='interface-setup.js') }}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+var pack = 1;
+var pick = 1;
+
+//let's make some functions we'll be reusing a lot
+//this one pings the server to ask for the current state, without sending data
+function ping() {
+	$.get('/makepick', function(response) {
+		//updatePicks(response); //update the list of existing picks
+		if (response['my_status']==0) {
+			//setTimeout(ping(),2000);
+			setTimeout(function() {ping(); }, 2000);
+			}
+		else {
+			//this means we have to populate the table!
+			populateTable(response['current_pack'],response['current_df']);
+			setTimer(response['time_remaining']);
+			} 
+		});
+	};
+
+function setTimer(time) {
+	i = Math.floor(time);
+	setInterval(runTimer(i), 1000);
+	};
+function runTimer(i) {
+	if (i > 0) {
+		min = Math.floor(i/60);
+		sec = i - min*60;
+		if (sec < 10) {secstring = '0'+sec;}
+		$("#timer").text(min + ':' + secstring);
+		i--;
+		}
+	else if (i==0) {
+		makePick(cardname, pack, pick);
+		}
+	};
+
+function populateTable(cardlist,cardinfo) {
+	//this should take a response that contains a new pack and populate the table with it
+	//we need to make a cell for each card
+	cardinfo = JSON.parse(cardinfo);
+	for (j=0; j<cardlist.length; j++) {
+		name = cardinfo['card'][cardlist[j]];
+		imgsrc = cardinfo['scryfall'][cardlist[j]];
+		$("#packdisp").append('<td><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '"></td>');
+	}
+};
+			
+
+$(document).ready(function(){
+	ping();
+	$(".unreserved").click(function(){
+		$(".card-image").not(this).removeClass("reserved");
+		$(".card-image").not(this).addClass("unreserved");
+		$(".card-image").not(this).off("dblclick");
+		$(this).removeClass("unreserved");
+		$(this).addClass("reserved");
+		$(this).off("dblclick");
+		$(this).dblclick(function(){
+			var cardname = $(this).attr("name");
+			makePick(cardname, pack, pick);
+			if (pick < 15) {pick++;}
+			else {pick = 1; pack++;}
+			$(this).addClass("unreserved");
+			$(this).removeClass("reserved");
+		}); 
+	}) ;
+});
+	
+$(document).ready(function(){
+	$(".unreserved:first").addClass("reserved");
+	$(".unreserved:first").removeClass("unreserved");
+});
+
+</script>
+</head>
+
+<body>
+<div class="content">
+<div class="draft-interface">
+<div id="pack-table">
+<table><tr id="packdisp">
+<!-- eight picks in first row -->
+</tr><tr>
+
+<td class="buttonbox"> <button id="confirm">confirm pick</button></td></tr></table>
+</div>
+
+<div id="under-pack-info">
+
+<!-- just sticking the timer here, you can move it/style it -->
+<div id="timer"></div>
+
+</div>
+</div>
+
+	<div id="vertbar" class="vertical-holder">
+<!-- This is populated by the vertBar function in interface-setup.js. -->
+	</div>
+
+</div>
+<div class="bottom-holder">
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-1">0-1</span><br>
+	<span class="critter cmcbox" id="creatures-1">test<br>test</span><br>
+	<span class="spell cmcbox" id="noncreatures-1">test</span>
+</div>
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-2">2</span><br>
+	<span class="critter cmcbox" id="creatures-2"></span><br>
+	<span class="spell cmcbox" id="noncreatures-2"></span>
+</div>
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-3">3</span><br>
+	<span class="critter cmcbox" id="creatures-3"></span><br>
+	<span class="spell cmcbox" id="noncreatures-3"></span>
+</div>
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-4">4</span><br>
+	<span class="critter cmcbox" id="creatures-4"></span><br>
+	<span class="spell cmcbox" id="noncreatures-4"></span>
+</div>
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-5">5</span><br>
+	<span class="critter cmcbox" id="creatures-5"></span><br>
+	<span class="spell cmcbox" id="noncreatures-5"></span>
+</div>
+<div class="cmc-stack">
+	<span class="cost cmcbox" id="cmc-6">6+</span><br>
+	<span class="critter cmcbox" id="creatures-6"></span><br>
+	<span class="spell cmcbox" id="noncreatures-6"></span>
+</div>
+
+<script>vertBar(3, 15)</script>
+</body></html>
