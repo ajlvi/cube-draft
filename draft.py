@@ -1,6 +1,6 @@
 from pack import *
 from player import *
-from random import shuffle, sample
+from random import shuffle, randrange
 import pandas as pd
 
 class Draft:
@@ -10,15 +10,20 @@ class Draft:
 		assuming this will come to us as a pandas dataframe -- as well as how
 		many packs to make, how many cards to make in each pack, a scheme for
 		how to make the packs, and the number of players intended.
+		
+		This method returns the key to be stored in a dictionary of drafts.
 		"""
 		self.packs = makePacks(cube, packs*intended, cardsper)
+		self.cube = cube
 		self.intended = intended
+		self.total_packs = packs
 		self.cards_per_pack = cardsper
 		self.players = []
 		self.handles = []
 		self.currentPack = 0
 		self.fullyDrafted = 0
-	
+		self.key = makeKey()
+
 	def __repr__(self):
 		out = f"A cube draft involving {self.handles}."
 		for Person in self.players:
@@ -29,14 +34,14 @@ class Draft:
 		return out
 	
 	def addPlayer(self, handle):
-		"""Player is a string representing the handle of the human."""
+		"""handle is a string representing the handle of the human."""
 		if handle not in self.handles:
 			self.players.append(Player(handle))
 		else:
 			i = 2
 			while handle + str(i) in self.handles: i += 1
-			self.players.append(Player(handle + str(i))
-	
+			self.players.append(Player(handle + str(i)))
+
 	def startDraft(self):
 		"""
 		All the things that need to happen to get the draft underway.
@@ -92,10 +97,10 @@ class Draft:
 		"""
 		PlayerObj = self.players[self.handles.index(handle)]
 		theirPack = PlayerObj.getActive()
-		card = sample(theirPack.getCards(), 1)
+		card = theirPack.randomCard()
 		self.makePick(handle, card)
 	
-	def status(self, handle)
+	def status(self, handle):
 		"""
 		Decides what the status of given player is.
 		The returned value is an integer. The interpretation is as follows:
@@ -106,13 +111,53 @@ class Draft:
 		then reassess.
 		"""
 		PlayerObj = self.players[self.handles.index(handle)]
-		if playerObj.isDelinquent(): #autopicking
-			self.autoPick(handle)
-			return self.status(handle)
+		if PlayerObj.isDelinquent(): #autopicking
+			self.autoPick(PlayerObj.getname())
+			return self.status(PlayerObj.getname())
 		if PlayerObj.hasPack():
 			return PlayerObj.queueLen() + 1
 		else: return 0
+		
+	def statusCheck(self):
+		"""A "global" version of status, for assessing the whole draft."""
+		output = []
+		for handle in self.handles:
+			PlayerObj = self.players[self.handles.index(handle)]
+			if PlayerObj.isDelinquent():
+				self.status(handle); return self.statusCheck()
+			else:
+				output.append(self.status(handle))
+		return output
 
+	def handleIncoming(self, handle, num):
+		"""
+		This is the function which interfaces with the end user -- it receives the
+		data from the page and it outputs everything that we want to give back.
+		[num] is nonnegative if this function call includes making a pick.
+		For a pure status update, -1 gets passed in.
+		
+		This returns a dictionary which still needs to be JSONnified.
+		"""
+		if num >= 0: self.makePick(handle, num)
+		stat = self.statusCheck()
+		PlayerObj = self.players[self.handles.index(handle)]
+		chosen_cards = PlayerObj.getChosen()
+		chosen_df = self.cube.loc[PlayerObj.getChosen()].to_json()
+		if PlayerObj.getActive() != None:
+			current_pack = PlayerObj.getActive()
+			current_df = self.cube.loc[PlayerObj.getActive()].to_json()
+			time_remaining = PlayerObj.timeLeft()
+		else:
+			current_pack = None
+			current_df = None
+			time_remaining = 0
+		outdict = {"draft_key": self.key, "drafters": self.handles,\
+			"status": stat, "my_name": handle, "my_status": self.status(handle), \
+			"packno": self.currentPack, "total_packs": self.total_packs, \
+			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
+			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
+			"current_pack": current_pack, "current_df": current_df}
+		return outdict
 
 
 def makePacks(cube, packs, cardsper, scheme="random"):
@@ -144,7 +189,7 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 			slice = cube[cube["color"] == color]
 			pool.append(list(slice.sample(stock[color]).index))
 		return divvy(pool, packs)
-		
+
 def divvy(cats, packs):
 	"""
 	Takes lists of segments and sprays them.
@@ -157,3 +202,9 @@ def divvy(cats, packs):
 			packlists[pak].append(card)
 			pak = (pak + 1)%len(packlists)
 	return [sorted(pack) for pack in packlists]
+	
+def makeKey():
+	"""
+	Returns a random four-character string.
+	"""
+	return hex(randrange(16**3, 16**4)).split('x')[1]

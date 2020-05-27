@@ -15,6 +15,7 @@ class Player:
 	def __repr__(self):
 		out = f"Player {self.handle} participating in draft."
 		out += f"\nI currently possess cards: {self.chosen}."
+		if self.activePack != None: out += f"\nI am drafting from {self.activePack}."
 		return out
 
 	def getname(self): return self.handle
@@ -44,7 +45,8 @@ class Player:
 		
 	def isDelinquent(self):
 		"""Says `yes` presently if you're more than three seconds beyond the limit."""
-		return self.timeLeft() < -3
+		if self.hasPack(): return self.timeLeft() < -3
+		return False
 		
 	def pullFromQueue(self):
 		assert self.activePack == None
@@ -59,7 +61,9 @@ class Player:
 		self.opentime = time()
 
 	def receivePack(self, pack):
-		if self.activePack == None: self.activePack = pack
+		if self.activePack == None: 
+			self.activePack = pack
+			self.opentime = time()
 		else: self.queue.append(pack)
 		
 	def draftCard(self, num, cogwork=False):

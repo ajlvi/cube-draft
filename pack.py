@@ -1,3 +1,5 @@
+from random import sample
+
 class Pack:	
 	"""A pack object!?"""	
 	def __init__(self, cardnums):
@@ -13,6 +15,8 @@ class Pack:
 	def getCards(self): return self.cards
 	
 	def hasCard(self, num): return num in self.cards
+	
+	def randomCard(self): return sample(self.cards, 1)[0]
 	
 	def chooseCard(self, num):
 		"""
