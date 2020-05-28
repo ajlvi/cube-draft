@@ -1,0 +1,1 @@
+web: guniform cubedraftapp:app
