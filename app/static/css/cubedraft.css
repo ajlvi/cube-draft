@@ -49,12 +49,19 @@ select, option, #draft-button { font-family: Ubuntu; font-size: 13pt }
 .recovery-string, side-string {font-family: Ubuntu; font-size:10pt; width:400px}
 
 /* for queue page */
-.queueblock { height: 180px ; width : 720px ;
+.queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
 	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
 	color:black ; font-size: 14pt }
-.queueblock form { height: 100% ; display: block; }
+.queueblock form { height: 100% ; display: table-cell; vertical-align:middle }
 .draft-id-field input, .player-name-field input { font-family: Ubuntu; font-size: 16pt;
-	border-radius: 5px ; border-width: 1px ; border-style: solid ; border-color: #999999 }
+	border-radius: 6px ; border-width: 1px ; border-style: solid ;
+	border-color: #999999; margin: 0px 0px 0px 5px }
 .draft-id-field input {width : 100px }
 .player-name-field input { width : 260px }
-.draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto }
+.draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto ;
+	padding: 0px 40px 0px 0px }
+#join-draft-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
+	border-radius: 6px 6px 6px 6px; border-width: 1px;
+	border-color: black; border-style: solid; background: #F0F0F0 }
+#join-draft-button:focus, #join-draft-button:hover { background-color: #DDDDDD; }
+#join-draft-button:active { background-color:#DDDDFF; }
