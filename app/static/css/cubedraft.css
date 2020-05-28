@@ -47,3 +47,8 @@ body {margin-left: 0; margin-top: 0 }
 select, option, #draft-button { font-family: Ubuntu; font-size: 13pt }
 .recovery-bar { float:left; padding: 50px 0px 0px 20px; display:inline-block}
 .recovery-string, side-string {font-family: Ubuntu; font-size:10pt; width:400px}
+
+/* for queue page */
+.queueblock { height: 180px ; width : 720px ;
+	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
+	color:black ; }
