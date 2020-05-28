@@ -9,9 +9,10 @@ body {margin-left: 0; margin-top: 0 }
 .vertical-holder {width: 272px; float: right }
 
 .card-image { width:130px; height:181px; padding: 1px 1px 1px 1px}
-.reserved { box-shadow: 2px 6px 6px #cccc66 }
+.reserved { box-shadow: 2px 8px 8px #dddd33; }
 .pick-table-row { height: 185px ; }
 .pick-table-cell { width: 132px ; }
+#packdisp { border-collapse: separate ; border-spacing : 2px 8px ; }
 #confirm { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid;
