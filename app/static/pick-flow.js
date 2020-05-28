@@ -33,7 +33,8 @@ function updatePicks() {
 function setTimer(time) {
 	i = Math.floor(time);
 	setInterval(function() {runTimer(i);}, 1000);
-	};
+};
+	
 function runTimer(num) {
 	if (num > 0) {
 		min = Math.floor(num/60);
@@ -42,23 +43,40 @@ function runTimer(num) {
 		else {secstring = sec.toString();}
 		$("#timer").text(min.toString() + ':' + secstring);
 		i--;
-		}
+	}
 	else if (num==0) {
 		//makePick(cardname, pack, pick);
 		$("#timer").text('time is up!');
-		}
-	};
+	}
+};
 
-function populateTable(cardlist,cardinfo) {
+function populateTable(cardlist, cardinfo) {
 	//this should take a response that contains a new pack and populate the table with it
 	//we need to make a cell for each card
 	cardinfo = JSON.parse(cardinfo);
+	outstring = ''
 	for (j=0; j<cardlist.length; j++) {
-		cardid = cardlist[j].toString();
-		name = cardinfo['card'][cardlist[j]];
-		imgsrc = cardinfo['scryfall'][cardlist[j]];
-		$("#packdisp").append('<td><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '" id="' + cardid + '"></td>');
+		if (j==0) {outstring = outstring + "<tr class='pick-table-row'>" };
+		var cardid = cardlist[j].toString();
+		var name = cardinfo['card'][cardlist[j]];
+		var imgsrc = cardinfo['scryfall'][cardlist[j]];
+		outstring = outstring + '<td class="pick-table-cell"><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '" id="' + cardid + '"></td>';
+		if (j==7) {$("#packdisp").append("</tr>\n<tr class='pick-table-row'>");}
 	}
+	/* we're done writing the cards; now include empty cells to fill out table */
+	var k = cardlist.length;
+	if (k < 7) {
+		while(k < 8) {
+			outstring = outstring + '<td class="pick-table-cell empty"></td>' ;
+			k++;	
+		}
+		outstring = outstring + '</tr><tr class="pick-table-row"><td class="pick-table-cell empty" colspan=7></td>' ;
+	}
+	else if (k < 15) {
+		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + 15-k + '></td>' ;
+	}
+	outstring = outstring + '<td class="pick-table-cell buttonbox"><button id="confirm">confirm pick</button></tr>';
+	$("#packdisp").append(outstring);
 	initializePack();
 };
 
