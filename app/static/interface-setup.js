@@ -9,4 +9,5 @@ function vertBar(packs, picks) {
 	outstring += "\n</div>" ;
 	vertContainer = document.getElementById('vertbar');
 	vertContainer.innerHTML = outstring;
+	vertbardone = true;
 }

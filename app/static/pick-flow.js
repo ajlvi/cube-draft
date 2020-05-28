@@ -1,10 +1,14 @@
 var dataDump = null;
 var reservedid = -1;
 var timer = null;
+var vertbardone = false;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
 		dataDump = response;
+		if (!vertbardone) {
+			vertBar(dataDump['total_packs'], dataDump['cards_per_pack']);
+		}
 		updatePicks(); //update the list of existing picks
 		if (response['my_status']==0) {
 			$('#packdisp').html('waiting....') //change this later
@@ -84,6 +88,9 @@ function populateTable(cardlist, cardinfo) {
 };
 
 function initializePack() {
+	$("#confirm").click(function(){
+		makePick(thisplayer, thisdraft, reservedid);
+	});
 	$(".unreserved").click(function(){
 		$(".card-image").not(this).removeClass("reserved");
 		$(".card-image").not(this).addClass("unreserved");
