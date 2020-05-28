@@ -1,7 +1,7 @@
 var datadump = null;
 
 function ping() {
-	$.get('/makepick', function(response) {
+	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
 		dataDump = response;
 		updatePicks(response); //update the list of existing picks
 		if (response['my_status']==0) {

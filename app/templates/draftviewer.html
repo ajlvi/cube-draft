@@ -2,7 +2,14 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/cubedraft.css') }}">
+<script>
 
+//there are variables passed from flask; let's grab them
+thisplayer = '{{ player }}';
+thisdraft = '{{ draftid }}';
+
+
+</script>
 <script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='card-choosing.js') }}"></script>
 <script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='interface-setup.js') }}"></script>
 
@@ -13,6 +20,7 @@
 
 //let's make some functions we'll be reusing a lot
 //this one pings the server to ask for the current state, without sending data
+
 
 
 	

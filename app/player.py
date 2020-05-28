@@ -1,4 +1,4 @@
-from pack import *
+from app.pack import *
 from time import time
 
 picktimes = {15: 75, 14: 70, 13: 65, 12: 60, 11: 55, 10: 50, 9: 45, 8: 40, 7: 35, 6: 30, 5: 25, 4: 20, 3: 15, 2: 10, 1: 5}

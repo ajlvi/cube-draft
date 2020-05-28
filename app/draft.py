@@ -1,5 +1,5 @@
-from pack import *
-from player import *
+from app.pack import *
+from app.player import *
 from random import shuffle, randrange
 import pandas as pd
 
@@ -39,7 +39,7 @@ class Draft:
 			if handle not in self.handles:
 				self.players.append(Player(handle))
 				self.handles.append(handle)
-				if self.handles == self.intended: self.startDraft() #fine for now
+				if len(self.handles) == self.intended: self.startDraft() #fine for now
 		
 	def hasPlayer(self, handle): return handle in self.handles
 	
@@ -150,7 +150,7 @@ class Draft:
 		chosen_df = self.cube.loc[PlayerObj.getChosen()].to_json()
 		if PlayerObj.getActive() != None:
 			current_pack = PlayerObj.getActive()
-			current_df = self.cube.loc[PlayerObj.getActive()].to_json()
+			current_df = self.cube.loc[current_pack.getCards()].to_json()
 			time_remaining = PlayerObj.timeLeft()
 		else:
 			current_pack = None
@@ -161,7 +161,7 @@ class Draft:
 			"packno": self.currentPack, "total_packs": self.total_packs, \
 			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
-			"current_pack": current_pack, "current_df": current_df}
+			"current_pack": current_pack.getCards(), "current_df": current_df}
 		return outdict
 
 
