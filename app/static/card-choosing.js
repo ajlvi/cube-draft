@@ -16,7 +16,7 @@ function isCreature(cardnum) {
 
 /* note this either returns a single string or a list for split cards.*/
 function manaSpan(cost, loc) {
-	if (cost == "nan") { mana = "<span class='mana-" + loc + "'>&nbsp;</span>" ; }
+	if (cost == null) { return "<span class='mana-" + loc + "'>&nbsp;</span>" ; }
 	else if (cost.indexOf("//") == -1) {
 		splitcost = cost.slice(1, cost.length-1).split("}{")
 		var mana = "<span class='mana-" + loc + "'>"
@@ -39,7 +39,7 @@ function cardString(cardnum) {
 	var cardname = getName(cardnum) ;
 	var cost = getCost(cardnum) ;
 	var arrows = '<span class="arrows"><a href="javascript:addToDeck(' 	+ cardnum + ')" class="addlink">▼</a><a href="javascript:pullFromDeck(' + cardnum + ')" class="droplink">▲</a></span>'
-	var manacost = manaSpan(getCost(cardnum), 'vert');
+	var manacost = manaSpan(cost, 'vert');
 	if (cardname.indexOf("//") == -1) {
 		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 		else {var bufferspace = '';}
@@ -67,7 +67,7 @@ function cardString(cardnum) {
 function cmc(cardnum) {
 	var cost = getCost(cardnum);
 	var cardname = getName(cardnum); 
-	if (cost == "nan") {return 1;}
+	if (cost == null) {return 1;}
 	if (cardname.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
 	var splitcost = cost.slice(1, cost.length-1).split("}{")
 	var total = 0 ;

@@ -1,4 +1,4 @@
-var datadump = null;
+var dataDump = null;
 var reservedid = -1;
 var timer = null;
 
