@@ -57,7 +57,7 @@ def displaydraft():
 				#RETURN SOMETHING TO PLAYER HERE?
 		else:
 			#"fail case" coding here -- draft didn't exist
-			url = '/queue?draftexists=no&player='+playername+'id='+draftid
+			url = '/queue?draftexists=no&player='+playername+'&id='+draftid
 			return redirect(url)
 		return render_template('draftviewer.html', draftid=draftid, player=playername) #other inputs here? I dunno, basically this should just display the main draft page.
 	else: 
