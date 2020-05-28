@@ -35,15 +35,15 @@ class Draft:
 	
 	def addPlayer(self, handle):
 		"""handle is a string representing the handle of the human."""
-		if handle not in self.handles:
-			self.players.append(Player(handle))
-			self.handles.append(handle)
-		else:
-			i = 2
-			while handle + str(i) in self.handles: i += 1
-			self.players.append(Player(handle + str(i)))
+		if self.currentPack == 0:
+			if handle not in self.handles:
+				self.players.append(Player(handle))
+				self.handles.append(handle)
+				if self.handles == self.intended: self.startDraft() #fine for now
 		
 	def hasPlayer(self, handle): return handle in self.handles
+	
+	def whatPackIsIt(self, handle): return self.currentPack
 
 	def startDraft(self):
 		"""
