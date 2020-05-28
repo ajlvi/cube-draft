@@ -69,6 +69,10 @@ function cmc(cardnum) {
 	var cardname = getName(cardnum); 
 	if (cost == null) {return 1;}
 	if (cardname.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
+	if (cardname.indexOf("}{") == -1) {
+		if (parseInt(cost[1]) > 0) { return parseInt(cost[1]); }
+		else { return 1 ; }
+	}
 	var splitcost = cost.slice(1, cost.length-1).split("}{")
 	var total = 0 ;
 	for (j=0; j<splitcost.length; j++) {

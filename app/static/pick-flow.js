@@ -26,8 +26,8 @@ function updatePicks() {
 	var picks = dataDump['cards_per_pack']
 	var thispack = 1;
 	var thispick = 1;
-	for (j=0; j<cardlist.length; j++) {
-		makeJSPick(cardlist[j], thispack, thispick);
+	for (cardidx=0; cardidx<cardlist.length; cardidx++) {
+		makeJSPick(cardlist[cardidx], thispack, thispick);
 		if (thispick < picks) {thispick++;}
 		else {thispick = 1; thispack++;}
 	}
@@ -76,7 +76,7 @@ function populateTable(cardlist, cardinfo) {
 		outstring = outstring + '</tr><tr class="pick-table-row"><td class="pick-table-cell empty" colspan=7></td>' ;
 	}
 	else if (k < 15) {
-		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + toString(15-k) + '></td>' ;
+		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + (15-k).toString() + '></td>' ;
 	}
 	outstring = outstring + '<td class="pick-table-cell buttonbox"><button id="confirm">confirm pick</button></tr>';
 	$("#packdisp").html(outstring);
