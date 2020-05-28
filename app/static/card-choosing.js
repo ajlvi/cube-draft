@@ -1,31 +1,17 @@
 var deck = [] ;
-var picked = {} ;
 
 var costdict = {"W/U": "azorius", "U/B": "dimir", "B/R": "rakdos", "R/G": "gruul", "G/W": "selesnya", "W/B": "boros", "B/G": "golgari", "G/U": "simic", "U/R": "izzet", "R/W": "boros"};
 
-function getCost(cardname) {
-	if (cardname == "Favored Hoplite") {return "{W}";}
-	else if (cardname == "Lagonna-Band Trailblazer") {return "{W}";}
-	else if (cardname == "Thraben Inspector") {return "{W}";}
-	else if (cardname == "Aviary Mechanic") {return "{1}{W}";}
-	else if (cardname == "Hero of Iroas") {return "{1}{W}";}
-	else if (cardname == "Seeker of the Way") {return "{1}{W}";}
-	else if (cardname == "Serene Steward") {return "{1}{W}";}
-	else if (cardname == "Syndic of Tithes") {return "{1}{W}";}
-	else if (cardname == "Phalanx Leader") {return "{W}{W}";}
-	else if (cardname == "Angel of Vitality") {return "{2}{W}";}
-	else if (cardname == "Avacynian Missionaries") {return "{3}{W}";}
-	else if (cardname == "Decree of Justice") {return "{X}{X}{2}{W}{W}";}
-	else if (cardname == "Commit // Memory") {return "{3}{U} // {4}{U}{U}"}
-	else if (cardname == "Arcanist's Owl") {return "{W/U}{W/U}{W/U}{W/U}"}
-	else if (cardname == "Temmet, Vizier of Naktamun") {return "{W}{U}";}
-	return 'nan'
+function getCost(cardnum) {
+	return JSON.parse(dataDump["chosen_df"])["cost"][cardnum];
 }
 
-function isCreature(cardname) {
-	if (cardname == "Decree of Justice") {return false;}
-	else if (cardname == "Commit // Memory") {return false;}
-	return true;
+function getName(cardnum) {
+	return JSON.parse(dataDump["chosen_df"])["card"][cardnum];
+}
+
+function isCreature(cardnum) {
+	return JSON.parse(dataDump["chosen_df"])["creature"][cardnum] == 1
 }
 
 /* note this either returns a single string or a list for split cards.*/
@@ -49,9 +35,11 @@ function manaSpan(cost, loc) {
 	}
 } 
 
-/*function cardString(cardname) {
-	var arrows = '<span class="arrows"><a href="javascript:addToDeck(\'' +cardname.replace("'", "\\'") + '\')" class="addlink">▼</a><a href="javascript:pullFromDeck(\'' + cardname.replace("'", "\\'") + '\')" class="droplink">▲</a></span>'
-	var manacost = manaSpan(getCost(cardname), 'vert');
+function cardString(cardnum) {
+	var cardname = getName(cardnum) ;
+	var cost = getCost(cardnum) ;
+	var arrows = '<span class="arrows"><a href="javascript:addToDeck(' 	+ cardnum + ')" class="addlink">▼</a><a href="javascript:pullFromDeck(' + cardnum + ')" class="droplink">▲</a></span>'
+	var manacost = manaSpan(getCost(cardnum), 'vert');
 	if (cardname.indexOf("//") == -1) {
 		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 		else {var bufferspace = '';}
@@ -62,6 +50,8 @@ function manaSpan(cost, loc) {
 		secondcost = manacost[1]
 		var bufferspace = ' style="padding:0px 0px 0px 0px"';
 		return arrows + firstcost + '<span class="slashspan">//</span>' + secondcost + '</span><span class="cardname" style="padding:0px 0px 0px 4px">' + cardnames[0] + '</span><span class="slashspan">//</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
+	}
+} ;
 /*		this code is for [COST 1} card 1 // [COST 2] card 2
 		if (firstcost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 		else {var bufferspace = '';}
@@ -73,29 +63,10 @@ function manaSpan(cost, loc) {
 		outstring = outstring + secondcost + '</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
 		return outstring
 */
-/* }} */
 
-function cardString(cardname, cost) {
-	var arrows = '<span class="arrows"><a href="javascript:addToDeck(\'' +cardname.replace("'", "\\'") + '\')" class="addlink">▼</a><a href="javascript:pullFromDeck(\'' + cardname.replace("'", "\\'") + '\')" class="droplink">▲</a></span>'
-	var manacost = manaSpan(cost, 'vert');
-	if (cardname.indexOf("//") == -1) {
-		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
-		else {var bufferspace = '';}
-		return arrows + manacost + '</span><span class="cardname"' + bufferspace + '>' + cardname + '</span>'
-	}
-	else { cardnames = cardname.split(" // ");
-		firstcost = manacost[0]
-		secondcost = manacost[1]
-		var bufferspace = ' style="padding:0px 0px 0px 0px"';
-		return arrows + firstcost + '<span class="slashspan">//</span>' + secondcost + '</span><span class="cardname" style="padding:0px 0px 0px 4px">' + cardnames[0] + '</span><span class="slashspan">//</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
-	}
-}
-
-
-
-
-function cmc(cardname) {
-	var cost = getCost(cardname);
+function cmc(cardnum) {
+	var cost = getCost(cardnum);
+	var cardname = getName(cardnum); 
 	if (cost == "nan") {return 1;}
 	if (cardname.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
 	var splitcost = cost.slice(1, cost.length-1).split("}{")
@@ -109,38 +80,33 @@ function cmc(cardname) {
 	return total;
 }
 
-function draftOrder(cardname, packno, pickno) {
+function makeJSPick(cardnum, packno, pickno) {
 	var pickdiv = document.getElementById("pick-" + packno + "-" + pickno) ;
-	pickdiv.innerHTML = cardString(cardname) ;
+	pickdiv.innerHTML = cardString(cardnum) ;
 }
-
-function makePick(cardname, packno, pickno) {
-	identifier = packno.toString() + "-" + pickno.toString()
-	picked[identifier] = cardname;
-	draftOrder(cardname, packno, pickno);
-	}
 	
 //functions below have to do with moving the cards to and from the deck 
 	
-function addToDeck(cardname) {
-	if (deck.indexOf(cardname) == -1) {
-	deck.push(cardname) ; writeCMCs() ; }
+function addToDeck(cardnum) {
+	if (deck.indexOf(cardnum) == -1) {
+	deck.push(cardnum) ; writeCMCs() ; }
 }
 
-function pullFromDeck(cardname) {
-	var idx = deck.indexOf(cardname);
+function pullFromDeck(cardnum) {
+	var idx = deck.indexOf(cardnum);
 	deck.splice(idx, 1); writeCMCs() ;
 }
 
-function writeCard(cardname) { 
-	var cardcmc = cmc(cardname);
-	var creatureQ = isCreature(cardname) ;
+function writeCard(cardnum) { 
+	var cardcmc = cmc(cardnum);
+	var creatureQ = isCreature(cardnum) ;
+	var cardname = getName(cardnum) ;
 	if (creatureQ) { var spanid = "creatures-" + cardcmc ; }
 	else { var spanid = "noncreatures-" + cardcmc ; }
 	var docspan = document.getElementById(spanid) ;
 	var current = docspan.innerHTML;
 	var present = '<div class="bottom-card">'
-	var manacost = manaSpan(getCost(cardname), "bot")
+	var manacost = manaSpan(getCost(cardnum), "bot")
 	if (cardname.indexOf("//") != -1) {manacost = manacost[0]; }
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}

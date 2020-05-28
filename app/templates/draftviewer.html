@@ -10,10 +10,13 @@
 
 //let's make some functions we'll be reusing a lot
 //this one pings the server to ask for the current state, without sending data
+
+var datadump = null;
+
 function ping() {
 	$.get('/makepick', function(response) {
-		dataDump = JSON.parse(response);
-		updatePicks(response['chosen_cards'],response['chosen_df'],response['total_packs'],response['cards_per_pack']); //update the list of existing picks
+		dataDump = response;
+		updatePicks(response); //update the list of existing picks
 		if (response['my_status']==0) {
 			setTimeout(function() {ping(); }, 2000);
 			}
@@ -25,25 +28,19 @@ function ping() {
 		});
 	};
 
-function updatePicks(cardlist,cardinfo,packs,picks) {
+function updatePicks() {
 	//for each card in the cardlist, we'll determine the pack and pick number, then get a string of html, then insert it
-	cardinfo = JSON.parse(cardinfo);
-	thispack = 1;
-	thispick = 1;
+	var cardlist = dataDump['chosen_cards']
+	var packs = dataDump['total_packs']
+	var picks = dataDump['cards_per_pack']
+	var thispack = 1;
+	var thispick = 1;
 	for (j=0; j<cardlist.length; j++) {
-		name = cardinfo['card'][cardlist[j]];
-		cost = cardinfo['cost'][cardlist[j]];
-		txt = cardString(name,cost);
-		divid = '#pick-' + thispack + '-' + thispick;
-		$(divid).html(txt);
+		makeJSPick(cardlist[j], thispack, thispick);
 		if (thispick < picks) {thispick++;}
 		else {thispick = 1; thispack++;}
 	}
-
-
-
 };
-
 
 
 function setTimer(time) {
