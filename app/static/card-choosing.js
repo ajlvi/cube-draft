@@ -37,19 +37,19 @@ function manaSpan(cost, loc) {
 		for (j=0; j<splitcost.length; j++) {
 			symb = splitcost[j]
 			if (symb in costdict) {
-				mana = mana + '<img src="symbols/' + costdict[symb] + '.png" class="symbolimg-' + loc + '">';}
+				mana = mana + '<img src="/static/symbols/' + costdict[symb] + '.png" class="symbolimg-' + loc + '">';}
 			else if (["W", "U", "B", "R", "G"].indexOf(symb) >= 0)
-				{mana = mana + '<img src="symbols/' + symb + '.png" class="symbolimg-' + loc + '">' }
-			else {mana = mana + '<img src="symbols/gen' + symb + '.png" class="symbolimg-' + loc + '">'}
+				{mana = mana + '<img src="/static/symbols/' + symb + '.png" class="symbolimg-' + loc + '">' }
+			else {mana = mana + '<img src="/static/symbols/gen' + symb + '.png" class="symbolimg-' + loc + '">'}
 		}
 		return mana
 	}
 	else { costs = cost.split(" // ");
 		return [manaSpan(costs[0], loc), manaSpan(costs[1], loc)];
 	}
-}
+} 
 
-function cardString(cardname) {
+/*function cardString(cardname) {
 	var arrows = '<span class="arrows"><a href="javascript:addToDeck(\'' +cardname.replace("'", "\\'") + '\')" class="addlink">▼</a><a href="javascript:pullFromDeck(\'' + cardname.replace("'", "\\'") + '\')" class="droplink">▲</a></span>'
 	var manacost = manaSpan(getCost(cardname), 'vert');
 	if (cardname.indexOf("//") == -1) {
@@ -73,8 +73,26 @@ function cardString(cardname) {
 		outstring = outstring + secondcost + '</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
 		return outstring
 */
+/* }} */
+
+function cardString(cardname, cost) {
+	var arrows = '<span class="arrows"><a href="javascript:addToDeck(\'' +cardname.replace("'", "\\'") + '\')" class="addlink">▼</a><a href="javascript:pullFromDeck(\'' + cardname.replace("'", "\\'") + '\')" class="droplink">▲</a></span>'
+	var manacost = manaSpan(cost, 'vert');
+	if (cardname.indexOf("//") == -1) {
+		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
+		else {var bufferspace = '';}
+		return arrows + manacost + '</span><span class="cardname"' + bufferspace + '>' + cardname + '</span>'
+	}
+	else { cardnames = cardname.split(" // ");
+		firstcost = manacost[0]
+		secondcost = manacost[1]
+		var bufferspace = ' style="padding:0px 0px 0px 0px"';
+		return arrows + firstcost + '<span class="slashspan">//</span>' + secondcost + '</span><span class="cardname" style="padding:0px 0px 0px 4px">' + cardnames[0] + '</span><span class="slashspan">//</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
 	}
 }
+
+
+
 
 function cmc(cardname) {
 	var cost = getCost(cardname);
@@ -101,6 +119,8 @@ function makePick(cardname, packno, pickno) {
 	picked[identifier] = cardname;
 	draftOrder(cardname, packno, pickno);
 	}
+	
+//functions below have to do with moving the cards to and from the deck 
 	
 function addToDeck(cardname) {
 	if (deck.indexOf(cardname) == -1) {

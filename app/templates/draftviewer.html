@@ -7,16 +7,13 @@
 <script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='interface-setup.js') }}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-var pack = 1;
-var pick = 1;
 
 //let's make some functions we'll be reusing a lot
 //this one pings the server to ask for the current state, without sending data
 function ping() {
 	$.get('/makepick', function(response) {
-		//updatePicks(response); //update the list of existing picks
+		updatePicks(response['chosen_cards'],response['chosen_df'],response['total_packs'],response['cards_per_pack']); //update the list of existing picks
 		if (response['my_status']==0) {
-			//setTimeout(ping(),2000);
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {
@@ -27,20 +24,43 @@ function ping() {
 		});
 	};
 
+function updatePicks(cardlist,cardinfo,packs,picks) {
+	//for each card in the cardlist, we'll determine the pack and pick number, then get a string of html, then insert it
+	cardinfo = JSON.parse(cardinfo);
+	thispack = 1;
+	thispick = 1;
+	for (j=0; j<cardlist.length; j++) {
+		name = cardinfo['card'][cardlist[j]];
+		cost = cardinfo['cost'][cardlist[j]];
+		txt = cardString(name,cost);
+		divid = '#pick-' + thispack + '-' + thispick;
+		$(divid).html(txt);
+		if (thispick < picks) {thispick++;}
+		else {thispick = 1; thispack++;}
+	}
+
+
+
+};
+
+
+
 function setTimer(time) {
 	i = Math.floor(time);
-	setInterval(runTimer(i), 1000);
+	setInterval(function() {runTimer(i);}, 1000);
 	};
-function runTimer(i) {
-	if (i > 0) {
-		min = Math.floor(i/60);
-		sec = i - min*60;
-		if (sec < 10) {secstring = '0'+sec;}
-		$("#timer").text(min + ':' + secstring);
+function runTimer(num) {
+	if (num > 0) {
+		min = Math.floor(num/60);
+		sec = num - min*60;
+		if (sec < 10) {secstring = '0'+ sec.toString();}
+		else {secstring = sec.toString();}
+		$("#timer").text(min.toString() + ':' + secstring);
 		i--;
 		}
-	else if (i==0) {
-		makePick(cardname, pack, pick);
+	else if (num==0) {
+		//makePick(cardname, pack, pick);
+		$("#timer").text('time is up!');
 		}
 	};
 
@@ -49,15 +69,15 @@ function populateTable(cardlist,cardinfo) {
 	//we need to make a cell for each card
 	cardinfo = JSON.parse(cardinfo);
 	for (j=0; j<cardlist.length; j++) {
+		cardid = cardlist[j].toString();
 		name = cardinfo['card'][cardlist[j]];
 		imgsrc = cardinfo['scryfall'][cardlist[j]];
-		$("#packdisp").append('<td><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '"></td>');
+		$("#packdisp").append('<td><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '" id="' + cardid + '"></td>');
 	}
+	initializePack();
 };
-			
 
-$(document).ready(function(){
-	ping();
+function initializePack() {
 	$(".unreserved").click(function(){
 		$(".card-image").not(this).removeClass("reserved");
 		$(".card-image").not(this).addClass("unreserved");
@@ -67,13 +87,23 @@ $(document).ready(function(){
 		$(this).off("dblclick");
 		$(this).dblclick(function(){
 			var cardname = $(this).attr("name");
-			makePick(cardname, pack, pick);
-			if (pick < 15) {pick++;}
-			else {pick = 1; pack++;}
+			var cardid = $(this).attr("id");
+			makePick(cardid, player);
+			//if (pick < 15) {pick++;}
+			//else {pick = 1; pack++;}
 			$(this).addClass("unreserved");
 			$(this).removeClass("reserved");
 		}); 
 	}) ;
+};
+
+function makePick(cardid, player) {
+	$.post('/makepick', {
+
+};	
+
+$(document).ready(function(){
+	ping();
 });
 	
 $(document).ready(function(){
