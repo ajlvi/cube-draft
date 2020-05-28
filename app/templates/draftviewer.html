@@ -12,6 +12,7 @@
 //this one pings the server to ask for the current state, without sending data
 function ping() {
 	$.get('/makepick', function(response) {
+		dataDump = JSON.parse(response);
 		updatePicks(response['chosen_cards'],response['chosen_df'],response['total_packs'],response['cards_per_pack']); //update the list of existing picks
 		if (response['my_status']==0) {
 			setTimeout(function() {ping(); }, 2000);
