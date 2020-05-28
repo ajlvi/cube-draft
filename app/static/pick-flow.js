@@ -61,7 +61,7 @@ function populateTable(cardlist, cardinfo) {
 		var name = cardinfo['card'][cardlist[j]];
 		var imgsrc = cardinfo['scryfall'][cardlist[j]];
 		outstring = outstring + '<td class="pick-table-cell"><img src="' + imgsrc + '" class="card-image unreserved" name="' + name + '" id="' + cardid + '"></td>';
-		if (j==7) {$("#packdisp").append("</tr>\n<tr class='pick-table-row'>");}
+		if (j==7) {outstring = outstring + "</tr>\n<tr class='pick-table-row'>";}
 	}
 	/* we're done writing the cards; now include empty cells to fill out table */
 	var k = cardlist.length;
@@ -76,7 +76,7 @@ function populateTable(cardlist, cardinfo) {
 		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + 15-k + '></td>' ;
 	}
 	outstring = outstring + '<td class="pick-table-cell buttonbox"><button id="confirm">confirm pick</button></tr>';
-	$("#packdisp").append(outstring);
+	$("#packdisp").html(outstring);
 	initializePack();
 };
 
