@@ -51,4 +51,10 @@ select, option, #draft-button { font-family: Ubuntu; font-size: 13pt }
 /* for queue page */
 .queueblock { height: 180px ; width : 720px ;
 	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
-	color:black ; }
+	color:black ; font-size: 14pt }
+.queueblock form { height: 100% ; display: block; }
+.draft-id-field input, .player-name-field input { font-family: Ubuntu; font-size: 16pt;
+	border-radius: 5px ; border-width: 1px ; border-style: solid ; border-color: #999999 }
+.draft-id-field input {width : 100px }
+.player-name-field input { width : 260px }
+.draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto }
