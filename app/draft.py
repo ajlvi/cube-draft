@@ -37,10 +37,13 @@ class Draft:
 		"""handle is a string representing the handle of the human."""
 		if handle not in self.handles:
 			self.players.append(Player(handle))
+			self.handles.append(handle)
 		else:
 			i = 2
 			while handle + str(i) in self.handles: i += 1
 			self.players.append(Player(handle + str(i)))
+		
+	def hasPlayer(self, handle): return handle in self.handles
 
 	def startDraft(self):
 		"""
@@ -138,6 +141,8 @@ class Draft:
 		
 		This returns a dictionary which still needs to be JSONnified.
 		"""
+	#if HANDLE not here -- raise IndexError
+	#if CARD not here -- raise ValueError
 		if num >= 0: self.makePick(handle, num)
 		stat = self.statusCheck()
 		PlayerObj = self.players[self.handles.index(handle)]
