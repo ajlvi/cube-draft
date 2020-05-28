@@ -35,11 +35,12 @@ def displaydraft():
 		if draftid in alldrafts:
 			DraftObj = alldrafts[draftid]
 			if DraftObj.hasPlayer(playername):
-				#"fail case" coding here -- player existed
-				pass
+				if request.form['rejoin'] == 'true':
+					pass
+				else: 
+					return redirect('/queue')
 			else:
 				DraftObj.addPlayer(playername)
-				print(alldrafts["TEST"])
 				#RETURN SOMETHING TO PLAYER HERE?
 		else:
 			#"fail case" coding here -- draft didn't exist

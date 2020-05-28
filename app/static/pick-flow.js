@@ -106,7 +106,7 @@ function makePick(playername, dnum, pnum) {
 		dataDump = response;
 		updatePicks(response); //update the list of existing picks
 		if (response['my_status']==0) {
-			$(#packdisp).html(''); //change this later
+			$(#packdisp).html('wait!!'); //change this later
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {
