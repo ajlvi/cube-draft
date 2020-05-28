@@ -11,7 +11,7 @@ def index():
 @app.route('/enterdraft', methods=['POST'])
 def newplayer():
 	# name stored under request.form['name']. this should add the player to the current draft (I could have this post the draft ID too if useful).
-	return redirect('/draft')
+	return redirect('/draftviewer') #should somehow pass the draft ID and name 
 
 
 @app.route('/queue')
