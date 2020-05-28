@@ -149,8 +149,8 @@ class Draft:
 		chosen_cards = PlayerObj.getChosen()
 		chosen_df = self.cube.loc[PlayerObj.getChosen()].to_json()
 		if PlayerObj.getActive() != None:
-			current_pack = PlayerObj.getActive()
-			current_df = self.cube.loc[current_pack.getCards()].to_json()
+			current_pack = PlayerObj.getActive().getCards()
+			current_df = self.cube.loc[current_pack].to_json()
 			time_remaining = PlayerObj.timeLeft()
 		else:
 			current_pack = None
@@ -161,7 +161,7 @@ class Draft:
 			"packno": self.currentPack, "total_packs": self.total_packs, \
 			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
-			"current_pack": current_pack.getCards(), "current_df": current_df}
+			"current_pack": current_pack, "current_df": current_df}
 		return outdict
 
 
