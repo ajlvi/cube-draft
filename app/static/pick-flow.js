@@ -1,4 +1,5 @@
 var datadump = null;
+var reservedid = -1;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
@@ -45,8 +46,7 @@ function runTimer(num) {
 		i--;
 	}
 	else if (num==0) {
-		//makePick(cardname, pack, pick);
-		$("#timer").text('time is up!');
+		makePick(thisplayer, thisdraft, reservedid);
 	}
 };
 
@@ -87,15 +87,33 @@ function initializePack() {
 		$(".card-image").not(this).off("dblclick");
 		$(this).removeClass("unreserved");
 		$(this).addClass("reserved");
+		reservedid = $(this).attr("id");
 		$(this).off("dblclick");
 		$(this).dblclick(function(){
 			var cardname = $(this).attr("name");
 			var cardid = $(this).attr("id");
-			makePick(cardid, player);
-			//if (pick < 15) {pick++;}
-			//else {pick = 1; pack++;}
 			$(this).addClass("unreserved");
 			$(this).removeClass("reserved");
+			makePick(thisplayer, thisdraft, cardid);
 		}); 
 	}) ;
+};
+
+
+//a function for actually making a pick -- sends player name, draft id, pick number
+function makePick(playername, dnum, pnum) {
+		$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum}, function(response) {
+		dataDump = response;
+		updatePicks(response); //update the list of existing picks
+		if (response['my_status']==0) {
+			$(#packdisp).html(''); //change this later
+			setTimeout(function() {ping(); }, 2000);
+			}
+		else {
+			//this means we have to populate the table!
+			reservedid = response['current_pack'][0];
+			populateTable(response['current_pack'],response['current_df']);
+			setTimer(response['time_remaining']);
+			} 
+		});	
 };

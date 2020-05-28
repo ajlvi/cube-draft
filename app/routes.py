@@ -55,6 +55,7 @@ def makepick():
 		draftid = request.args['draftid']
 		playername = request.args['player']
 		num = int(request.args['pickid'])
+		print(num)
 		if draftid in alldrafts:
 			try:
 				DraftObj = alldrafts[draftid]
@@ -67,5 +68,21 @@ def makepick():
 		else:
 		#draft not in alldrafts
 			pass
+	elif request.form['player'] != '':
+		draftid = request.form['draftid']
+		playername = request.form['player']
+		num = int(request.form['pickid'])
+		if draftid in alldrafts:
+			try:
+				DraftObj = alldrafts[draftid]
+				output = DraftObj.handleIncoming(playername, num)
+				return jsonify(output)
+			except IndexError: #we get here if the player isn't in the draft
+				pass
+			except ValueError: #card not in pack!?!?!
+				pass
+		else:
+		#draft not in alldrafts
+			pass		
 	else:
 		return redirect('/queue')
