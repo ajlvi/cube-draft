@@ -84,6 +84,7 @@ class Draft:
 		"""
 		I'm expecting to receive handles from the end users.
 		"""
+		print(f"player {handle} is picking card {num}.")
 		PlayerObj = self.players[self.handles.index(handle)]
 		usedPack = PlayerObj.draftCard(num)
 		if len(usedPack) == 0:
@@ -141,6 +142,7 @@ class Draft:
 		
 		This returns a dictionary which still needs to be JSONnified.
 		"""
+		print(f"Player {handle} is ppinging with card-id {num}.")
 	#if HANDLE not here -- raise IndexError
 	#if CARD not here -- raise ValueError
 		if num >= 0: self.makePick(handle, num)

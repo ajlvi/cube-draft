@@ -1,15 +1,18 @@
 var datadump = null;
 var reservedid = -1;
+var timer = null;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
 		dataDump = response;
-		updatePicks(response); //update the list of existing picks
+		updatePicks(); //update the list of existing picks
 		if (response['my_status']==0) {
+			$('#packdisp').html('waiting....') //change this later
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {
 			//this means we have to populate the table!
+			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
 			} 
@@ -33,7 +36,7 @@ function updatePicks() {
 
 function setTimer(time) {
 	i = Math.floor(time);
-	setInterval(function() {runTimer(i);}, 1000);
+	timer = setInterval(function() {runTimer(i);}, 1000);
 };
 	
 function runTimer(num) {
@@ -73,7 +76,7 @@ function populateTable(cardlist, cardinfo) {
 		outstring = outstring + '</tr><tr class="pick-table-row"><td class="pick-table-cell empty" colspan=7></td>' ;
 	}
 	else if (k < 15) {
-		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + 15-k + '></td>' ;
+		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + toString(15-k) + '></td>' ;
 	}
 	outstring = outstring + '<td class="pick-table-cell buttonbox"><button id="confirm">confirm pick</button></tr>';
 	$("#packdisp").html(outstring);
@@ -102,11 +105,13 @@ function initializePack() {
 
 //a function for actually making a pick -- sends player name, draft id, pick number
 function makePick(playername, dnum, pnum) {
+		clearInterval(timer);
 		$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum}, function(response) {
+		reservedid = -1;
 		dataDump = response;
-		updatePicks(response); //update the list of existing picks
+		updatePicks(); //update the list of existing picks
 		if (response['my_status']==0) {
-			$(#packdisp).html('wait!!'); //change this later
+			$('#packdisp').html('wait!!'); //change this later
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {

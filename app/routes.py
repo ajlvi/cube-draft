@@ -38,13 +38,15 @@ def displaydraft():
 				if request.form['rejoin'] == 'true':
 					pass
 				else: 
-					return redirect('/queue')
+					url = '/queue?playerexists=yes&name='+playername+'&id='+draftid
+					return redirect(url)
 			else:
 				DraftObj.addPlayer(playername)
 				#RETURN SOMETHING TO PLAYER HERE?
 		else:
 			#"fail case" coding here -- draft didn't exist
-			pass
+			url = '/queue?draftexists=no&player='+playername
+			return redirect(url)
 		return render_template('draftviewer.html', draftid=draftid, player=playername) #other inputs here? I dunno, basically this should just display the main draft page.
 	else: 
 		return redirect('/lostandfound')
