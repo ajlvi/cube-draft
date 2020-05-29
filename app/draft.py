@@ -44,6 +44,8 @@ class Draft:
 	def hasPlayer(self, handle): return handle in self.handles
 	
 	def whatPackIsIt(self, handle): return self.currentPack
+	
+	def getKey(self): return self.key
 
 	def startDraft(self):
 		"""
@@ -214,4 +216,4 @@ def makeKey():
 	"""
 	Returns a random four-character string.
 	"""
-	return hex(randrange(16**3, 16**4)).split('x')[1]
+	return hex(randrange(16**3, 16**4)).split('x')[1].upper()

@@ -16,7 +16,7 @@ function isCreature(cardnum) {
 
 /* note this either returns a single string or a list for split cards.*/
 function manaSpan(cost, loc) {
-	if (cost == null) { return "<span class='mana-" + loc + "'>&nbsp;</span>" ; }
+	if (cost == null) { return "<span class='mana-" + loc + "'></span>" ; }
 	else if (cost.indexOf("//") == -1) {
 		splitcost = cost.slice(1, cost.length-1).split("}{")
 		var mana = "<span class='mana-" + loc + "'>"
@@ -69,7 +69,7 @@ function cmc(cardnum) {
 	var cardname = getName(cardnum); 
 	if (cost == null) {return 1;}
 	if (cardname.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
-	if (cardname.indexOf("}{") == -1) {
+	if (cost.indexOf("}{") == -1) {
 		if (parseInt(cost[1]) > 0) { return parseInt(cost[1]); }
 		else { return 1 ; }
 	}
