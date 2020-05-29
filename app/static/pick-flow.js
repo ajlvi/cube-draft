@@ -11,7 +11,9 @@ function ping() {
 		}
 		updatePicks(); //update the list of existing picks
 		if (response['my_status']==0) {
-			$('#packdisp').html('waiting....') //change this later
+			//message 0: wait for picks; message 1: wait for players
+			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
+			else {$('#packdisp').html(midTableMessage(0)) ; }
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {
@@ -19,9 +21,17 @@ function ping() {
 			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
+			packAndPickNos() ;
 			} 
 		});
 	};
+	
+function midTableMessage(choice) {
+	//returns a string meant to be plugged into the table.
+	if (choice == 0) { return '<tr class="fulltr"><td class="fulltd">Waiting for a player to pick a card.</tr>' ;}
+	else if (choice == 1) { return '<tr class="fulltr"><td class="fulltd">Waiting for players to join the draft.</tr>' ;}
+	else { return '' ;}
+}
 
 function updatePicks() {
 	//for each card in the cardlist, we'll determine the pack and pick number, then get a string of html, then insert it
@@ -72,7 +82,7 @@ function populateTable(cardlist, cardinfo) {
 	}
 	/* we're done writing the cards; now include empty cells to fill out table */
 	var k = cardlist.length;
-	if (k < 7) {
+	if (k < 8) {
 		while(k < 8) {
 			outstring = outstring + '<td class="pick-table-cell empty"></td>' ;
 			k++;	
@@ -117,8 +127,10 @@ function makePick(playername, dnum, pnum) {
 		reservedid = -1;
 		dataDump = response;
 		updatePicks(); //update the list of existing picks
+		packAndPickNos(); //clear the pack and pick numbers
+		$('#timer').html('');
 		if (response['my_status']==0) {
-			$('#packdisp').html('wait!!'); //change this later
+			$('#packdisp').html(midTableMessage(0)); //change this later
 			setTimeout(function() {ping(); }, 2000);
 			}
 		else {
@@ -129,3 +141,14 @@ function makePick(playername, dnum, pnum) {
 			} 
 		});	
 };
+
+function packAndPickNos() {
+	var pick_no = (1 + dataDump.chosen_cards.length) % dataDump.cards_per_pack
+	if (dataDump.current_pack == null) { var packstring = '' ; var pickstring = '' ;}
+	else { 
+		var packstring = 'pack <span class="pack-no">' + dataDump.packno.toString() + '</span>' ;
+		var pickstring = 'pick <span class="pick-no">' + pick_no.toString() + '</span>' ;
+	}
+	$('#pack-number').html(packstring);
+	$('#pick-number').html(pickstring);
+}

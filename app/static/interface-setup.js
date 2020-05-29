@@ -11,3 +11,17 @@ function vertBar(packs, picks) {
 	vertContainer.innerHTML = outstring;
 	vertbardone = true;
 }
+
+function flowBar() {
+	drafters = dataDump.drafters
+	if (dataDump.packno % 2 == 0) { var arrow = "&#x27f6;" }
+	else { var arrow = "&#x27f5;" }
+	arrowbox = "<span class='arrow'>" + arrow + "</span>"
+	output = arrowbox;
+	for (pers = 0 ; pers < drafters.length; pers++) {
+		if (dataDump.packno == 0) { var spanclass = "drafter-box unstarted" ; }
+		else { var spanclass = "drafter-box" ; }
+		output = output + "<span class='" + spanclass + "'>" + drafters[pers] + "</span>" + arrowbox ;
+	}
+	$('#flow-info').html(output) ;
+}

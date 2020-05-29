@@ -12,13 +12,14 @@ body {margin-left: 0; margin-top: 0 }
 .reserved { box-shadow: 2px 8px 8px #dddd33; }
 .pick-table-row { height: 185px ; }
 .pick-table-cell { width: 132px ; }
-#packdisp { border-collapse: separate ; border-spacing : 2px 8px ; }
+#packdisp { border-collapse: separate ; border-spacing : 2px 8px ; height: 394px }
 #confirm { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid;
 	margin: auto; display: block; background: #F0F0F0 }
 #confirm:focus, #confirm:hover { background-color: #DDDDDD; }
 #confirm:active { background-color:#DDDDFF; }
+.fulltd { text-align : center ; font-family : Ubuntu; font-size : 11pt ; color: black; width:1090px;}
 
 .draft-picks {padding:3px 0px 0px 0px}
 .symbolimg-vert {height: 13px; width: 13px; padding: 0px 0px 0px 0px}
@@ -45,7 +46,17 @@ body {margin-left: 0; margin-top: 0 }
 .divider { border-style: dashed ; border-width: 1px 0px 0px 0px ; margin: 4px 0px 4px 0px ; margin-left :auto; margin-right:auto; width:75%}
 
 .under-pack-info {display: table; height:50px ; width: 100% ; text-align : right;}
-#timer { color:black ; font-size : 12pt ; display: table-cell; vertical-align: middle ; width: 132px ; text-align: center }
+#whitespace, #pack-number, #pick-number, #timer { display: table-cell ; vertical-align: middle ; color : black ; }
+#pack-number { font-size : 14pt ; width : 175px ; text-align : center }
+.pack-no, .pick-no { font-weight : bold ; padding: 0px 0px 0px 3px }
+#pick-number { font-size : 14pt ; width : 175px ; text-align : center }
+#timer { font-size : 14pt ; width: 132px ; text-align: center ; font-weight:bold }
+
+.draft-flow-bar { width : 1088px ; display:table ; height : 50px ; text-align : center ; }
+#flow-info { width: 100% ; vertical-align: middle; display : table-cell } 
+.drafter-box { color : black ; font-size : 11pt ; font-family : Ubuntu; }
+.arrow  { color : black ; padding: 0px 10px 0px 10px }
+.unstarted { font-style: italic ; }
 
 /* for queue page */
 .queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
