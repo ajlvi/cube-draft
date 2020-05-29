@@ -45,18 +45,26 @@ body {margin-left: 0; margin-top: 0 }
 
 .divider { border-style: dashed ; border-width: 1px 0px 0px 0px ; margin: 4px 0px 4px 0px ; margin-left :auto; margin-right:auto; width:75%}
 
-.under-pack-info {display: table; height:50px ; width: 100% ; text-align : right;}
+.under-pack-info { height : 198px ; width: 1086px ; }
+.draft-flow-bar { width: 954px ; display : table ; text-align : center ; float : left ; height : 100% }
+#flow-info { width: 100% ; height: 100%;  vertical-align: middle; display : table-cell } 
+.drafter-box { color : black ; font-size : 12pt ; font-family : Ubuntu; }
+.arrow { color : black ; padding: 0px 10px 0px 10px ; vertical-align: middle }
+
+.pack-time { width: 132px ; height : 100% ; float : left }
+#timer, #pick-number, #pack-number  { font-size: 14pt ; width: 100% ; text-align: center ; color: black ; height : 22px }
+.pack-no, .pick-no { font-weight : bold ; padding: 0px 0px 0px 3px }
+#timer { padding: 0px 0px 8px 0px }
+#pack-number { padding: 0px 0px 5px 0px }
+
+/*.under-pack-info {display: table; height:50px ; width: 100% ; text-align : right;}
 #whitespace, #pack-number, #pick-number, #timer { display: table-cell ; vertical-align: middle ; color : black ; }
 #pack-number { font-size : 14pt ; width : 175px ; text-align : center }
 .pack-no, .pick-no { font-weight : bold ; padding: 0px 0px 0px 3px }
 #pick-number { font-size : 14pt ; width : 175px ; text-align : center }
 #timer { font-size : 14pt ; width: 132px ; text-align: center ; font-weight:bold }
 
-.draft-flow-bar { width : 1088px ; display:table ; height : 50px ; text-align : center ; }
-#flow-info { width: 100% ; vertical-align: middle; display : table-cell } 
-.drafter-box { color : black ; font-size : 11pt ; font-family : Ubuntu; }
-.arrow  { color : black ; padding: 0px 10px 0px 10px }
-.unstarted { font-style: italic ; }
+.unstarted { font-style: italic ; } */
 
 /* for queue page */
 .queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
@@ -68,8 +76,8 @@ body {margin-left: 0; margin-top: 0 }
 .draft-id-field input, .player-name-field input { font-family: Ubuntu; font-size: 16pt;
 	border-radius: 6px ; border-width: 1px ; border-style: solid ;
 	border-color: #999999; margin: 0px 0px 0px 5px }
-.draft-id-field input {width : 100px }
-.player-name-field input { width : 260px }
+.draft-id-field input {width : 100px ; text-align: center }
+.player-name-field input { width : 260px ; padding: 0px 0px 0px 5px }
 .draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto ;
 	padding: 0px 40px 0px 0px }
 #join-draft-button, #make-draft-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
@@ -78,9 +86,9 @@ body {margin-left: 0; margin-top: 0 }
 #join-draft-button:focus, #join-draft-button:hover, #make-draft-button:focus, #make-draft-button:hover { background-color: #DDDDDD; }
 #join-draft-button:active, #make-draft-button:active { background-color:#DDDDFF; }
 
-.createblock { height: 180px ; width: 720px ;
-	background: #CCCCCC; border-radius: 0px 25px 25px 0px; margin-top: 70px }
-.createblock form { width : 100% ; display; table ; text-align : center }  
+.createblock { height: 180px ; width: 720px ; background: #CCCCCC; 
+	border-radius: 0px 25px 25px 0px; margin-top: 70px }
+.createblock form { width : 100% ; display: table ; text-align : center }  
 .draft-creation-fields { width: 100% ; padding-top: 30px }
 .cube-field, .player-field, .packs-field, .cards-field, .pack-scheme, .make-draft-button { color : green; font-family: Ubuntu ;
 	color:black ; font-size: 12pt; display:inline-block }

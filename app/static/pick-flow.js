@@ -9,7 +9,7 @@ function ping() {
 		if (!vertbardone) {
 			vertBar(dataDump['total_packs'], dataDump['cards_per_pack']);
 		}
-		updatePicks(); //update the list of existing picks
+		updatePicks(); flowBar() //update the list of existing picks
 		if (response['my_status']==0) {
 			//0: wait for picks; 1: wait for players; 2: modo export message
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
@@ -145,6 +145,7 @@ function makePick(playername, dnum, pnum) {
 		else {
 			//this means we have to populate the table!
 			reservedid = response['current_pack'][0];
+			flowBar(); //we got some data back so we'll update what we know
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
 			} 
