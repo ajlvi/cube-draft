@@ -1,7 +1,61 @@
 {% extends 'base.html' %}
 
+{% block scripts %}
+
+<script>
+function validateForm() {
+  var alertmsg = '';
+  var oops = false;
+  var playernum = document.forms["createdraft"]["players"].value;
+  var packnum = document.forms["createdraft"]["packs"].value;
+  var cardnum = document.forms["createdraft"]["cards"].value;
+  if (isNaN(playernum) || playernum < 2 || playernum > 450) {
+	alertmsg += 'Please enter a valid number of players (at least two).';
+	oops = true;
+	}
+  if (isNaN(packnum) || packnum < 1 || packnum > 450) {
+	alertmsg += ' Please enter a valid number of packs.';
+	oops = true;
+	}
+  if (isNaN(cardnum) || cardnum < 1 || cardnum > 225) {
+	alertmsg += ' Please enter a valid number of cards per pack.';
+	oops = true;
+	}
+  if (playernum*packnum*cardnum > 450) {
+     alertmsg += ' Your draft requires too many total cards.';
+	 oops = true;
+  }
+  if (oops) {
+	alert(alertmsg);
+	return false;
+	}
+};
+</script>
+
+{% endblock %}
+
 {% block content %}
 <div class="queueblock">
+Create a new draft:
+<form name="createdraft" action="newdraft" method="post" onsubmit="return validateForm()">
+Select a cube: <select id="cubes" name="cubes">
+	<option value="ada">Adam's cube</option>
+	<!-- eventually this will loop over something but fuck it for now -->
+	</select><br/>
+Number of players: <input type="text" size="3" name="players" /><br/>
+Packs per player: <input type="text" size="3" name="packs" /><br/>
+Cards per pack: <input type="text" size="3" name="cards" /><br/>
+Pack construction method: <select name="packmethod">
+<option value="Adam">Ada style</option>
+<option value="random">JJ style</option>
+</select>
+<input type="submit" name="submit" value="create draft" />
+</form>
+{{ draftcreated }}
+
+<br/><br/>
+
+
 <form action='draftviewer' method="post">
 <span class="draft-id-field">draft ID <input type="text" name="id" value="{{ draftid }}"/></span>
 <span class="player-name-field">name <input type="text" name="name" value="{{ playername }}"/></span>
