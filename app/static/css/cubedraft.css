@@ -3,8 +3,8 @@ body {overflow:hidden;}
 body, html, div {font-family: Ubuntu; font-size:10pt}
 body {margin-left: 0; margin-top: 0 }
 
-.content {width: 100%;}
-.draft-interface {width: 1088px; height: 592px; float:left; background: #CCCCCC;
+.content {width: 1088px; display: inline-block}
+.draft-interface {width: 1088px; height: 592px; background: #CCCCCC;
 					border-radius: 0px 0px 25px 0px}
 .vertical-holder {width: 272px; float: right }
 
@@ -32,7 +32,7 @@ body {margin-left: 0; margin-top: 0 }
 .addlink, .droplink {font-size: 9pt ; text-decoration : none }
 .slashspan { padding: 0px 3px 0px 3px ;}
 
-.bottom-holder {width: 1088px; display: block; height:25%;}
+.bottom-holder {width: 1088px; display: block; height:198px}
 .cmc-stack {display: inline-block; float:left}
 .cmcbox {width : 178px ; display: inline-block }
 .critter { max-height:116px;}
