@@ -19,11 +19,18 @@ class Player:
 		return out
 
 	def getname(self): return self.handle
-	
 	def getChosen(self): return self.chosen
-
 	def getActive(self): return self.activePack
+	def getUnopened(self): return self.unopened
+	def getQueue(self): return self.queue
+	def getTime(self): return self.opentime
 	
+	def setChosen(self, l): self.chosen = l
+	def setActive(self, ap): self.activePack = ap
+	def setUnopened(self, u): self.unopened = u
+	def setQueue(self, q): self.queue = q
+	def setTime(self, t): self.opentime = t
+
 	def takeUnopened(self, packs):
 		"""
 		These are the unopened packs that come from the draft object.

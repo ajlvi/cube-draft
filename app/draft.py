@@ -13,8 +13,8 @@ class Draft:
 		
 		This method returns the key to be stored in a dictionary of drafts.
 		"""
-		self.packs = makePacks(cube, packs*intended, cardsper)
 		self.cube = cube
+		self.scheme = scheme
 		self.intended = intended
 		self.total_packs = packs
 		self.cards_per_pack = cardsper
@@ -47,17 +47,24 @@ class Draft:
 	
 	def getKey(self): return self.key
 
+	def setKey(self, k): self.key = k
+	def setHandles(self, hs): self.handles = hs
+	def setFully(self, f): self.fullyDrafted = f
+	def setCurrent(self, c): self.currentPack = c
+	def setPlayer(self, Pl): self.players.append(Pl)
+
 	def startDraft(self):
 		"""
 		All the things that need to happen to get the draft underway.
 		We need to randomize the players and give them their packs.
 		"""
-		shuffle(self.players); shuffle(self.packs)
+		packstock = makePacks(self.cube, self.total_packs*self.intended, self.cards_per_pack, self.scheme)
+		shuffle(self.players); shuffle(packstock)
 		self.handles = [Person.getname() for Person in self.players]
-		assert len(self.packs) % len(self.players) == 0
-		packsper = int(len(self.packs) / len(self.players))
+		assert len(packstock) % len(self.players) == 0
+		packsper = int(len(packstock) / len(self.players))
 		for i in range(len(self.players)):
-			self.players[i].takeUnopened(self.packs[i*packsper:(i+1)*packsper])
+			self.players[i].takeUnopened(packstock[i*packsper:(i+1)*packsper])
 		self.nextPack() #will increment currentPack to 1, everyone opens pack
 	
 	def lookupByHandle(self, handle):
@@ -167,7 +174,58 @@ class Draft:
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
 			"current_pack": current_pack, "current_df": current_df}
 		return outdict
-
+		
+	def export(self):
+		"""
+		Returns enough information as a dictionary so that self can be rebuilt.
+		I'm not exporting the cube -- that will need to be specified on each
+		import call.
+		"""
+		d = {}
+		d["key"] = self.key
+		d["handles"] = self.handles
+		d["intended"] = self.intended
+		d["total_packs"] = self.total_packs
+		d["cards_per_pack"] = self.cards_per_pack
+		d["currentPack"] = self.currentPack
+		d["fullyDrafted"] = self.fullyDrafted
+		d["scheme"] = self.scheme
+		playd = {}
+		for handle in self.handles:
+			PlayerObj = self.players[self.handles.index(handle)]
+			hd = {}
+			hd["queue"] = [P.getCards() for P in PlayerObj.getQueue()]
+			hd["unopened"] = [P.getCards() for P in PlayerObj.getUnopened()]
+			hd["chosen"] = PlayerObj.getChosen()
+			if PlayerObj.getActive() == None: hd["active"] = None
+			else: hd["active"] = PlayerObj.getActive().getCards()
+			hd["opentime"] = PlayerObj.getTime()
+			playd[handle] = hd
+		d["player_info"] = playd
+		return d
+		
+def rebuildDraft(d, cube):
+	"""
+	Takes the information of an exported dictionary d and a cube df and
+	rebuilds a draft object from it.
+	"""
+	newD = Draft(cube, d["total_packs"], d["cards_per_pack"], d["intended"], d["scheme"])
+	newD.setKey(d["key"])
+	newD.setHandles(d["handles"])
+	newD.setCurrent(d["currentPack"])
+	newD.setFully(d["fullyDrafted"])
+	for hand in d["handles"]:
+		Pl = Player(hand)
+		Pl.setQueue([Pack(l) for l in d["player_info"][hand]["queue"]])
+		Pl.setUnopened([Pack(l) for l in d["player_info"][hand]["unopened"]])
+		Pl.setChosen(d["player_info"][hand]["chosen"])
+		Pl.setTime(d["player_info"][hand]['opentime'])
+		if d["player_info"][hand]["active"] == None:
+			Pl.setActive(d["player_info"][hand]["active"])
+		else:
+			Pl.setActive(Pack(d["player_info"][hand]["active"]))
+		newD.setPlayer(Pl)
+	return newD
 
 def makePacks(cube, packs, cardsper, scheme="random"):
 	"""
