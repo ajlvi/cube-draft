@@ -49,9 +49,10 @@ def displaydraft():
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
 		playername = request.form['name'] #sanitize this here
-		draftid = request.form['id'].encode()
-		if r.exists(draftid):
-			snapshot = json.loads(r.get(draftid))
+		draftid = request.form['id']
+		draftidbit = draftid.encode()
+		if r.exists(draftidbit):
+			snapshot = json.loads(r.get(draftidbit))
 			DraftObj = draft.rebuildDraft(snapshot, cube)
 			if DraftObj.hasPlayer(playername):
 				if 'rejoin' in request.form:
@@ -62,7 +63,7 @@ def displaydraft():
 			else:
 				DraftObj.addPlayer(playername)
 				newsnapshot = json.dumps(DraftObj.export())
-				r.set(draftid, newsnapshot)
+				r.set(draftidbit, newsnapshot)
 				#RETURN SOMETHING TO PLAYER HERE?
 		else:
 			#"fail case" coding here -- draft didn't exist
