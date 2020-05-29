@@ -13,12 +13,12 @@ body {margin-left: 0; margin-top: 0 }
 .pick-table-row { height: 185px ; }
 .pick-table-cell { width: 132px ; }
 #packdisp { border-collapse: separate ; border-spacing : 2px 8px ; height: 394px }
-#confirm { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
+#confirm, .modobutton { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid;
 	margin: auto; display: block; background: #F0F0F0 }
-#confirm:focus, #confirm:hover { background-color: #DDDDDD; }
-#confirm:active { background-color:#DDDDFF; }
+#confirm:focus, #confirm:hover, .modobutton:focus, .modobutton:hover { background-color: #DDDDDD; }
+#confirm:active, .modobutton:active { background-color:#DDDDFF; }
 .fulltd { text-align : center ; font-family : Ubuntu; font-size : 11pt ; color: black; width:1090px;}
 
 .draft-picks {padding:3px 0px 0px 0px}

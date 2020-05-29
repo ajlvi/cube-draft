@@ -11,8 +11,9 @@ function ping() {
 		}
 		updatePicks(); //update the list of existing picks
 		if (response['my_status']==0) {
-			//message 0: wait for picks; message 1: wait for players
+			//0: wait for picks; 1: wait for players; 2: modo export message
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
+			else if (dataDump.chosen_cards.length == dataDump.total_packs * dataDump.cards_per_pack) { $('#packdisp').html(midTableMessage(2));}
 			else {$('#packdisp').html(midTableMessage(0)) ; }
 			setTimeout(function() {ping(); }, 2000);
 			}
@@ -30,6 +31,14 @@ function midTableMessage(choice) {
 	//returns a string meant to be plugged into the table.
 	if (choice == 0) { return '<tr class="fulltr"><td class="fulltd">Waiting for a player to pick a card.</tr>' ;}
 	else if (choice == 1) { return '<tr class="fulltr"><td class="fulltd">Waiting for players to join the draft.</tr>' ;}
+	else if (choice == 2) {
+		var outstring = '<tr class="fulltr"><td class="fulltd">' ;
+		outstring = outstring + "The draft has ended. Use the following button to export your pool as a Magic Online .dek file.";
+		outstring = outstring + "<br>If you have cards in the bottom panel, the rest of your pool will be put in the sideboard.";
+		outstring = outstring + "<br>If the bottom panel is empty, all of your cards will appear in the main deck."
+		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button></td></tr>";
+		return outstring
+	}
 	else { return '' ;}
 }
 
