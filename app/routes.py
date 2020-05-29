@@ -8,12 +8,6 @@ cube = pd.read_csv(url)
 
 alldrafts = {}
 
-DTest = draft.Draft(cube, 3, 15, intended=3, scheme="Adam")
-DTest.addPlayer("ada")
-DTest.addPlayer("squiggs")
-DTest.key = "TEST"
-alldrafts["TEST"] = DTest
-
 @app.route('/')
 @app.route('/index')
 def index():
