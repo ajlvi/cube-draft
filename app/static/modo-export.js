@@ -20,7 +20,7 @@ function MODOExport(){
 	var year = (d.getYear()%100).toString()
 	var date_string = year + "-" + month + "-" + day
 	var filename = "cube-draft-" + dataDump["my_name"] + "-" + date_string + ".dek"
-	download_file(outfile, "cube-draft-deck.dek", "text/csv")
+	download_file(outfile, filename, "text/csv")
 }
 
 /* this was stolen from https://stackoverflow.com/a/30832210 */
