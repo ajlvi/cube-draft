@@ -1,13 +1,10 @@
 from flask import Flask
 from config import Config
-#from flask_sqlalchemy import SQLAlchemy
-#from flask_migrate import Migrate
+from flask_redis import FlaskRedis
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.config["DEBUG"] = True
-#db = SQLAlchemy(app)
-#migrate = Migrate(app, db)
-alldrafts = {}
+redis_client = FlaskRedis(app)
 
 from app import routes
