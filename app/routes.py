@@ -135,7 +135,7 @@ def newdraft():
 		draftdict = json.dumps(newdraft.export())
 		r.set(newdraftkey, draftdict)
 		url = '/queue?draftcreated=yes&key='+newdraftkey
-		return redirect('url')
+		return redirect(url)
 	else:
 		return redirect('/queue?draftcreated=no')
 		
