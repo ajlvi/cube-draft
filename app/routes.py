@@ -31,6 +31,7 @@ def queue():
 	playername = ''
 	draftid = ''
 	hiddenform = ''
+	draftcreated = ''
 	if 'playerexists' in request.args:
 		msg = 'There is already a player in that draft with that name. If it\'s you, submit the form again to rejoin. Otherwise, pick a different name!'
 		playername = request.args['name']
