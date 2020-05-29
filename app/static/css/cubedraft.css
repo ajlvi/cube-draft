@@ -62,7 +62,9 @@ body {margin-left: 0; margin-top: 0 }
 .queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
 	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
 	color:black ; font-size: 14pt }
-.queueblock form { height: 100% ; display: table-cell; vertical-align:middle }
+.queueblock form { height: 100% ; display: table-cell; vertical-align:middle; position: relative }
+.upper-message { width: 100%; text-align: center; font-family: Ubuntu;
+	font-size:14pt ; color: #990000 ; position: absolute; bottom: 15 }
 .draft-id-field input, .player-name-field input { font-family: Ubuntu; font-size: 16pt;
 	border-radius: 6px ; border-width: 1px ; border-style: solid ;
 	border-color: #999999; margin: 0px 0px 0px 5px }
@@ -70,8 +72,24 @@ body {margin-left: 0; margin-top: 0 }
 .player-name-field input { width : 260px }
 .draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto ;
 	padding: 0px 40px 0px 0px }
-#join-draft-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
+#join-draft-button, #make-draft-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid; background: #F0F0F0 }
-#join-draft-button:focus, #join-draft-button:hover { background-color: #DDDDDD; }
-#join-draft-button:active { background-color:#DDDDFF; }
+#join-draft-button:focus, #join-draft-button:hover, #make-draft-button:focus, #make-draft-button:hover { background-color: #DDDDDD; }
+#join-draft-button:active, #make-draft-button:active { background-color:#DDDDFF; }
+
+.createblock { height: 180px ; width: 720px ;
+	background: #CCCCCC; border-radius: 0px 25px 25px 0px; margin-top: 70px }
+.createblock form { width : 100% ; display; table ; text-align : center }  
+.draft-creation-fields { width: 100% ; padding-top: 30px }
+.cube-field, .player-field, .packs-field, .cards-field, .pack-scheme, .make-draft-button { color : green; font-family: Ubuntu ;
+	color:black ; font-size: 12pt; display:inline-block }
+.cube-field, .player-field, .packs-field, .cards-field, .pack-scheme { padding: 0px 35px 20px 0px }
+.make-draft-button { width: 100% }
+.player-field input, .packs-field input, .cards-field input { font-family: Ubuntu; font-size: 16pt;
+	border-radius: 6px ; border-width: 1px ; border-style: solid ;
+	border-color: #999999; margin: 2px 0px 0px 0px; width:45px; 
+	text-align:center }
+.cube-field select, .pack-scheme select { font-family: Ubuntu; font-size: 14pt }
+.created-response { width: 100%; text-align: center; font-family: Ubuntu;
+	font-size:14pt ; color: #990000 }
