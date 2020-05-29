@@ -26,6 +26,7 @@ function manaSpan(cost, loc) {
 				mana = mana + '<img src="/static/symbols/' + costdict[symb] + '.png" class="symbolimg-' + loc + '">';}
 			else if (["W", "U", "B", "R", "G"].indexOf(symb) >= 0)
 				{mana = mana + '<img src="/static/symbols/' + symb + '.png" class="symbolimg-' + loc + '">' }
+			else if ( symb == "X" ) {mana = mana + '<img src="/static/symbols/genx.png" class="symbolimg-' + loc + '">'}
 			else {mana = mana + '<img src="/static/symbols/gen' + symb + '.png" class="symbolimg-' + loc + '">'}
 		}
 		return mana
