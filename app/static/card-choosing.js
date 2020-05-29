@@ -71,7 +71,7 @@ function cmc(cardnum) {
 	if (cost == null) {return 1;}
 	if (cardname.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
 	if (cost.indexOf("}{") == -1) {
-		if (parseInt(cost[1]) > 0) { return parseInt(cost[1]); }
+		if (parseInt(cost[1]) > 0) { return Math.min(6, parseInt(cost[1])); }
 		else { return 1 ; }
 	}
 	var splitcost = cost.slice(1, cost.length-1).split("}{")
