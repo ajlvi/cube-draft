@@ -52,6 +52,7 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: hidden}
 .drafter-box { color : black ; font-size : 12pt ; font-family : Ubuntu; position : relative }
 .overtext { position: absolute; top: -75%; width: 100%; text-align:center; left: 0 }
 .arrow { color : black ; padding: 0px 10px 0px 10px ; vertical-align: middle }
+.unstarted { font-style: italic }
 
 .pack-time { width: 132px ; height : 100% ; float : left }
 #timer, #pick-number, #pack-number  { font-size: 14pt ; width: 100% ; text-align: center ; color: black ; height : 22px }
