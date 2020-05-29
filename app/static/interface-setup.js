@@ -23,7 +23,7 @@ function flowBar(input=1) {
 	for (pers = 0 ; pers < drafters.length; pers++) {
 		if (dataDump.packno == 0) { var spanclass = "drafter-box unstarted" ; }
 		else { var spanclass = "drafter-box" ; }
-		output = output + "<span class='" + spanclass + "'>" + drafters[pers] + "</span>" + arrowbox ;
+		output = output + "<span class='" + spanclass + "'><span class='drafter-name'>" + drafters[pers] + "</span><span class='overtext'>" + "&bull;".repeat(dataDump.status[pers]) + "</span></span>" + arrowbox ;
 	}
 	$('#flow-info').html(output) ;
 }
