@@ -6,16 +6,6 @@ from flask import render_template, jsonify, request, redirect, url_for, escape
 url = 'app/static/cube.csv'
 cube = pd.read_csv(url)
 
-current_state = {'draft_key': '7162', 'my_name': 'bekka', 'my_status': 1, 'drafters': ['squigs', 'ada', 'bekka'], 'status': [1, 2, 1], 'packno': 1, 'total_packs': 3, 'cards_per_pack': 15, 'time_remaining': 10, 'chosen_cards': [113], 'chosen_df': '{"card":{"113":"Vile Manifestation"},"color":{"113":"B"},"cost":{"113":"{1}{B}"},"creature":{"113":1},"scryfall":{"113":"https:\\/\\/img.scryfall.com\\/cards\\/normal\\/front\\/7\\/1\\/7160bc31-bdfa-4654-9d69-95ee2a5fe870.jpg?1562803268"},"mtgo":{"113":64644}}', 'current_pack': [113], 'current_df': '{"card":{"113":"Vile Manifestation"},"color":{"113":"B"},"cost":{"113":"{1}{B}"},"creature":{"113":1},"scryfall":{"113":"https:\\/\\/img.scryfall.com\\/cards\\/normal\\/front\\/7\\/1\\/7160bc31-bdfa-4654-9d69-95ee2a5fe870.jpg?1562803268"},"mtgo":{"113":64644}}'}
-
-alldrafts = {}
-
-DTest = draft.Draft(cube, 3, 15, intended=3, scheme="Adam")
-DTest.addPlayer("ada")
-DTest.addPlayer("squiggs")
-DTest.key = "TEST"
-alldrafts["TEST"] = DTest
-
 @app.route('/')
 @app.route('/index')
 def index():
@@ -44,6 +34,7 @@ def displaydraft():
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
 		playername = request.form['name'] #sanitize this here
 		draftid = request.form['id']
+		print(alldrafts.keys())
 		if draftid in alldrafts:
 			DraftObj = alldrafts[draftid]
 			if DraftObj.hasPlayer(playername):
@@ -104,3 +95,17 @@ def makepick():
 @app.route('/lostandfound')
 def lostandfound():
 	return render_template('lostandfound.html')
+	
+@app.route('/newdraft', methods=['POST'])
+def newdraft():
+	if 'submit' in request.form:
+		newdraft = draft.Draft(cube, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
+		newdraftkey = newdraft.getKey()
+		alldrafts[newdraftkey] = newdraft
+		msg = 'Draft was created with ID ' + newdraftkey
+		return render_template('queue.html', draftcreated = msg)
+	else:
+		msg = 'Something went wrong??'
+		return render_template('queue.html', draftcreated = msg)
+		
+		

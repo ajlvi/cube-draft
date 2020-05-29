@@ -8,5 +8,6 @@ app.config.from_object(Config)
 app.config["DEBUG"] = True
 #db = SQLAlchemy(app)
 #migrate = Migrate(app, db)
+alldrafts = {}
 
 from app import routes
