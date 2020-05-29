@@ -2,6 +2,7 @@ var dataDump = null;
 var reservedid = -1;
 var timer = null;
 var vertbardone = false;
+var draftover = false;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
@@ -13,9 +14,9 @@ function ping() {
 		if (response['my_status']==0) {
 			//0: wait for picks; 1: wait for players; 2: modo export message
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
-			else if (dataDump.chosen_cards.length == dataDump.total_packs * dataDump.cards_per_pack) { $('#packdisp').html(midTableMessage(2));}
+			else if (dataDump.chosen_cards.length == dataDump.total_packs * dataDump.cards_per_pack) { $('#packdisp').html(midTableMessage(2)); draftover=true;}
 			else {$('#packdisp').html(midTableMessage(0)) ; }
-			setTimeout(function() {ping(); }, 2000);
+			if (!draftover) {setTimeout(function() {ping(); }, 2000);}
 			}
 		else {
 			//this means we have to populate the table!
