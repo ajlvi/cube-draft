@@ -12,7 +12,9 @@ function vertBar(packs, picks) {
 	vertbardone = true;
 }
 
-function flowBar() {
+function flowBar(input=1) {
+	//input is only checked to see if it's zero, in which case do nothing
+	if (input == 0) { $('#flow-info').html(''); return }
 	drafters = dataDump.drafters
 	if (dataDump.packno % 2 == 0) { var arrow = "&#x27f6;" }
 	else { var arrow = "&#x27f5;" }
