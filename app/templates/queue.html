@@ -36,32 +36,47 @@ function validateForm() {
 
 {% block content %}
 <div class="queueblock">
-Create a new draft:
-<form name="createdraft" action="newdraft" method="post" onsubmit="return validateForm()">
-Select a cube: <select id="cubes" name="cubes">
-	<option value="ada">Adam's cube</option>
-	<!-- eventually this will loop over something but fuck it for now -->
-	</select><br/>
-Number of players: <input type="text" size="3" name="players" /><br/>
-Packs per player: <input type="text" size="3" name="packs" /><br/>
-Cards per pack: <input type="text" size="3" name="cards" /><br/>
-Pack construction method: <select name="packmethod">
-<option value="Adam">Ada style</option>
-<option value="random">JJ style</option>
-</select>
-<input type="submit" name="submit" value="create draft" />
-</form>
-{{ draftcreated }}
-
-<br/><br/>
-
-
+<!-- for joining a draft -->
 <form action='draftviewer' method="post">
-<span class="draft-id-field">draft ID <input type="text" name="id" value="{{ draftid }}"/></span>
-<span class="player-name-field">name <input type="text" name="name" value="{{ playername }}"/></span>
-<span class="join-draft-button"><input id="join-draft-button" type="submit" name="submit" value="join" /></span>
-{{ hiddenform|safe }}
-<br/>{{ msg }}
+	<span class="draft-id-field">draft ID <input type="text" name="id" value="{{ draftid }}"/></span>
+	<span class="player-name-field">name <input type="text" name="name" value="{{ playername }}"/></span>
+	<span class="join-draft-button"><input id="join-draft-button" type="submit" name="submit" value="join" /></span>
+	{{ hiddenform|safe }}
+	<div class="upper-message">{{ msg }}</div>
 </form>
+</div>
+
+<!-- for creating a draft -->
+<div class="createblock">
+
+<form name="createdraft" action="newdraft" method="post" onsubmit="return validateForm()">
+<div class="draft-creation-fields">
+	<span class="cube-field">
+	cube<br><select id="cubes" name="cubes">
+		<option value="ada">Adam's cube</option>
+		<!-- eventually this will loop over something but fuck it for now -->
+		</select>
+	</span>
+
+	<span class="player-field">players<br><input type="text" size="3" name="players" /></span>
+	<span class="packs-field">packs/player<br><input type="text" size="3" name="packs" /></span>
+	<span class="cards-field">cards/pack<br><input type="text" size="3" name="cards" /></span>
+	
+	
+	
+	<span class="pack-scheme">
+	pack scheme<br><select name="packmethod">
+		<option value="Adam">Ada style</option>
+		<option value="random">JJ style</option>
+		</select>
+	</span>
+</div>
+
+<div class="make-draft-button">
+	<input id="make-draft-button" type="submit" name="submit" value="create draft" />
+</div>
+</form>
+<div class="created-response">{{ draftcreated }}</div>
+
 </div>
 {% endblock %}
