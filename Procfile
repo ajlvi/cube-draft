@@ -1,1 +1,1 @@
-web: guniform cubedraftapp:app
+web: gunicorn cubedraftapp:app
