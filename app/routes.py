@@ -7,7 +7,6 @@ import json
 url = 'app/static/cube.csv'
 cube = pd.read_csv(url)
 
-alldrafts = {}
 
 testDict = {'key': 'DA50', 
 'handles': ['bekka', 'ada', 'squiggs'], 
@@ -32,6 +31,7 @@ def queue():
 	playername = ''
 	draftid = ''
 	hiddenform = ''
+	draftcreated = ''
 	if 'playerexists' in request.args:
 		msg = 'There is already a player in that draft with that name. If it\'s you, submit the form again to rejoin. Otherwise, pick a different name!'
 		playername = request.args['name']
@@ -41,7 +41,10 @@ def queue():
 		msg = 'The draft ID you have entered does not appear to exist. Doublecheck the ID and try again.'
 		playername = request.args['name']
 		draftid = request.args['id']
-	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform)
+	elif 'draftcreated' in request.args:
+		if request.args['draftcreated'] == 'yes':
+			draftcreated = 'Draft has been created with ID ' + request.args['key']
+	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
 def displaydraft():
@@ -131,17 +134,9 @@ def newdraft():
 		newdraftkey = newdraft.getKey()
 		draftdict = json.dumps(newdraft.export())
 		r.set(newdraftkey, draftdict)
-		msg = 'Draft was created with ID ' + newdraftkey
-		return render_template('queue.html', draftcreated = msg)
+		url = '/queue?draftcreated=yes&key='+newdraftkey
+		return redirect(url)
 	else:
-		msg = 'Something went wrong??'
-		return render_template('queue.html', draftcreated = msg)
-		
-@app.route('/redistesting', methods=['GET', 'POST'])
-def redistesting():
-	r = redis_client
-	key = '5C6D'.encode()
-	msg = r.exists(key)
-	return render_template('redistesting.html', msg = msg)
+		return redirect('/queue?draftcreated=no')
 		
 		
