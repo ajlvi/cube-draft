@@ -42,6 +42,7 @@ def displaydraft():
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
 		playername = request.form['name'] #sanitize this here
 		draftid = request.form['id']
+		print(alldrafts.keys())
 		if draftid in alldrafts:
 			DraftObj = alldrafts[draftid]
 			if DraftObj.hasPlayer(playername):
