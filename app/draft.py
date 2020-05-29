@@ -69,7 +69,7 @@ class Draft:
 	
 	def readyForNextPack(self):
 		"""Decides if we're ready for the next pack."""
-		return self.fullyDrafted == len(self.players)
+		return (self.fullyDrafted == len(self.players)) and (self.currentPack < self.total_packs)
 		
 	def nextPack(self):
 		"""Moves everyone onto the next pack."""
