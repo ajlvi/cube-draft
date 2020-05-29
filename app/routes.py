@@ -6,8 +6,6 @@ from flask import render_template, jsonify, request, redirect, url_for, escape
 url = 'app/static/cube.csv'
 cube = pd.read_csv(url)
 
-alldrafts = {}
-
 @app.route('/')
 @app.route('/index')
 def index():
