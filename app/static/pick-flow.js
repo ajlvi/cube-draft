@@ -155,6 +155,7 @@ function makePick(playername, dnum, pnum) {
 
 function packAndPickNos() {
 	var pick_no = (1 + dataDump.chosen_cards.length) % dataDump.cards_per_pack
+	if (pick_no == 0) {pick_no = dataDump.cards_per_pack ;}
 	if (dataDump.current_pack == null) { var packstring = '' ; var pickstring = '' ;}
 	else { 
 		var packstring = 'pack <span class="pack-no">' + dataDump.packno.toString() + '</span>' ;
