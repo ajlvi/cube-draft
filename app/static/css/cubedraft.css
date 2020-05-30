@@ -1,6 +1,6 @@
 .body, html { background : #333333 ; color: white }
 body, html, div {font-family: Ubuntu; font-size:10pt}
-body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: hidden}
+body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 
 .content { width : 1338px }
 
