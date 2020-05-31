@@ -41,17 +41,10 @@ function cardString(cardnum) {
 	var cost = getCost(cardnum) ;
 	var arrows = '<span class="arrows"><a href="javascript:addToDeck(' 	+ cardnum + ')" class="addlink">▼</a><a href="javascript:pullFromDeck(' + cardnum + ')" class="droplink">▲</a></span>'
 	var manacost = manaSpan(cost, 'vert');
-	if (cardname.indexOf("//") == -1) {
-		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
-		else {var bufferspace = '';}
-		return arrows + manacost + '</span><span class="cardname"' + bufferspace + '>' + cardname + '</span>'
-	}
-	else { cardnames = cardname.split(" // ");
-		firstcost = manacost[0]
-		secondcost = manacost[1]
-		var bufferspace = ' style="padding:0px 0px 0px 0px"';
-		return arrows + firstcost + '<span class="slashspan">//</span>' + secondcost + '</span><span class="cardname" style="padding:0px 0px 0px 4px">' + cardnames[0] + '</span><span class="slashspan">//</span><span class="cardname"' + bufferspace + '>' + cardnames[1] + '</span>'
-	}
+
+	if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
+	else {var bufferspace = '';}
+	return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a href="javascript:addToDeck(' + cardnum + ')">' + cardname + '</a></span>'
 } ;
 /*		this code is for [COST 1} card 1 // [COST 2] card 2
 		if (firstcost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
