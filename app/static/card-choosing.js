@@ -116,7 +116,7 @@ function writeCard(cardnum) {
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}
 	else {var bufferspace = '';}
-	present = present + manacost + '</span><span class="cardname-bot"' + bufferspace + '><a href="javascript:pullFromDeck(' + cardnum + ')>' + cardname + '</a></span></div>'
+	present = present + manacost + '</span><span class="cardname-bot"' + bufferspace + '><a href="javascript:pullFromDeck(' + cardnum + ')">' + cardname + '</a></span></div>'
 	docspan.innerHTML = current + present ;
 }
 
