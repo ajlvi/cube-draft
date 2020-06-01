@@ -44,7 +44,7 @@ function cardString(cardnum) {
 
 	if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 	else {var bufferspace = '';}
-	return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a href="javascript:addToDeck(' + cardnum + ')">' + cardname + '</a></span>'
+	return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a class="tooltip" href="javascript:addToDeck(' + cardnum + ')" data-image="' + JSON.parse(dataDump.chosen_df)["scryfall"][cardnum] + '">' + cardname + '</a></span>'
 } ;
 /*		this code is for [COST 1} card 1 // [COST 2] card 2
 		if (firstcost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
