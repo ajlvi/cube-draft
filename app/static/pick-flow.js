@@ -23,7 +23,7 @@ function ping() {
 			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
-			packAndPickNos() ;
+			packAndPickNos() ; addMainOverlays(); 
 			} 
 		});
 	};
@@ -55,6 +55,7 @@ function updatePicks() {
 		if (thispick < picks) {thispick++;}
 		else {thispick = 1; thispack++;}
 	}
+	addSideOverlays();
 };
 
 
@@ -164,3 +165,46 @@ function packAndPickNos() {
 	$('#pack-number').html(packstring);
 	$('#pick-number').html(pickstring);
 }
+
+//adds overlays to the picks panel this needs to be re-run when new picks are added.
+function addSideOverlays() {
+	$(".tooltip").mouseenter(function(event){
+		if ($(this).parent('span').children('span.image-overlay').length) {
+			$(this).parent('span').children('span.image-overlay').show();
+		} else {
+			var image_name = $(this).data('image');
+			var imageTag='<span class="image-overlay" style="position:absolute;">' + '<img src="' + image_name + '" alt="image-overlay" height="300" />' + '</span>';
+			$(this).parent('span').append(imageTag);
+			
+			var rightWidth = ($(this).width() + 2).toString() + "px"
+			$(this).parent('span').children('span.image-overlay').css("right", rightWidth); 
+			
+			if ( $(this).parent('span').position()["top"] + 320 > $(window).height() ) {
+				$(this).parent('span').children('span.image-overlay').css("bottom", "16px"); }
+			else { $(this).parent('span').children('span.image-overlay').css("top", "16px"); }
+			
+			$(this).parent('span').children('span.image-overlay').css("z-index", "1");
+		}
+	});
+
+	$(".tooltip").mouseleave(function(){
+		$(this).parent('span').children('span.image-overlay').hide();
+    });
+};
+
+function addMainOverlays() {
+	$(".card-image").hover(function(){
+		if ($(this).parent('td').children('span.image-overlay').length) {
+			$(this).parent('td').children('span.image-overlay').show();
+		} else {
+			var image_name = $(this).attr('src');
+			var imageTag='<span class="image-overlay" style="position:absolute;top:0;left:0">' + '<img src="' + image_name + '" alt="image-overlay" height="300" />' + '</span>';
+			$(this).parent('td').append(imageTag);
+
+			$(this).parent('td').children('span.image-overlay').css("z-index", "1");
+		}
+	},
+	function(){
+		$(this).parent('td').children('span.image-overlay').hide();
+    })
+};

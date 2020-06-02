@@ -15,11 +15,12 @@ function isCreature(cardnum) {
 }
 
 /* note this either returns a single string or a list for split cards.*/
-function manaSpan(cost, loc) {
+function manaSpan(cost, loc, slashed=false) {
 	if (cost == null) { return "<span class='mana-" + loc + "'></span>" ; }
 	else if (cost.indexOf("//") == -1) {
 		splitcost = cost.slice(1, cost.length-1).split("}{")
-		var mana = "<span class='mana-" + loc + "'>"
+		if (slashed) { var slash = "-slashed" ; } else { var slash = '' ; }
+		var mana = "<span class='mana-" + loc + slash + "'>"
 		for (j=0; j<splitcost.length; j++) {
 			symb = splitcost[j]
 			if (symb in costdict) {
@@ -32,7 +33,7 @@ function manaSpan(cost, loc) {
 		return mana
 	}
 	else { costs = cost.split(" // ");
-		return [manaSpan(costs[0], loc), manaSpan(costs[1], loc)];
+		return [manaSpan(costs[0], loc, true), manaSpan(costs[1], loc, true)];
 	}
 } 
 
@@ -42,10 +43,17 @@ function cardString(cardnum) {
 	var arrows = '<span class="arrows"><a href="javascript:addToDeck(' 	+ cardnum + ')" class="addlink">▼</a><a href="javascript:pullFromDeck(' + cardnum + ')" class="droplink">▲</a></span>'
 	var manacost = manaSpan(cost, 'vert');
 
-	if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
-	else {var bufferspace = '';}
-	return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a class="tooltip" href="javascript:addToDeck(' + cardnum + ')" data-image="' + JSON.parse(dataDump.chosen_df)["scryfall"][cardnum] + '">' + cardname + '</a></span>'
+	if (cardname.indexOf("//") == -1) {
+		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
+		else {var bufferspace = '';}
+		return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a class="tooltip" href="javascript:addToDeck(' + cardnum + ')" data-image="' + JSON.parse(dataDump.chosen_df)["scryfall"][cardnum] + '">' + cardname + '</a></span>'
+	}
+	else {
+		var bufferspace = ' style="padding:0px 0px 0px 4px"';
+		return arrows + manacost[0] + '</span><span class="slashspan">//</span>' + manacost[1] + '</span><span class="cardname"' + bufferspace + '><a class="tooltip" href="javascript:addToDeck(' + cardnum + ')" data-image="' + JSON.parse(dataDump.chosen_df)["scryfall"][cardnum] + '">' + cardname + '</a></span>'
+	}
 } ;
+
 /*		this code is for [COST 1} card 1 // [COST 2] card 2
 		if (firstcost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 		else {var bufferspace = '';}
