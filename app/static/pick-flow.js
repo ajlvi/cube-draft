@@ -23,7 +23,7 @@ function ping() {
 			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
-			packAndPickNos() ; addMainOverlays(); 
+			packAndPickNos();
 			} 
 		});
 	};
@@ -190,21 +190,4 @@ function addSideOverlays() {
 	$(".tooltip").mouseleave(function(){
 		$(this).parent('span').children('span.image-overlay').hide();
     });
-};
-
-function addMainOverlays() {
-	$(".card-image").hover(function(){
-		if ($(this).parent('td').children('span.image-overlay').length) {
-			$(this).parent('td').children('span.image-overlay').show();
-		} else {
-			var image_name = $(this).attr('src');
-			var imageTag='<span class="image-overlay" style="position:absolute;top:0;left:0">' + '<img src="' + image_name + '" alt="image-overlay" height="300" />' + '</span>';
-			$(this).parent('td').append(imageTag);
-
-			$(this).parent('td').children('span.image-overlay').css("z-index", "1");
-		}
-	},
-	function(){
-		$(this).parent('td').children('span.image-overlay').hide();
-    })
 };
