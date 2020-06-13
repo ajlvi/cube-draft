@@ -8,7 +8,8 @@ function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
 		dataDump = response;
 		if (!vertbardone) {
-			vertBar(dataDump['total_packs'], dataDump['cards_per_pack']);
+			var tossed = cutCards(dataDump["total_packs"], dataDump["cards_per_pack"], dataDump["drafters"].length, dataDump["scheme"]) ;
+			vertBar(dataDump['total_packs'], dataDump['cards_per_pack'] - tossed);
 		}
 		updatePicks(); flowBar() //update the list of existing picks
 		if (response['my_status']==0) {
@@ -46,13 +47,14 @@ function midTableMessage(choice) {
 function updatePicks() {
 	//for each card in the cardlist, we'll determine the pack and pick number, then get a string of html, then insert it
 	var cardlist = dataDump['chosen_cards']
+	var tossed = cutCards(dataDump["total_packs"], dataDump["cards_per_pack"], dataDump["drafters"].length, dataDump["scheme"]) ;
 	var packs = dataDump['total_packs']
 	var picks = dataDump['cards_per_pack']
 	var thispack = 1;
 	var thispick = 1;
 	for (cardidx=0; cardidx<cardlist.length; cardidx++) {
 		makeJSPick(cardlist[cardidx], thispack, thispick);
-		if (thispick < picks) {thispick++;}
+		if (thispick < picks - tossed) {thispick++;}
 		else {thispick = 1; thispack++;}
 	}
 	addSideOverlays();
@@ -155,8 +157,9 @@ function makePick(playername, dnum, pnum) {
 };
 
 function packAndPickNos() {
-	var pick_no = (1 + dataDump.chosen_cards.length) % dataDump.cards_per_pack
-	if (pick_no == 0) {pick_no = dataDump.cards_per_pack ;}
+	var tossed = cutCards(dataDump["total_packs"], dataDump["cards_per_pack"], dataDump["drafters"].length, dataDump["scheme"]) ;
+	var pick_no = (1 + dataDump.chosen_cards.length) % (dataDump.cards_per_pack-tossed)
+	if (pick_no == 0) {pick_no = (dataDump.cards_per_pack-tossed) ;}
 	if (dataDump.current_pack == null) { var packstring = '' ; var pickstring = '' ;}
 	else { 
 		var packstring = 'pack <span class="pack-no">' + dataDump.packno.toString() + '</span>' ;

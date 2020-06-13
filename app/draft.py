@@ -46,6 +46,8 @@ class Draft:
 	def whatPackIsIt(self, handle): return self.currentPack
 	
 	def getKey(self): return self.key
+	def getScheme(self): return self.scheme
+	def getPackData(self): return (self.intended, self.total_packs, self.cards_per_pack)
 
 	def setKey(self, k): self.key = k
 	def setHandles(self, hs): self.handles = hs
@@ -96,7 +98,7 @@ class Draft:
 		print(f"player {handle} is picking card {num}.")
 		PlayerObj = self.players[self.handles.index(handle)]
 		usedPack = PlayerObj.draftCard(num)
-		if len(usedPack) == 0:
+		if len(usedPack) == endPackNumber(self):
 			self.fullyDrafted += 1
 			if self.readyForNextPack(): self.nextPack()
 		else:
@@ -151,7 +153,7 @@ class Draft:
 		
 		This returns a dictionary which still needs to be JSONnified.
 		"""
-		print(f"Player {handle} is ppinging with card-id {num}.")
+		print(f"Player {handle} is pinging with card-id {num}.")
 	#if HANDLE not here -- raise IndexError
 	#if CARD not here -- raise ValueError
 		if num >= 0: self.makePick(handle, num)
@@ -172,7 +174,8 @@ class Draft:
 			"packno": self.currentPack, "total_packs": self.total_packs, \
 			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
-			"current_pack": current_pack, "current_df": current_df}
+			"current_pack": current_pack, "current_df": current_df, \
+			"scheme": self.scheme}
 		return outdict
 		
 	def export(self):
@@ -204,6 +207,11 @@ class Draft:
 		d["player_info"] = playd
 		return d
 		
+def endPackNumber(draf):
+	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
+		return 2
+	return 0
+
 def rebuildDraft(d, cube):
 	"""
 	Takes the information of an exported dictionary d and a cube df and
@@ -247,9 +255,15 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		if (packs, cardsper) == (24, 15):
 			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 					 "ally": 35, "enemy": 35, 'other': 37, 'land': 38}
+		elif (packs, cardsper) == (24, 13):
+			stock = {"W": 37, "U": 37, "B": 37, "R": 37, "G": 37, \
+					 "ally": 30, "enemy": 30, 'other': 33, 'land': 34}
 		elif (packs, cardsper) == (24, 11):
 			stock = {"W": 31, "U": 31, "B": 31, "R": 31, "G": 31, \
 					 "ally": 26, "enemy": 26, 'other': 28, 'land': 29}
+		elif (packs, cardsper) == (24, 9):
+			stock = {"W": 26, "U": 26, "B": 26, "R": 26, "G": 26, \
+					 "ally": 20, "enemy": 20, 'other': 22, 'land': 24}
 		else: return makePacks(cube, packs, cardsper, "random")
 		pool = []
 		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
@@ -268,7 +282,7 @@ def divvy(cats, packs):
 		for card in current:
 			packlists[pak].append(card)
 			pak = (pak + 1)%len(packlists)
-	return [sorted(pack) for pack in packlists]
+	return [Pack(sorted(pack)) for pack in packlists]
 	
 def makeKey():
 	"""

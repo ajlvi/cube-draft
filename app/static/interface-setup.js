@@ -1,3 +1,11 @@
+function cutCards(packs, picks, players, scheme) {
+	if (scheme == "Adam") {
+		if (players == 6 && packs == 4 && picks == 13) { return 2 ; }
+		else if (players == 4 && packs == 6 && picks == 9) { return 2 ; }
+	}
+	return 0 ;
+}
+
 function vertBar(packs, picks) {
 	var outstring = '<div class="draft-picks">' ;
 	for (p=1; p <= packs; p++) {
