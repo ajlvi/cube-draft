@@ -105,7 +105,13 @@ function populateTable(cardlist, cardinfo) {
 	else if (k < 15) {
 		outstring = outstring + '<td class="pick-table-cell empty" colspan=' + (15-k).toString() + '></td>' ;
 	}
-	outstring = outstring + '<td class="pick-table-cell buttonbox"><button id="confirm">confirm pick</button></tr>';
+	// last cell -- button either with or without librarian
+	if (dataDump.has_cogwork == dataDump.my_name) {
+		outstring = outstring + '<td class="pick-table-cell buttonbox"><div class="cogwork-button"><button id="cogwork">replace with<br> librarian</button></div><div class="regular-button"><button id="confirm">confirm pick</button></div></tr>';
+	}
+	else {
+		outstring = outstring + '<td class="pick-table-cell buttonbox"><div class="regular-button"><button id="confirm">confirm pick</button></div></tr>';
+	}
 	$("#packdisp").html(outstring);
 	initializePack();
 };

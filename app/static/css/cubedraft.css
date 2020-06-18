@@ -14,12 +14,13 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .pick-table-row { height: 185px ; }
 .pick-table-cell { width: 132px ; position:relative }
 #packdisp { border-collapse: separate ; border-spacing : 2px 8px ; height: 394px }
-#confirm, .modobutton { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
+#cogwork { margin-bottom: 12px ; }
+#confirm, #cogwork, .modobutton { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid;
-	margin: auto; display: block; background: #F0F0F0 }
-#confirm:focus, #confirm:hover, .modobutton:focus, .modobutton:hover { background-color: #DDDDDD; }
-#confirm:active, .modobutton:active { background-color:#DDDDFF; }
+	margin-left: auto; margin-right: auto; display: block; background: #F0F0F0 }
+#confirm:focus, #confirm:hover, #cogwork:focus, #cogwork:hover, .modobutton:focus, .modobutton:hover { background-color: #DDDDDD; }
+#confirm:active, #cogwork:active, .modobutton:active { background-color:#DDDDFF; }
 .fulltd { text-align : center ; font-family : Ubuntu; font-size : 11pt ; color: black; width:1090px;}
 
 .draft-picks {padding:3px 0px 0px 0px}
@@ -55,9 +56,10 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .under-pack-info { height : 198px ; width: 1086px ; }
 .draft-flow-bar { width: 954px ; display : table ; text-align : center ; float : left ; height : 100% }
 #flow-info { width: 100% ; height: 100%;  vertical-align: middle; display : table-cell } 
-.drafter-box { color : black ; font-size : 12pt ; font-family : Ubuntu; position : relative }
+.drafter-box { color : black ; font-size : 12pt ; font-family : Ubuntu; position : relative ; padding: 0px 10px 0px 10px ; }
 .overtext { position: absolute; top: -75%; width: 100%; text-align:center; left: 0 }
-.arrow { color : black ; padding: 0px 10px 0px 10px ; vertical-align: middle }
+.undertext { position: absolute; bottom: -75%; width: 100%; text-align:center; left: 0; font-variant : small-caps; font-size: 8pt }
+.arrow { color : black ; vertical-align: middle }
 .unstarted { font-style: italic }
 
 .pack-time { width: 132px ; height : 100% ; float : left }

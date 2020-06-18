@@ -24,3 +24,10 @@ class Pack:
 		"""
 		if self.hasCard(num): self.cards.remove(num)
 		else: raise ValueError(f"Card {num} wasn't in pack...")
+		
+	def replaceCard(self, taken, putback):
+		"""
+		Removes [[taken]] and puts in [[putback]]. This is used for Cogwork Librarians.
+		"""
+		assert taken in self.cards
+		self.cards[self.cards.index(taken)] = putback

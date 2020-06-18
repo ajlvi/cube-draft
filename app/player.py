@@ -73,11 +73,9 @@ class Player:
 			self.opentime = time()
 		else: self.queue.append(pack)
 		
-	def draftCard(self, num, cogwork=False):
+	def draftCard(self, num):
 		"""
-		Later we can try to add support for Cogwork Librarian here,
-		but for now we're just going to append cards to the end of the
-		list of picked objects.
+		This method only handles non-Cogwork picks.
 		"""
 		self.activePack.chooseCard(num)
 		self.chosen.append(num)
@@ -85,3 +83,14 @@ class Player:
 		self.activePack = None
 		if self.queueLen() != 0: self.pullFromQueue()
 		return usedPack
+		
+	def cogworkPick(self, num, cogwork):
+		"""
+		This method replaces Cogwork Librarian in the list of chosen cards
+		with the selected card [[num]]. I'm having the Draft object tell us
+		which card is the librarian.
+		"""
+		assert cogwork in self.chosen
+		self.chosen[self.chosen.index(cogwork)] = num
+		self.activePack.swapCard(num, cogwork)
+		self.opentime += 10

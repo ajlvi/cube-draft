@@ -29,9 +29,13 @@ function flowBar(input=1) {
 	arrowbox = "<span class='arrow'>" + arrow + "</span>"
 	output = arrowbox;
 	for (pers = 0 ; pers < drafters.length; pers++) {
+		var handle = drafters[pers]
 		if (dataDump.packno == 0) { var spanclass = "drafter-box unstarted" ; }
 		else { var spanclass = "drafter-box" ; }
-		output = output + "<span class='" + spanclass + "'><span class='drafter-name'>" + drafters[pers] + "</span><span class='overtext'>" + "&bull;".repeat(dataDump.status[pers]) + "</span></span>" + arrowbox ;
+		if (dataDump.has_cogwork == handle) {
+			cogtext = '<span class="undertext">cogwork</span>' }
+		else { var cogtext = '' ; }
+		output = output + "<span class='" + spanclass + "'><span class='drafter-name'>" + handle + "</span><span class='overtext'>" + "&bull;".repeat(dataDump.status[pers]) + "</span>" + cogtext + "</span>" + arrowbox ;
 	}
 	$('#flow-info').html(output) ;
 }

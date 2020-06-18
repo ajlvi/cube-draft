@@ -88,7 +88,7 @@ def makepick():
 			try:
 				snapshot = json.loads(r.get(draftid))
 				DraftObj = draft.rebuildDraft(snapshot, cube)
-				output = DraftObj.handleIncoming(playername, num)
+				output = DraftObj.handleIncoming(playername, num, False)
 				newsnapshot = json.dumps(DraftObj.export())
 				r.set(draftid, newsnapshot)
 				return jsonify(output)

@@ -14,6 +14,9 @@ class Draft:
 		This method returns the key to be stored in a dictionary of drafts.
 		"""
 		self.cube = cube
+		if "Cogwork Librarian" in cube["card"].values:
+			self.cogworkIdx = cube[cube["card"] == "Cogwork Librarian"].index[0]
+		else: self.cogworkIdx = 0
 		self.scheme = scheme
 		self.intended = intended
 		self.total_packs = packs
@@ -91,19 +94,22 @@ class Draft:
 		increment = (-1)**self.currentPack
 		return self.players[(self.handles.index(handle) + increment)%len(self.players)]
 	
-	def makePick(self, handle, num):
+	def makePick(self, handle, num, cogwork):
 		"""
 		I'm expecting to receive handles from the end users.
 		"""
 		print(f"player {handle} is picking card {num}.")
 		PlayerObj = self.players[self.handles.index(handle)]
-		usedPack = PlayerObj.draftCard(num)
-		if len(usedPack) == endPackNumber(self):
-			self.fullyDrafted += 1
-			if self.readyForNextPack(): self.nextPack()
+		if cogwork:
+			PlayerObj.cogworkPick(num, self.cogworkIdx)
 		else:
-			nextPlayer = self.successor(handle)
-			nextPlayer.receivePack(usedPack)
+			usedPack = PlayerObj.draftCard(num)
+			if len(usedPack) == endPackNumber(self):
+				self.fullyDrafted += 1
+				if self.readyForNextPack(): self.nextPack()
+			else:
+				nextPlayer = self.successor(handle)
+				nextPlayer.receivePack(usedPack)
 	
 	def autoPick(self, handle):
 		"""
@@ -113,7 +119,14 @@ class Draft:
 		PlayerObj = self.players[self.handles.index(handle)]
 		theirPack = PlayerObj.getActive()
 		card = theirPack.randomCard()
-		self.makePick(handle, card)
+		self.makePick(handle, card, False)
+	
+	def hasCogwork(self):
+		for handle in self.handles:
+			PlayerObj = self.players[self.handles.index(handle)]
+			if self.cogworkIdx in PlayerObj.getChosen():
+				return handle
+		return None
 	
 	def status(self, handle):
 		"""
@@ -144,7 +157,7 @@ class Draft:
 				output.append(self.status(handle))
 		return output
 
-	def handleIncoming(self, handle, num):
+	def handleIncoming(self, handle, num, cogwork=False):
 		"""
 		This is the function which interfaces with the end user -- it receives the
 		data from the page and it outputs everything that we want to give back.
@@ -156,7 +169,7 @@ class Draft:
 		print(f"Player {handle} is pinging with card-id {num}.")
 	#if HANDLE not here -- raise IndexError
 	#if CARD not here -- raise ValueError
-		if num >= 0: self.makePick(handle, num)
+		if num >= 0: self.makePick(handle, num, cogwork)
 		stat = self.statusCheck()
 		PlayerObj = self.players[self.handles.index(handle)]
 		chosen_cards = PlayerObj.getChosen()
@@ -175,7 +188,7 @@ class Draft:
 			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
 			"current_pack": current_pack, "current_df": current_df, \
-			"scheme": self.scheme}
+			"scheme": self.scheme, "has_cogwork": self.hasCogwork() }
 		return outdict
 		
 	def export(self):
@@ -247,7 +260,13 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 	Right now "Adam" only works for 3x15 (8-man), 4x11 (6-man), and 5x9.
 	"""
 	if scheme == "random":
+#		pool = cube.sample(packs * cardsper)
+#		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
+#		return packidxs
+#	elif scheme == "cogtest":
+		cog = cube[cube["card"] == "Cogwork Librarian"].index[0]
 		pool = cube.sample(packs * cardsper)
+		if cog not in pool.index: pool = cube.loc[list(pool.index[:-1]) + [cog]]
 		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
 		return packidxs
 	elif scheme == "Adam":
