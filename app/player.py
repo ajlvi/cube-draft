@@ -92,5 +92,5 @@ class Player:
 		"""
 		assert cogwork in self.chosen
 		self.chosen[self.chosen.index(cogwork)] = num
-		self.activePack.swapCard(num, cogwork)
+		self.activePack.replaceCard(num, cogwork)
 		self.opentime += 10

@@ -15,7 +15,7 @@ class Draft:
 		"""
 		self.cube = cube
 		if "Cogwork Librarian" in cube["card"].values:
-			self.cogworkIdx = cube[cube["card"] == "Cogwork Librarian"].index[0]
+			self.cogworkIdx = int(cube[cube["card"] == "Cogwork Librarian"].index[0])
 		else: self.cogworkIdx = 0
 		self.scheme = scheme
 		self.intended = intended

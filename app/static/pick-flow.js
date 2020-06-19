@@ -5,7 +5,7 @@ var vertbardone = false;
 var draftover = false;
 
 function ping() {
-	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1}, function(response) {
+	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1, isCogwork : 'no'}, function(response) {
 		dataDump = response;
 		if (!vertbardone) {
 			var tossed = cutCards(dataDump["total_packs"], dataDump["cards_per_pack"], dataDump["drafters"].length, dataDump["scheme"]) ;
@@ -120,6 +120,9 @@ function initializePack() {
 	$("#confirm").click(function(){
 		makePick(thisplayer, thisdraft, reservedid);
 	});
+	$("#cogwork").click(function(){
+		makePick(thisplayer, thisdraft, reservedid, 'yes');
+	});
 	$(".unreserved").click(function(){
 		$(".card-image").not(this).removeClass("reserved");
 		$(".card-image").not(this).addClass("unreserved");
@@ -140,9 +143,9 @@ function initializePack() {
 
 
 //a function for actually making a pick -- sends player name, draft id, pick number
-function makePick(playername, dnum, pnum) {
+function makePick(playername, dnum, pnum, cogwork='no') {
 		clearInterval(timer);
-		$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum}, function(response) {
+		$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum, isCogwork: cogwork}, function(response) {
 		reservedid = -1;
 		dataDump = response;
 		updatePicks(); //update the list of existing picks
