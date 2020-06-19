@@ -8,6 +8,7 @@ function MODOExport(){
 		cube_id = cardpool[drafted]
 		modo_id = JSON.parse(dataDump["chosen_df"])["mtgo"][cube_id]
 		card_name = JSON.parse(dataDump["chosen_df"])["card"][cube_id].replace(" // ", "/")
+		if (card_name == "Cogwork Librarian") { card_name = "Gilded Sentinel" }
 		if (deck.length == 	0) { var sbloc = "false" }
 		else if ( deck.includes(cube_id) ) { var sbloc = "false" }
 		else { var sbloc = "true" }

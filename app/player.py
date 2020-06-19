@@ -58,6 +58,7 @@ class Player:
 	def pullFromQueue(self):
 		assert self.activePack == None
 		self.activePack = self.queue[0]
+		self.activePack.sortCards() #deals with Librarian being out of position
 		self.queue = self.queue[1:]
 		self.opentime = time()
 

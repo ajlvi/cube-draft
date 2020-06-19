@@ -31,3 +31,10 @@ class Pack:
 		"""
 		assert taken in self.cards
 		self.cards[self.cards.index(taken)] = putback
+		
+	def sortCards(self):
+		"""
+		If Cogwork Librarian was re-inserted into the pack, we don't want it to
+		show up in the inserted slot.
+		"""
+		self.cards = sorted(self.cards)
