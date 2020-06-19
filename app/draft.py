@@ -109,6 +109,7 @@ class Draft:
 				if self.readyForNextPack(): self.nextPack()
 			else:
 				nextPlayer = self.successor(handle)
+				usedPack.sortCards() #to rearrange a replaced Librarian, if needed
 				nextPlayer.receivePack(usedPack)
 	
 	def autoPick(self, handle):

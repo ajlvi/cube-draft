@@ -122,6 +122,14 @@ function writeCard(cardnum) {
 }
 
 function writeCMCs() {
+	//cogwork nonsense -- is there a card in the deck not in our pool?
+	var df = JSON.parse(dataDump.chosen_df).card
+	var cutIdx = []
+	for (i=0; i < deck.length; i++) {
+		if (!(deck[i] in df)) { cutIdx.push(i) }
+	}
+	if (cutIdx.length == 1) { deck.splice(cutIdx[0], 1); }
+	//okay whew, now let's write all the cards in the deck.
 	for (j=1; j<=6; j++) {
 		cspan = document.getElementById("creatures-" + j);
 		nspan = document.getElementById("noncreatures-" + j);
@@ -131,7 +139,6 @@ function writeCMCs() {
 		writeCard(deck[k]);
 	}
 }
-		
 
 /* these functions were used for the stream draft overlay and are not used presently. 
 
