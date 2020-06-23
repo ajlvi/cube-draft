@@ -261,10 +261,10 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 	Right now "Adam" only works for 3x15 (8-man), 4x11 (6-man), and 5x9.
 	"""
 	if scheme == "random":
-#		pool = cube.sample(packs * cardsper)
-#		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
-#		return packidxs
-#	elif scheme == "cogtest":
+		pool = cube.sample(packs * cardsper)
+		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
+		return packidxs
+	elif scheme == "cogtest":
 		cog = cube[cube["card"] == "Cogwork Librarian"].index[0]
 		pool = cube.sample(packs * cardsper)
 		if cog not in pool.index: pool = cube.loc[list(pool.index[:-1]) + [cog]]
