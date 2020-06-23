@@ -275,6 +275,9 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		if (packs, cardsper) == (24, 15):
 			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 					 "ally": 35, "enemy": 35, 'other': 37, 'land': 38}
+		elif (packs, cardsper) == (21, 15):
+			stock = {"W": 37, "U": 37, "B": 37, "R": 37, "G": 37, \
+					 "ally": 32, "enemy": 32, 'other': 32, 'land': 34}
 		elif (packs, cardsper) == (24, 13):
 			stock = {"W": 37, "U": 37, "B": 37, "R": 37, "G": 37, \
 					 "ally": 30, "enemy": 30, 'other': 33, 'land': 34}
