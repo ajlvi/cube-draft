@@ -62,8 +62,8 @@ function updatePicks() {
 
 
 function setTimer(time) {
-	i = Math.floor(time);
-	timer = setInterval(function() {runTimer(i);}, 1000);
+	timeFloor = Math.floor(time);
+	timer = setInterval(function() {runTimer(timeFloor);}, 1000);
 };
 	
 function runTimer(num) {
@@ -73,7 +73,7 @@ function runTimer(num) {
 		if (sec < 10) {secstring = '0'+ sec.toString();}
 		else {secstring = sec.toString();}
 		$("#timer").text(min.toString() + ':' + secstring);
-		i--;
+		timeFloor--;
 	}
 	else if (num==0) {
 		makePick(thisplayer, thisdraft, reservedid);
