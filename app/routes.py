@@ -39,7 +39,7 @@ def displaydraft():
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
 		playername = request.form['name'] #sanitize this here
-		draftid = request.form['id']
+		draftid = request.form['id'].upper().strip()
 		draftidbit = draftid.encode()
 		if r.exists(draftidbit):
 			snapshot = json.loads(r.get(draftidbit))
@@ -67,7 +67,7 @@ def displaydraft():
 def makepick():
 	r = redis_client
 	if 'player' in request.args:
-		draftid = request.args['draftid'].encode()
+		draftid = request.args['draftid'].upper().strip().encode()
 		playername = escape(request.args['player'])
 		num = int(request.args['pickid'])
 		if 'isCogwork' in request.args:
@@ -94,7 +94,7 @@ def makepick():
 		#draft not in alldrafts
 			return redirect('/queue')
 	elif 'player' in request.form:
-		draftid = escape(request.form['draftid']).encode()
+		draftid = escape(request.form['draftid']).upper().strip().encode()
 		playername = request.form['player']
 		num = int(request.form['pickid'])
 		if 'isCogwork' in request.form:
