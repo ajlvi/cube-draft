@@ -1234,3 +1234,5 @@ venv/Scripts/pythonw.exe
 *.pyc
 *.pyc
 app/__pycache__/routes.cpython-37.pyc
+app/__init__.py
+config.py
