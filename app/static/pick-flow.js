@@ -139,6 +139,27 @@ function initializePack() {
 			makePick(thisplayer, thisdraft, cardid);
 		}); 
 	}) ;
+	$('.card-image').bind('contextmenu', function(e) {
+		return false;
+	}); 
+	$(".card-image").mousedown(function(e) {
+		if (e.which > 1) {
+			var zoomIn = true; 
+			var my_src = $(this).attr('src');
+			var zb = $("#zoom-box");
+			if (zb.children("img").length > 0) {
+				var zoom_src = zb.children("img")[0].src ;
+				if (zoom_src == my_src) {
+					zoomIn = false ;
+					zb.html('') ;
+				}
+			}
+			if (zoomIn) {
+				var img_tag = '<img src="' + my_src + '" class="zoomed-image">';
+				zb.html(img_tag) ;
+			}
+		}
+	});
 };
 
 
@@ -150,6 +171,7 @@ function makePick(playername, dnum, pnum, cogwork='no') {
 		dataDump = response;
 		updatePicks(); //update the list of existing picks
 		packAndPickNos(); //clear the pack and pick numbers
+		$('#zoom-box').html(''); //in case any card image was zoomed in
 		$('#timer').html('');
 		if (response['my_status']==0) {
 			$('#packdisp').html(midTableMessage(0)); //change this later
