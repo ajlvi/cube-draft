@@ -68,6 +68,9 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 #timer { padding: 0px 0px 8px 0px }
 #pack-number { padding: 0px 0px 5px 0px }
 
+.zoombox { position : absolute ; z-index: 1 ; left: 3px }
+.zoomed-image { width : 275px; }
+
 /* for queue page */
 .queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
 	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
