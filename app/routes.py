@@ -3,6 +3,7 @@ from app import draft, player, pack, redis_client
 import pandas as pd
 from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
+import redis
 
 url = 'app/static/cube.csv'
 cube = pd.read_csv(url)
@@ -77,15 +78,33 @@ def makepick():
 				cog = False
 		else:
 			cog = False
-		print(num)
 		if r.exists(draftid):
 			try:
-				snapshot = json.loads(r.get(draftid))
-				DraftObj = draft.rebuildDraft(snapshot, cube)
-				output = DraftObj.handleIncoming(playername, num, cog)
-				newsnapshot = json.dumps(DraftObj.export())
-				r.set(draftid, newsnapshot)
-				return jsonify(output)
+				if num < 0:
+					snapshot = json.loads(r.get(draftid))
+					DraftObj = draft.rebuildDraft(snapshot, cube)
+					output = DraftObj.handleIncoming(playername, num, cog)
+					newsnapshot = json.dumps(DraftObj.export())
+					r.set(draftid, newsnapshot)
+					return jsonify(output)
+				else:
+					pipe = r.pipeline() #we need to watch the draft id to make sure there aren't collisions
+					pickMade = False
+					while not pickMade:
+						try:
+							snapshot = json.loads(r.get(draftid))
+							pipe.watch(draftid)
+							DraftObj = draft.rebuildDraft(snapshot, cube)
+							output = DraftObj.handleIncoming(playername, num, cog)
+							newsnapshot = json.dumps(DraftObj.export())
+							pipe.multi()
+							pipe.set(draftid, newsnapshot)
+							pipe.execute()
+							pickMade = True
+							return jsonify(output) 
+						except redis.WatchError: #there was a collision! try again
+							print('watch error!!!')
+							pass
 			except IndexError: #we get here if the player isn't in the draft
 				return redirect('/queue')
 			except ValueError: #card not in pack!?!?!
@@ -107,12 +126,31 @@ def makepick():
 		print(draftid)
 		if r.exists(draftid):
 			try:
-				snapshot = json.loads(r.get(draftid))
-				DraftObj = draft.rebuildDraft(snapshot, cube)
-				output = DraftObj.handleIncoming(playername, num, cog)
-				newsnapshot = json.dumps(DraftObj.export())
-				r.set(draftid, newsnapshot)
-				return jsonify(output)
+				if num < 0:
+					snapshot = json.loads(r.get(draftid))
+					DraftObj = draft.rebuildDraft(snapshot, cube)
+					output = DraftObj.handleIncoming(playername, num, cog)
+					newsnapshot = json.dumps(DraftObj.export())
+					r.set(draftid, newsnapshot)
+					return jsonify(output)
+				else:
+					pipe = r.pipeline() #we need to watch the draft id to make sure there aren't collisions
+					pickMade = False
+					while not pickMade:
+						try:
+							snapshot = json.loads(r.get(draftid))
+							pipe.watch(draftid)
+							DraftObj = draft.rebuildDraft(snapshot, cube)
+							output = DraftObj.handleIncoming(playername, num, cog)
+							newsnapshot = json.dumps(DraftObj.export())
+							pipe.multi()
+							pipe.set(draftid, newsnapshot)
+							pipe.execute()
+							pickMade = True
+							return jsonify(output) 
+						except redis.WatchError: #there was a collision! try again
+							print('watch error!!!')
+							pass
 			except IndexError: #we get here if the player isn't in the draft
 				return redirect('/queue')
 			except ValueError: #card not in pack!?!?!
