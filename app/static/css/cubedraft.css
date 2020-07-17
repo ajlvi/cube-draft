@@ -36,15 +36,16 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .slashspan { padding: 0px 3px 0px 3px ;}
 .cardname { position: relative ; }
 
-.bottom-holder {width: 1088px; display: block; height:198px}
+.bottom-holder {width: 1085px; display: block; height:198px; margin-left: 3px}
 .cmc-stack {display: inline-block; float:left}
-.cmcbox {width : 178px ; display: inline-block }
+.cmcbox {width : 180px ; display: inline-block }
 .critter { max-height:116px;}
 .spell {max-height:76px; margin:10px 0px 0px 0px}
 .cost {border-style: dashed; border-width: 0px 0px 1px 0px ; border-color: black; text-align: center; font-size: 8pt}
 .critter, .spell { font-size: 10px ; }
 .symbolimg-bot {height: 10px; width: 10px; padding: 0px 0px 0px 0px}
 .mana-bot {min-width : 33px; display: inline-block; }
+.mana-bot-slashed {min-width : 33px; display: inline-block; }
 .cardname-bot { font-size : 10px ; }
 .cardname-bot > a { color: white; text-decoration : none }
 .cardname-bot > a:hover { color: #DDDDDD; text-decoration : none }
