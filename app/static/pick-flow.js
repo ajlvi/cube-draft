@@ -156,6 +156,11 @@ function initializePack() {
 			}
 			if (zoomIn) {
 				var img_tag = '<img src="' + my_src + '" class="zoomed-image">';
+				var my_id = parseInt($(this).attr('id'));
+				if (JSON.parse(dataDump.current_df)["back"][my_id] != null) {
+					back_src = JSON.parse(dataDump.current_df)["back"][my_id];
+					img_tag = img_tag + '<img src="' + back_src + '" class="zoomed-image">';
+				}
 				zb.html(img_tag) ;
 			}
 		}
