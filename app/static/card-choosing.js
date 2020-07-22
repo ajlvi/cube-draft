@@ -1,6 +1,6 @@
 var deck = [] ;
 
-var costdict = {"W/U": "azorius", "U/B": "dimir", "B/R": "rakdos", "R/G": "gruul", "G/W": "selesnya", "W/B": "boros", "B/G": "golgari", "G/U": "simic", "U/R": "izzet", "R/W": "boros"};
+var costdict = {"W/U": "azorius", "U/B": "dimir", "B/R": "rakdos", "R/G": "gruul", "G/W": "selesnya", "W/B": "orzhov", "B/G": "golgari", "G/U": "simic", "U/R": "izzet", "R/W": "boros"};
 
 function getCost(cardnum) {
 	return JSON.parse(dataDump["chosen_df"])["cost"][cardnum];
