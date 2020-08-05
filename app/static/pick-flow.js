@@ -122,12 +122,12 @@ function populateTable(cardlist, cardinfo) {
 function initializePack() {
 	$("#confirm").click(function(){
 		var rightNow = new Date();
-		if (rightNow.getTime() - startTime > 4) {
+		if (rightNow.getTime() - startTime > 1500) {
 			makePick(thisplayer, thisdraft, reservedid); }
 	});
 	$("#cogwork").click(function(){
 		var rightNow = new Date();
-		if (rightNow.getTime() - startTime > 4) {
+		if (rightNow.getTime() - startTime > 1500) {
 			makePick(thisplayer, thisdraft, reservedid, 'yes'); }
 	});
 	$(".unreserved").click(function(){
@@ -140,7 +140,7 @@ function initializePack() {
 		$(this).off("dblclick");
 		$(this).dblclick(function(){
 			var rightNow = new Date();
-			if (rightNow.getTime() - startTime > 4) {
+			if (rightNow.getTime() - startTime > 1500) {
 			var cardname = $(this).attr("name");
 			var cardid = $(this).attr("id");
 			$(this).addClass("unreserved");
