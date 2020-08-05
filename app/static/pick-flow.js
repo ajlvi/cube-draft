@@ -3,6 +3,7 @@ var reservedid = -1;
 var timer = null;
 var vertbardone = false;
 var draftover = false;
+var startTime = null;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1, isCogwork : 'no'}, function(response) {
@@ -62,6 +63,8 @@ function updatePicks() {
 
 
 function setTimer(time) {
+	var d = new Date();
+	startTime = d.getTime();
 	timeFloor = Math.floor(time);
 	timer = setInterval(function() {runTimer(timeFloor);}, 1000);
 };
@@ -118,10 +121,14 @@ function populateTable(cardlist, cardinfo) {
 
 function initializePack() {
 	$("#confirm").click(function(){
-		makePick(thisplayer, thisdraft, reservedid);
+		var rightNow = new Date();
+		if (rightNow.getTime() - startTime > 1) {
+			makePick(thisplayer, thisdraft, reservedid); }
 	});
 	$("#cogwork").click(function(){
-		makePick(thisplayer, thisdraft, reservedid, 'yes');
+		var rightNow = new Date();
+		if (rightNow.getTime() - startTime > 1) {
+			makePick(thisplayer, thisdraft, reservedid, 'yes'); }
 	});
 	$(".unreserved").click(function(){
 		$(".card-image").not(this).removeClass("reserved");
@@ -132,11 +139,14 @@ function initializePack() {
 		reservedid = $(this).attr("id");
 		$(this).off("dblclick");
 		$(this).dblclick(function(){
+			var rightNow = new Date();
+			if (rightNow.getTime() - startTime > 1) {
 			var cardname = $(this).attr("name");
 			var cardid = $(this).attr("id");
 			$(this).addClass("unreserved");
 			$(this).removeClass("reserved");
 			makePick(thisplayer, thisdraft, cardid);
+			}
 		}); 
 	}) ;
 	$('.card-image').bind('contextmenu', function(e) {
