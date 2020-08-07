@@ -73,9 +73,12 @@ function runTimer(num) {
 	if (num > 0) {
 		min = Math.floor(num/60);
 		sec = num - min*60;
-		if (sec < 10) {secstring = '0'+ sec.toString();}
+		if (sec < 10) {secstring = '0'+ sec.toString()}
 		else {secstring = sec.toString();}
-		$("#timer").html("<span class='timebox'>" + min.toString() + ':' + secstring + "</span>");
+		if (sec < 3) {var bgcolor = " panic"}
+		else if (sec < 10) {var bgcolor = " low-time" }
+		else {var bgcolor = ""}
+		$("#timer").html("<span class='timebox" + bgcolor + "'>" + min.toString() + ':' + secstring + "</span>");
 		timeFloor--;
 	}
 	else if (num==0) {
