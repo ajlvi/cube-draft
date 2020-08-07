@@ -66,11 +66,11 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .pack-time { width: 132px ; height : 100% ; float : left }
 #timer, #pick-number, #pack-number  { font-size: 14pt ; width: 100% ; text-align: center ; color: black ; height : 22px }
 .pack-no, .pick-no { font-weight : bold ; padding: 0px 0px 0px 3px }
-#timer { padding: 0px 0px 8px 0px }
+#timer { padding: 0px 0px 9px 0px }
 #pack-number { padding: 0px 0px 5px 0px }
 .timebox { border-radius : 11px 11px 11px 11px ; border-style: solid ; border-color: black; border-width: 1px 1px 1px 1px ; padding: 3px 10px 3px 10px }
-.low-time { background: #0099ff ; }
-.panic { background : #ff1100 ; }
+.low-time { background: #55bbff ; }
+.panic { background : #ff5555 ; }
 
 .zoombox { position : absolute ; z-index: 1 ; left: 3px }
 .zoomed-image { width : 275px; }
