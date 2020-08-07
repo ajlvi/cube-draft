@@ -72,7 +72,7 @@ function runTimer(num) {
 		sec = num - min*60;
 		if (sec < 10) {secstring = '0'+ sec.toString();}
 		else {secstring = sec.toString();}
-		$("#timer").text(min.toString() + ':' + secstring);
+		$("#timer").text("<span class='timebox'>" + min.toString() + ':' + secstring + "</span>");
 		timeFloor--;
 	}
 	else if (num==0) {
