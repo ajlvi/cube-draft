@@ -97,9 +97,9 @@ Commit // Memory,U,{3}{U} // {4}{U}{U},0,https://img.scryfall.com/cards/normal/f
 Failed Inspection,U,{2}{U}{U},0,https://img.scryfall.com/cards/normal/front/f/8/f8900f91-cb17-4f99-a5ce-15819369beb8.jpg?1576381199,61659,
 Logic Knot,U,{X}{U}{U},0,https://img.scryfall.com/cards/normal/front/4/e/4e946be1-4ed6-4e2c-9782-3f630f8a8e1f.jpg?1562910897,26616,
 Confirm Suspicions,U,{3}{U}{U},0,https://img.scryfall.com/cards/normal/front/c/f/cf7fcbc2-1034-442d-9f2a-7d79ea40ac3d.jpg?1576384007,60328,
-Write into Being,U,{2}{U},0,https://img.scryfall.com/cards/normal/front/c/4/c4a8a726-7570-4823-848e-1132a5b7acce.jpg?1562634610,55755,
+Write into Being,U,{2}{U},0,https://img.scryfall.com/cards/normal/front/c/4/c4a8a726-7570-4823-848e-1132a5b7acce.jpg?1562634610,55755,https://i.imgur.com/s48jeOw.png
 Coastal Discovery,U,{3}{U},0,https://img.scryfall.com/cards/normal/front/c/1/c1df2411-0b0d-4b93-bf30-a22487b3c6ef.jpg?1562940797,58359,
-Taigam's Strike,U,{3}{U},0,https://img.scryfall.com/cards/normal/front/2/e/2ef5e279-14c4-4f91-b24d-c7098140efcd.jpg?1562784329,56180,
+Taigam's Strike,U,{3}{U},0,https://img.scryfall.com/cards/normal/front/2/e/2ef5e279-14c4-4f91-b24d-c7098140efcd.jpg?1562784329,56180,https://i.imgur.com/41cLK5q.png
 Treasure Cruise,U,{7}{U},0,https://img.scryfall.com/cards/normal/front/7/a/7a59d4b1-6cf4-44ec-8a96-1bb7094fea21.jpg?1562788963,54300,
 Ongoing Investigation,U,{1}{U},0,https://img.scryfall.com/cards/normal/front/1/9/19b8f962-8d4e-4dd8-a157-c0a55f9e152a.jpg?1576384167,60358,
 Claustrophobia,U,{1}{U}{U},0,https://img.scryfall.com/cards/normal/front/b/7/b7e5f600-4d19-42a4-b57e-650c76041798.jpg?1562836024,42620,
@@ -222,7 +222,6 @@ Tempting Wurm,G,{1}{G},1,https://img.scryfall.com/cards/normal/front/8/5/857c2b6
 Werebear,G,{1}{G},1,https://img.scryfall.com/cards/normal/front/9/6/964cf7e3-932d-432f-8ad4-9bd651aada96.jpg?1562922922,16615,
 Byway Courier,G,{2}{G},1,https://img.scryfall.com/cards/normal/front/2/f/2f243a51-bbd3-4028-a469-469ab5591aae.jpg?1576385010,60340,
 Hunting Moa,G,{2}{G},1,https://img.scryfall.com/cards/normal/front/9/2/926cefa1-3c5c-4bd6-859b-de620a3ee777.jpg?1555789722,26125,
-Matca Rioters,G,{2}{G},1,https://img.scryfall.com/cards/normal/front/b/3/b32dcf7d-ac19-45c5-8c3a-1155bf25b216.jpg?1562803200,31739,
 Silkweaver Elite,G,{2}{G},1,https://img.scryfall.com/cards/normal/front/d/1/d10938c8-6fc4-495f-912a-1d3f12278f78.jpg?1576382088,62785,
 Trusted Forcemage,G,{2}{G},1,https://img.scryfall.com/cards/normal/front/3/e/3ee66ef9-10a7-4aab-88f7-84956811cc6c.jpg?1561864176,43973,
 Spike Feeder,G,{1}{G}{G},1,https://img.scryfall.com/cards/normal/front/3/7/3751b2ae-a234-4691-984b-2f9f6b1cd1df.jpg?1562596387,10391,
@@ -238,6 +237,7 @@ Gigapede,G,{3}{G}{G},1,https://img.scryfall.com/cards/normal/front/0/a/0a96a608-
 Lifecraft Cavalry,G,{4}{G},1,https://img.scryfall.com/cards/normal/front/b/2/b2a92a03-4e1d-4b79-ad75-a29db2ea5495.jpg?1576382009,62765,
 Pine Walker,G,{3}{G}{G},1,https://img.scryfall.com/cards/normal/front/9/3/93a49d9c-8fe7-494b-9a26-cf4bde71e420.jpg?1562790508,54396,
 Somberwald Stag,G,{3}{G}{G},1,https://img.scryfall.com/cards/normal/front/6/5/651428a8-27af-4137-84f0-f71274a8b4a6.jpg?1576384872,61252,
+Springmantle Cleric,G,{4}{G},1,https://c1.scryfall.com/file/scryfall-cards/normal/front/8/d/8d822730-6d81-4dbc-a3c3-ce96d29a1078.jpg?1599334487,83399,
 Temur War Shaman,G,{4}{G}{G},1,https://img.scryfall.com/cards/normal/front/a/8/a873164f-d8eb-460e-a8cc-8b2a663dcf3a.jpg?1562828567,55676,
 Fangren Marauder,G,{5}{G},1,https://img.scryfall.com/cards/normal/front/f/5/f5cf62a2-d03a-495d-924a-bf79524175fa.jpg?1562615957,39331,
 Nemesis of Mortals,G,{4}{G}{G},1,https://img.scryfall.com/cards/normal/front/c/4/c4010889-1d7a-4db3-a27c-c39baa024765.jpg?1562829927,50490,
@@ -252,12 +252,12 @@ Primal Boost,G,{2}{G},0,https://img.scryfall.com/cards/normal/front/f/1/f1b91a5a
 Become Immense,G,{5}{G},0,https://img.scryfall.com/cards/normal/front/5/e/5e17b65e-56c3-4e12-a774-780514dfd8ba.jpg?1562787250,54400,
 Windstorm,G,{X}{G},0,https://img.scryfall.com/cards/normal/front/e/e/ee3768ec-bb3b-44dc-9fa3-7cb3d3ee9f8c.jpg?1562000543,32905,
 Adventurous Impulse,G,{G},0,https://img.scryfall.com/cards/normal/front/f/4/f426c92c-6e71-49f0-9a91-0d529bf8c17d.jpg?1562745600,67771,
-Savage Punch,G,{1}{G},0,https://img.scryfall.com/cards/normal/front/6/c/6c6b50dc-244a-4df5-a9a9-5a2b8f30d40c.jpg?1562788166,54046,
+Savage Punch,G,{1}{G},0,https://img.scryfall.com/cards/normal/front/6/c/6c6b50dc-244a-4df5-a9a9-5a2b8f30d40c.jpg?1562788166,54046,https://i.imgur.com/MBE07lp.png
 Mouth // Feed,G,{2}{G} // {3}{G},0,https://img.scryfall.com/cards/normal/front/a/4/a47070a0-fd05-4ed9-a175-847a864478da.jpg?1549941630,64050,
 Spider Spawning,G,{4}{G},0,https://img.scryfall.com/cards/normal/front/f/9/f97007af-6642-4105-8d8c-4223681e1cf9.jpg?1562839993,42396,
 Font of Fertility,G,{G},0,https://img.scryfall.com/cards/normal/front/a/c/ac8d1ecb-de7c-4641-81da-13117820195c.jpg?1562220577,52080,
 Quiet Disrepair,G,{1}{G},0,https://img.scryfall.com/cards/normal/front/5/4/541ce95e-5102-44fb-b74d-7469331ca9cc.jpg?1562912121,26782,
-Trail of Mystery,G,{1}{G},0,https://img.scryfall.com/cards/normal/front/6/1/6149685f-cb05-4c1f-95a4-3810505d1a95.jpg?1562787478,54178,
+Trail of Mystery,G,{1}{G},0,https://img.scryfall.com/cards/normal/front/6/1/6149685f-cb05-4c1f-95a4-3810505d1a95.jpg?1562787478,54178,https://i.imgur.com/PsXVoU8.png
 Autumnal Gloom,G,{2}{G},0,https://img.scryfall.com/cards/normal/front/d/4/d41b07c8-f0c8-4654-bcc2-00c785c8c628.jpg?1576384999,60398,https://img.scryfall.com/cards/normal/back/d/4/d41b07c8-f0c8-4654-bcc2-00c785c8c628.jpg?1576384999
 Ulvenwald Mysteries,G,{2}{G},0,https://img.scryfall.com/cards/normal/front/9/1/911a2b5d-7e2d-4358-8e38-cbae7192e4d4.jpg?1576385285,60266,
 Greater Good,G,{2}{G}{G},0,https://img.scryfall.com/cards/normal/front/1/2/12befd35-2dc6-4852-a153-75b553042643.jpg?1562898942,51542,
