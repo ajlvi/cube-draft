@@ -29,6 +29,9 @@ def queue():
 		msg = 'The draft ID you have entered does not appear to exist. Doublecheck the ID and try again.'
 		playername = request.args['name']
 		draftid = request.args['id']
+	elif 'invalidname' in request.args:
+		draftid = request.args['id']
+		msg = 'Please enter a valid name. (Names cannot be blank.)'
 	elif 'draftcreated' in request.args:
 		if request.args['draftcreated'] == 'yes':
 			draftcreated = 'Draft has been created with ID ' + request.args['key']
@@ -45,7 +48,10 @@ def displaydraft():
 		if r.exists(draftidbit):
 			snapshot = json.loads(r.get(draftidbit))
 			DraftObj = draft.rebuildDraft(snapshot, cube)
-			if DraftObj.hasPlayer(playername):
+			if playername == '':
+				url = '/queue?invalidname=blank&id='+draftid
+				return redirect(url)
+			elif DraftObj.hasPlayer(playername):
 				if 'rejoin' in request.form:
 					pass
 				else: 
