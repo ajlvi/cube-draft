@@ -189,7 +189,8 @@ class Draft:
 			"cards_per_pack": self.cards_per_pack, "time_remaining": time_remaining,\
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
 			"current_pack": current_pack, "current_df": current_df, \
-			"scheme": self.scheme, "has_cogwork": self.hasCogwork() }
+			"scheme": self.scheme, "has_cogwork": self.hasCogwork(), \
+			"thrown_picks": self.endPackNumber() }
 		return outdict
 		
 	def export(self):

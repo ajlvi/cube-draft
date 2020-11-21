@@ -9,7 +9,7 @@ function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1, isCogwork : 'no'}, function(response) {
 		dataDump = response;
 		if (!vertbardone) {
-			var tossed = cutCards(dataDump["total_packs"], dataDump["cards_per_pack"], dataDump["drafters"].length, dataDump["scheme"]) ;
+			var tossed = dataDump['thrown_picks'] ;
 			vertBar(dataDump['total_packs'], dataDump['cards_per_pack'] - tossed);
 		}
 		updatePicks(); flowBar() //update the list of existing picks
