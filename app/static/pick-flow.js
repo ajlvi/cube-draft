@@ -223,25 +223,27 @@ function packAndPickNos() {
 
 function addSideOverlays() {
 	$(".tooltip").mouseenter(function(event){
-		if ($(this).parent('span').children('span.image-overlay').length) {
-			$(this).parent('span').children('span.image-overlay').show();
+		if ($(this).closest('div').children('span.image-overlay').length) {
+			$(this).closest('div').children('span.image-overlay').show();
 		} else {
 			var image_name = $(this).data('image');
 			var imageTag='<span class="image-overlay" style="position:absolute;">' + '<img src="' + image_name + '" alt="image-overlay" height="300" />' + '</span>';
-			$(this).parent('span').append(imageTag);
+			$(this).closest('div').append(imageTag);
 			
 			var rightWidth = ($(this).width() + 2).toString() + "px"
-			$(this).parent('span').children('span.image-overlay').css("right", rightWidth); 
+			$(this).closest('div').children('span.image-overlay').css("left", "941px");
+//			$(this).closest('div').children('span.image-overlay').css("right", rightWidth);
 			
-			if ( $(this).parent('span').position()["top"] + 320 > $(window).height() ) {
-				$(this).parent('span').children('span.image-overlay').css("bottom", "16px"); }
-			else { $(this).parent('span').children('span.image-overlay').css("top", "16px"); }
+			var divtop = $(this).closest('div').position()["top"]
+			if ( divtop + 320 > $(window).height() ) {
+				$(this).closest('div').children('span.image-overlay').css("bottom", ($(window).height() - divtop + 8).toString() + "px"); }
+			else { $(this).closest('div').children('span.image-overlay').css("top", (divtop+16).toString() + "px"); }
 			
-			$(this).parent('span').children('span.image-overlay').css("z-index", "1");
+			$(this).closest('div').children('span.image-overlay').css("z-index", "1");
 		}
 	});
 
 	$(".tooltip").mouseleave(function(){
-		$(this).parent('span').children('span.image-overlay').hide();
+		$(this).closest('div').children('span.image-overlay').hide();
     });
 };
