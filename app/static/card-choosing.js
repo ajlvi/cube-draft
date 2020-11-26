@@ -113,7 +113,7 @@ function writeCard(cardnum) {
 	var current = docspan.innerHTML;
 	var present = '<div class="bottom-card">'
 	var manacost = manaSpan(getCost(cardnum), "bot")
-	if (cardname.indexOf("//") != -1) {manacost = manacost[0]; }
+	if (cardname.indexOf("//") != -1 | cardname.includes("Pathway")) {manacost = manacost[0]; }
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}
 	else {var bufferspace = '';}
