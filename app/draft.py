@@ -4,7 +4,7 @@ from random import shuffle, randrange
 import pandas as pd
 
 class Draft:
-	def __init__(self, cube, packs, cardsper, intended=8, scheme="random"):
+	def __init__(self, cube, cubename, packs, cardsper, intended=8, scheme="random"):
 		"""
 		To initialize the draft we need a cube to create packs from -- I'm
 		assuming this will come to us as a pandas dataframe -- as well as how
@@ -26,6 +26,7 @@ class Draft:
 		self.currentPack = 0
 		self.fullyDrafted = 0
 		self.key = makeKey()
+		self.cubename = cubename
 
 	def __repr__(self):
 		out = f"A cube draft involving {self.handles}."
@@ -190,7 +191,7 @@ class Draft:
 			"chosen_cards": chosen_cards, "chosen_df": chosen_df,\
 			"current_pack": current_pack, "current_df": current_df, \
 			"scheme": self.scheme, "has_cogwork": self.hasCogwork(), \
-			"thrown_picks": endPackNumber(self) }
+			"thrown_picks": endPackNumber(self), "cube_id": self.cubename }
 		return outdict
 		
 	def export(self):
@@ -208,6 +209,7 @@ class Draft:
 		d["currentPack"] = self.currentPack
 		d["fullyDrafted"] = self.fullyDrafted
 		d["scheme"] = self.scheme
+		d["cube_id"] = self.cubename
 		playd = {}
 		for handle in self.handles:
 			PlayerObj = self.players[self.handles.index(handle)]
@@ -232,7 +234,7 @@ def rebuildDraft(d, cube):
 	Takes the information of an exported dictionary d and a cube df and
 	rebuilds a draft object from it.
 	"""
-	newD = Draft(cube, d["total_packs"], d["cards_per_pack"], d["intended"], d["scheme"])
+	newD = Draft(cube, d["cube_id"], d["total_packs"], d["cards_per_pack"], d["intended"], d["scheme"])
 	newD.setKey(d["key"])
 	newD.setHandles(d["handles"])
 	newD.setCurrent(d["currentPack"])
