@@ -5,8 +5,8 @@ from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
 import redis
 
-url = 'app/static/cube.csv'
-cube = pd.read_csv(url)
+#url = 'app/static/cube.csv'
+#cube = pd.read_csv(url)
 
 @app.route('/')
 @app.route('/index')
@@ -157,8 +157,17 @@ def lostandfound():
 	
 @app.route('/newdraft', methods=['POST'])
 def newdraft():
+	global cube
 	r = redis_client
 	if 'submit' in request.form:
+		if request.form['cubes'] == 'ada':
+			url = 'app/static/cube.csv'
+		elif request.form['cubes'] == 'jason':
+			url = 'app/static/jason_cube.csv'
+		#as a failsafe for now let's default to ada's cube
+		else:
+			url = 'app/static/cube.csv'
+		cube = pd.read_csv(url)
 		newdraft = draft.Draft(cube, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
 		newdraftkey = newdraft.getKey()
 		draftdict = json.dumps(newdraft.export())
