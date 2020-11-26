@@ -5,7 +5,8 @@ from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
 import redis
 
-cube = ''
+#url = 'app/static/cube.csv'
+#cube = pd.read_csv(url)
 
 @app.route('/')
 @app.route('/index')
@@ -46,6 +47,9 @@ def displaydraft():
 		draftidbit = draftid.encode()
 		if r.exists(draftidbit):
 			snapshot = json.loads(r.get(draftidbit))
+			cubeid = snapshot['cube_id']
+			cubeidbit = cubeid.encode()
+			cube = pd.read_json(r.get(cubeidbit))
 			DraftObj = draft.rebuildDraft(snapshot, cube)
 			if playername == '':
 				url = '/queue?invalidname=blank&id='+draftid
@@ -90,6 +94,9 @@ def makepick():
 				while not pickMade:
 					try:
 						snapshot = json.loads(r.get(draftid))
+						cubeid = snapshot['cube_id']
+						cubeidbit = cubeid.encode()
+						cube = pd.read_json(r.get(cubeidbit))
 						pipe.watch(draftid)
 						DraftObj = draft.rebuildDraft(snapshot, cube)
 						output = DraftObj.handleIncoming(playername, num, cog)
@@ -128,6 +135,9 @@ def makepick():
 				while not pickMade:
 					try:
 						snapshot = json.loads(r.get(draftid))
+						cubeid = snapshot['cube_id']
+						cubeidbit = cubeid.encode()
+						cube = pd.read_json(r.get(cubeidbit))
 						pipe.watch(draftid)
 						DraftObj = draft.rebuildDraft(snapshot, cube)
 						output = DraftObj.handleIncoming(playername, num, cog)
@@ -156,20 +166,24 @@ def lostandfound():
 	
 @app.route('/newdraft', methods=['POST'])
 def newdraft():
-	global cube
 	r = redis_client
 	if 'submit' in request.form:
 		if request.form['cubes'] == 'ada':
 			url = 'app/static/cube.csv'
-		elif request.form['cubes'] == 'jason':
-			url = 'app/static/jason_cube.csv'
+			cubeid = 'ajlvi'
+		elif request.form['cubes'] == 'jacob':
+			url = 'app/static/jacob_cube.csv'
+			cubeid = 'jacob'
 		#as a failsafe for now let's default to ada's cube
 		else:
 			url = 'app/static/cube.csv'
+			cubeid = 'ajlvi'
 		cube = pd.read_csv(url)
-		newdraft = draft.Draft(cube, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
+		newdraft = draft.Draft(cube, cubeid, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
 		newdraftkey = newdraft.getKey()
 		draftdict = json.dumps(newdraft.export())
+		cubedict = cube.to_json()
+		r.set(cubeid, cubedict)
 		r.set(newdraftkey, draftdict)
 		url = '/queue?draftcreated=yes&key='+newdraftkey
 		return redirect(url)
