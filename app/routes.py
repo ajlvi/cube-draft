@@ -5,8 +5,8 @@ from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
 import redis
 
-#url = 'app/static/cube.csv'
-#cube = pd.read_csv(url)
+url = 'app/static/cube.csv'
+cube = pd.read_csv(url)
 
 @app.route('/')
 @app.route('/index')
