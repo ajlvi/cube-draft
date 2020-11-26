@@ -265,13 +265,13 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		pool = cube.sample(packs * cardsper)
 		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
 		return packidxs
-	elif scheme == "cogtest":
-		cog = cube[cube["card"] == "Cogwork Librarian"].index[0]
-		pool = cube.sample(packs * cardsper)
-		if cog not in pool.index: pool = cube.loc[list(pool.index[:-1]) + [cog]]
-		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
-		return packidxs
-	elif scheme == "Adam":
+#	elif scheme == "cogtest":
+#		cog = cube[cube["card"] == "Cogwork Librarian"].index[0]
+#		pool = cube.sample(packs * cardsper)
+#		if cog not in pool.index: pool = cube.loc[list(pool.index[:-1]) + [cog]]
+#		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
+#		return packidxs
+	elif scheme == "Adam" and len(cube) == 450:
 		#note, slightly unsatisfyingly, I couldn't use cube["color"].unique() here.
 		if (packs, cardsper) == (24, 15):
 			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
@@ -294,6 +294,7 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 			slice = cube[cube["color"] == color]
 			pool.append(list(slice.sample(stock[color]).index))
 		return divvy(pool, packs)
+	else: return makePacks(cube, packs, cardsper, "random")
 
 def divvy(cats, packs):
 	"""
