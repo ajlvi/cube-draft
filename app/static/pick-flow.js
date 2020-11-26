@@ -218,7 +218,9 @@ function packAndPickNos() {
 	$('#pick-number').html(pickstring);
 }
 
-//adds overlays to the picks panel this needs to be re-run when new picks are added.
+//adds overlays to the picks panel.
+//this needs to be re-run when new picks are added.
+
 function addSideOverlays() {
 	$(".tooltip").mouseenter(function(event){
 		if ($(this).parent('span').children('span.image-overlay').length) {
