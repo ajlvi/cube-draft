@@ -43,7 +43,7 @@ function cardString(cardnum) {
 	var arrows = '<span class="arrows"><a href="javascript:addToDeck(' 	+ cardnum + ')" class="addlink">▼</a><a href="javascript:pullFromDeck(' + cardnum + ')" class="droplink">▲</a></span>'
 	var manacost = manaSpan(cost, 'vert');
 
-	if (cardname.indexOf("//") == -1 & cardname.includes("Pathway")) {
+	if (cardname.indexOf("//") == -1 | cardname.includes("Pathway")) {
 		if (manacost.split(".png").length > 4) {var bufferspace = ' style="padding:0px 0px 0px 4px"';}
 		else {var bufferspace = '';}
 		return arrows + manacost + '</span><span class="cardname"' + bufferspace + '><a class="tooltip" href="javascript:addToDeck(' + cardnum + ')" data-image="' + JSON.parse(dataDump.chosen_df)["scryfall"][cardnum] + '">' + cardname + '</a></span>'
@@ -113,7 +113,7 @@ function writeCard(cardnum) {
 	var current = docspan.innerHTML;
 	var present = '<div class="bottom-card">'
 	var manacost = manaSpan(getCost(cardnum), "bot")
-	if (cardname.indexOf("//") != -1 | cardname.includes("Pathway")) {manacost = manacost[0]; }
+	if (cardname.indexOf("//") != -1 & cardname.includes("Pathway")) {manacost = manacost[0]; }
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}
 	else {var bufferspace = '';}
