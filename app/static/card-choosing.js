@@ -89,6 +89,17 @@ function cmc(cardnum) {
 function makeJSPick(cardnum, packno, pickno) {
 	var pickdiv = document.getElementById("pick-" + packno + "-" + pickno) ;
 	pickdiv.innerHTML = cardString(cardnum) ;
+	
+//change the length of the cardname box, if needed, to avoid wrapping
+	var tot = 246 ;
+	var spans = $(pickdiv).children() ;
+	var i = 0 ;
+	while (!$(spans[i]).hasClass("cardname")) {
+		tot = tot - $(spans[i]).width() ; 
+		if ($(spans[i]).hasClass("slashspan")) { tot = tot - 6 ; }
+		if ($(spans[i]).hasClass("arrows")) { tot = tot - 6 ; }
+		i ++; }
+	if ( tot < 170 ) { $(spans[i]).css("max-width", tot) ;}
 }
 	
 //functions below have to do with moving the cards to and from the deck 
