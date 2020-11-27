@@ -4,6 +4,7 @@ import pandas as pd
 from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
 import redis
+import time
 
 #url = 'app/static/cube.csv'
 #cube = pd.read_csv(url)
@@ -93,11 +94,11 @@ def makepick():
 				pickMade = False
 				while not pickMade:
 					try:
+						pipe.watch(draftid)
 						snapshot = json.loads(r.get(draftid))
 						cubeid = snapshot['cube_id']
 						cubeidbit = cubeid.encode()
 						cube = pd.read_json(r.get(cubeidbit))
-						pipe.watch(draftid)
 						DraftObj = draft.rebuildDraft(snapshot, cube)
 						output = DraftObj.handleIncoming(playername, num, cog)
 						newsnapshot = json.dumps(DraftObj.export())
@@ -105,6 +106,7 @@ def makepick():
 						pipe.set(draftid, newsnapshot)
 						pipe.execute()
 						pickMade = True
+#						print(time.time()); print(DraftObj) #debug line
 						return jsonify(output) 
 					except redis.WatchError: #there was a collision! try again
 						print('watch error!!!')
@@ -189,5 +191,3 @@ def newdraft():
 		return redirect(url)
 	else:
 		return redirect('/queue?draftcreated=no')
-		
-		
