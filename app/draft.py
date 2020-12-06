@@ -92,7 +92,7 @@ class Draft:
 		for i in range(len(self.players)):
 			self.players[i].takeUnopened(packstock[i*packsper:(i+1)*packsper])
 			self.players[i].draftAllCards()
-		self.fullyDrafted = 1
+		self.fullyDrafted = 1; self.currentPack = 1
 		
 	def lookupByHandle(self, handle):
 		"""
