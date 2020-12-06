@@ -95,3 +95,13 @@ class Player:
 		self.chosen[self.chosen.index(cogwork)] = num
 		self.activePack.replaceCard(num, cogwork)
 		self.opentime += 10
+	
+	def draftAllCards(self):
+		"""
+		Draft every card from all packs. Used for sealed.
+		"""
+		for pack in self.unopened:
+			for card in pack.getCards():
+				self.chosen.append(card)
+		self.chosen.sort()
+		self.unopened = []

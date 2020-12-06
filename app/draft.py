@@ -38,7 +38,9 @@ class Draft:
 		return out
 	
 	def addPlayer(self, handle):
-		"""handle is a string representing the handle of the human."""
+		"""handle is a string representing the handle of the human.
+		   In the interest of avoiding funny business, new players are processed
+		   pre-draft only. This also auto-fires the draft when ready."""
 		if self.currentPack == 0:
 			if handle not in self.handles:
 				self.players.append(Player(handle))
@@ -64,6 +66,8 @@ class Draft:
 		All the things that need to happen to get the draft underway.
 		We need to randomize the players and give them their packs.
 		"""
+		if self.cards_per_pack == 90 and self.scheme != "random":
+			self.startSealed(); return
 		packstock = makePacks(self.cube, self.total_packs*self.intended, self.cards_per_pack, self.scheme)
 		shuffle(self.players); shuffle(packstock)
 		self.handles = [Person.getname() for Person in self.players]
@@ -73,6 +77,23 @@ class Draft:
 			self.players[i].takeUnopened(packstock[i*packsper:(i+1)*packsper])
 		self.nextPack() #will increment currentPack to 1, everyone opens pack
 	
+	def startSealed(self):
+		"""
+		All the things that need to happen to get a sealed pool underway.
+		We need to randomize the players and give them their packs.
+		Then each player picks every card in all their packs and the "draft" ends.
+		I'm expecting each player will ping and discover all their cards.
+		"""
+		packstock = sealedPacks(self.cube, self.scheme)
+		shuffle(self.players); shuffle(packstock)
+		self.handles = [Person.getname() for Person in self.players]
+		assert len(self.handles) <= 5
+		packsper = 6		
+		for i in range(len(self.players)):
+			self.players[i].takeUnopened(packstock[i*packsper:(i+1)*packsper])
+			self.players[i].draftAllCards()
+		self.fullyDrafted = 1
+		
 	def lookupByHandle(self, handle):
 		"""
 		self.handles is updated in the startDraft method to map correctly
@@ -262,6 +283,8 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 	and cut into segments and returned. If the scheme is "Adam", do what
 	Adam typically does to make his cube (deal out colors to each pack).
 	Right now "Adam" only works for 3x15 (8-man), 4x11 (6-man), and 5x9.
+	
+	Update 20.12.06: Inputting cardsper=90 gets sealed packs.
 	"""
 	if scheme == "random":
 		pool = cube.sample(packs * cardsper)
@@ -290,8 +313,6 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		elif (packs, cardsper) == (24, 9):
 			stock = {"W": 26, "U": 26, "B": 26, "R": 26, "G": 26, \
 					 "ally": 20, "enemy": 20, 'other': 22, 'land': 24}
-		elif cardsper == 90:
-			pass
 		else: return makePacks(cube, packs, cardsper, "random")
 		pool = []
 		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
@@ -300,6 +321,36 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		return divvy(pool, packs)
 	else: return makePacks(cube, packs, cardsper, "random")
 
+def sealedPacks(cube, scheme):
+	"""
+	Makes packs for sealed. The idea is to create color-balanced ("ada style")
+	packs from the whole cube, then divvy the entire cube. We'll give six packs
+	to each player elsewhere.
+	"""
+	colors = ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]
+	pool = []
+	if scheme == "Adam" and len(cube) == 450:
+		stock = {"W": 53, "U": 53, "B": 53, "R": 53, "G": 53, \
+				"ally": 45, "enemy": 45, 'other': 48, 'land': 47}
+	else:
+		total = 450
+		stock = {}
+		mono = round( (450/len(cube)) * len(cube[cube["color"].isin(["W", "U", "B", "R", "G"])])/5)
+		total -= mono*5
+		for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
+		multi = round( (450/len(cube)) * len(cube[cube["color"] == "ally"]))
+		total -= multi*2
+		for color in ["ally", "enemy"]: stock[color] = multi
+		lands = int( (450/len(cube)) * len(cube[cube["color"] == "land"]))
+		total -= lands
+		stock["land"] = lands
+		stock["other"] = total
+#	print(stock)
+	for color in colors:
+		slice = cube[cube["color"] == color]
+		pool.append(list(slice.sample(stock[color]).index))
+	return divvy(pool, 30)
+	
 def divvy(cats, packs):
 	"""
 	Takes lists of segments and sprays them.
