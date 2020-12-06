@@ -176,6 +176,9 @@ def newdraft():
 		elif request.form['cubes'] == 'jacob':
 			url = 'app/static/jacob_cube.csv'
 			cubeid = 'jacob'
+		elif request.form['cubes'] == "andrew":
+			url = 'app/static/andrew_cube.csv'
+			cubeid = 'andrew'
 		#as a failsafe for now let's default to ada's cube
 		else:
 			url = 'app/static/cube.csv'

@@ -10,6 +10,7 @@ class Player:
 		self.chosen = []
 		self.activePack = None
 		self.unopened = []
+		self.choices = []
 		self.opentime = 0 #refreshes each time a pack is opened
 
 	def __repr__(self):

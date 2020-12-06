@@ -290,6 +290,8 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		elif (packs, cardsper) == (24, 9):
 			stock = {"W": 26, "U": 26, "B": 26, "R": 26, "G": 26, \
 					 "ally": 20, "enemy": 20, 'other': 22, 'land': 24}
+		elif cardsper == 90:
+			pass
 		else: return makePacks(cube, packs, cardsper, "random")
 		pool = []
 		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
