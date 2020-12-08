@@ -1,6 +1,6 @@
 from app.pack import *
 from app.player import *
-from random import shuffle, randrange
+from random import shuffle, randrange, choices
 import pandas as pd
 
 class Draft:
@@ -319,6 +319,29 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 			slice = cube[cube["color"] == color]
 			pool.append(list(slice.sample(stock[color]).index))
 		return divvy(pool, packs)
+	elif scheme == "Adam" and len(cube) == 465:
+		#for Andrew's cube. the plan is to draw 52 of each color, 54 multi, 42 other.
+		#the multi should be close to 27/27 but not necessarily exact.
+		#the lands should be close to 26 but not necessarily exact.
+		#four extra cards will be added.
+		if (packs, cardsper) == (24, 15):
+			stock = {"W": 52, "U": 52, "B": 52, "R": 52, "G": 52, \
+					 "ally": 0, "enemy": 0, 'other': 0, 'land': 0}
+			multitilt = randrange(-3, 4)
+			landtilt = randrange(-2, 4)
+			stock["ally"] = 27 + multitilt
+			stock["enemy"] = 27 - multitilt
+			stock["land"] = 26 + landtilt
+			stock["other"] = 16 - landtilt
+			for addl in choices(list(stock), k=4):
+				stock[addl] += 1
+		else: return makePacks(cube, packs, cardsper, "random")
+		pool = []
+		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
+			slice = cube[cube["color"] == color]
+			pool.append(list(slice.sample(stock[color]).index))
+		return divvy(pool, packs)
+	
 	else: return makePacks(cube, packs, cardsper, "random")
 
 def sealedPacks(cube, scheme):
