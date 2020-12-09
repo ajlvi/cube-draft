@@ -35,6 +35,7 @@ function validateForm() {
 {% endblock %}
 
 {% block content %}
+<div class="queue-left-container">
 <div class="queueblock">
 <!-- for joining a draft -->
 <form action='draftviewer' method="post">
@@ -80,5 +81,27 @@ function validateForm() {
 </form>
 <div class="created-response">{{ draftcreated }}</div>
 
+</div>
+</div>
+<div class="queue-right-container">
+<div class="infoblock">
+<span class="info-header">Drafting</span>
+<ul>
+<li>When the final person joins the draft, it fires automatically. So once you've joined the queue, don't wander too far off.
+<li>Single left-click a card to reserve it. A yellow border will appear. That card will be drafted when your timer runs out.
+<li>Double left-click a card to draft it. Alternatively, the "confirm pick" button will draft the reserved card.
+<li>If you've drafted a Cogwork Librarian, you'll see an extra button "replace with librarian" above "confirm pick." To use the Librarian, reserve a card, then push that button.
+<li>Click a card with any mouse button besides the left one to enlarge it. If the card has a back face, it will be shown when enlarged. The enlarged copy goes away when you make a pick or when you non-left click the enlarged card again.
+<li>To avoid accidents, there's a two-second buffer after each pack appears before you're allowed to draft a card.
+<li>The dots above the other drafters' handles represent the location of the packs in the draft. This "flow bar" doesn't update while you're making a pick.
+<li>If you close the tab, think you may have been disconnected, or something seems weird, either refresh the page or come back to this page and re-enter the draft ID and your name. You'll be reconnected to the draft. 
+</ul>
+
+<span class="info-header">Deckbuilding</span>
+<ul>
+<li>Clicking on a card name on the right pane, or using the ▼ button, will add a card to the bottom deck builder pane. Clicking on ▲, or on the card name in the deck pane, will remove it. [This is all done in the browser, so if you refresh or close the tab your currently built deck will be removed.]
+<li>At the end of the draft there will be a MODO export button. The .dek file that gets created will assign the cards in the deck pane to the main deck and all other drafted cards to the sideboard.
+</ul>
+</div>
 </div>
 {% endblock %}

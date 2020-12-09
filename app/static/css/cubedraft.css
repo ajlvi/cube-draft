@@ -80,6 +80,14 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .zoomed-image { width : 275px; }
 
 /* for queue page */
+.queue-left-container {width : 720px ; display:inline-block ; vertical-align: top}
+.queue-right-container {width : 450px ; display:inline-block ; vertical-align: top; margin-left: 70px }
+
+.infoblock { width : 450px ; display : table; font-size : 12pt ; font-family: Ubuntu ; background : #CCCCCC ; border-radius: 0px 0px 25px 25px ; color : black ; padding: 10px 15px 10px 15px }
+.info-header { font-variant: small-caps ; font-size: 13pt }
+.infoblock > ul { padding: 0px 0px 0px 16px ; margin-top:6px; margin-bottom: 8px }
+.infoblock > ul > li {padding-bottom : 4px }
+
 .queueblock { height: 180px ; width : 720px ; display:table; text-align:center; 
 	background : #CCCCCC ; border-radius: 0px 0px 25px 0px; font-family: Ubuntu ;
 	color:black ; font-size: 14pt }
