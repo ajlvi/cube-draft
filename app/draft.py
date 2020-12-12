@@ -16,7 +16,7 @@ class Draft:
 		self.cube = cube
 		if "Cogwork Librarian" in cube["card"].values:
 			self.cogworkIdx = int(cube[cube["card"] == "Cogwork Librarian"].index[0])
-		else: self.cogworkIdx = 0
+		else: self.cogworkIdx = -1
 		self.scheme = scheme
 		self.intended = intended
 		self.total_packs = packs
@@ -319,7 +319,7 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 			slice = cube[cube["color"] == color]
 			pool.append(list(slice.sample(stock[color]).index))
 		return divvy(pool, packs)
-	elif scheme == "Adam" and len(cube) == 465:
+	elif scheme == "Adam" and len(cube) == 467:
 		#for Andrew's cube. the plan is to draw 52 of each color, 54 multi, 42 other.
 		#the multi should be close to 27/27 but not necessarily exact.
 		#the lands should be close to 26 but not necessarily exact.
