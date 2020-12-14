@@ -296,21 +296,22 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 #		if cog not in pool.index: pool = cube.loc[list(pool.index[:-1]) + [cog]]
 #		packidxs = [Pack(sorted(list(pool[i*cardsper:(i+1)*cardsper].index))) for i in range(packs)]
 #		return packidxs
+
 	elif scheme == "Adam" and len(cube) == 450:
 		#note, slightly unsatisfyingly, I couldn't use cube["color"].unique() here.
 		if (packs, cardsper) == (24, 15):
 			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 					 "ally": 35, "enemy": 35, 'other': 37, 'land': 38}
-		elif (packs, cardsper) == (21, 15):
+		elif (packs, cardsper) == (21, 15): #seven people
 			stock = {"W": 37, "U": 37, "B": 37, "R": 37, "G": 37, \
 					 "ally": 32, "enemy": 32, 'other': 32, 'land': 34}
-		elif (packs, cardsper) == (24, 13):
+		elif (packs, cardsper) == (24, 13): #six with tosses
 			stock = {"W": 37, "U": 37, "B": 37, "R": 37, "G": 37, \
 					 "ally": 30, "enemy": 30, 'other': 33, 'land': 34}
-		elif (packs, cardsper) == (24, 11):
+		elif (packs, cardsper) == (24, 11): #six without tosses
 			stock = {"W": 31, "U": 31, "B": 31, "R": 31, "G": 31, \
 					 "ally": 26, "enemy": 26, 'other': 28, 'land': 29}
-		elif (packs, cardsper) == (24, 9):
+		elif (packs, cardsper) == (24, 9): #four with tosses
 			stock = {"W": 26, "U": 26, "B": 26, "R": 26, "G": 26, \
 					 "ally": 20, "enemy": 20, 'other': 22, 'land': 24}
 		else: return makePacks(cube, packs, cardsper, "random")
@@ -319,6 +320,26 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 			slice = cube[cube["color"] == color]
 			pool.append(list(slice.sample(stock[color]).index))
 		return divvy(pool, packs)
+		
+	elif scheme == "Adam" and len(cube) == 480:
+		if (packs, cardsper) == (24, 15):
+			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
+					 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
+		elif (packs, cardsper) == (21, 15): #seven people
+			stock = {}
+		elif (packs, cardsper) == (24, 13): #six with tosses
+			stock = {}
+		elif (packs, cardsper) == (24, 11): #six without tosses
+			stock = {}
+		elif (packs, cardsper) == (24, 9): #four with tosses
+			stock = {}
+		else: return makePacks(cube, packs, cardsper, "random")
+		pool = []
+		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
+			slice = cube[cube["color"] == color]
+			pool.append(list(slice.sample(stock[color]).index))
+		return divvy(pool, packs)
+		
 	elif scheme == "Adam" and len(cube) == 467:
 		#for Andrew's cube. the plan is to draw 52 of each color, 54 multi, 42 other.
 		#the multi should be close to 27/27 but not necessarily exact.
@@ -352,7 +373,7 @@ def sealedPacks(cube, scheme):
 	"""
 	colors = ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]
 	pool = []
-	if scheme == "Adam" and len(cube) == 450:
+	if scheme == "Adam" and len(cube) == 450: #broken now
 		stock = {"W": 53, "U": 53, "B": 53, "R": 53, "G": 53, \
 				"ally": 45, "enemy": 45, 'other': 48, 'land': 47}
 	else:
