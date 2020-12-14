@@ -379,19 +379,24 @@ def sealedPacks(cube, scheme):
 	else:
 		total = 450
 		stock = {}
+		
 		mono = int( (450/len(cube)) * len(cube[cube["color"].isin(["W", "U", "B", "R", "G"])])/5)
 		total -= mono*5
+		print(f"Taking {mono} of each color, {total} to go.")
 		for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
+		
 		multi = int( (450/len(cube)) * len(cube[cube["color"] == "ally"]))
 		total -= multi*2
+		print(f"Taking {multi} allies and enemies, {total} to go.")
 		for color in ["ally", "enemy"]: stock[color] = multi
+		
 		lands = int( (450/len(cube)) * len(cube[cube["color"] == "land"]))
 		other = int( (450/len(cube)) * len(cube[cube["color"] == "other"]))
 		total -= lands; total -= other
-		stock["land"] = lands
-		stock["other"] = other
-		for addl in choices(list(stock), k=total):
-			stock[addl] += 1
+		print(f"Taking {lands} lands and {other} other, {total} to go.")
+		stock["land"] = lands; stock["other"] = other
+		
+		for addl in choices(list(stock), k=total): stock[addl] += 1
 #	print(stock)
 	for color in colors:
 		slice = cube[cube["color"] == color]
