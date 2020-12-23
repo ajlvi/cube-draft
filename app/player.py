@@ -10,7 +10,7 @@ class Player:
 		self.chosen = []
 		self.activePack = None
 		self.unopened = []
-		self.choices = []
+		self.choices = [] #these are pairs ([pack], [chosen])
 		self.opentime = 0 #refreshes each time a pack is opened
 
 	def __repr__(self):
@@ -31,6 +31,7 @@ class Player:
 	def setUnopened(self, u): self.unopened = u
 	def setQueue(self, q): self.queue = q
 	def setTime(self, t): self.opentime = t
+	def setChoices(self, c): self.choices = c
 
 	def takeUnopened(self, packs):
 		"""
@@ -57,21 +58,27 @@ class Player:
 		return False
 		
 	def pullFromQueue(self):
+		#take the next pack from the queue and begin drafting from it.
 		assert self.activePack == None
 		self.activePack = self.queue[0]
 		self.queue = self.queue[1:]
 		self.opentime = time()
+		self.choices.append( ([c for c in self.activePack.getCards()], []) )
 
 	def startNewPack(self):
+		#take the next pack from our stock of unopened packs and start drafting from it.
 		assert self.activePack == None
 		self.activePack = self.unopened[0]
 		self.unopened = self.unopened[1:]
 		self.opentime = time()
+		self.choices.append( ([c for c in self.activePack.getCards()], []) )
 
 	def receivePack(self, pack):
+		#draft from the passed pack, or put it in the queue if busy.
 		if self.activePack == None: 
 			self.activePack = pack
 			self.opentime = time()
+			self.choices.append( ([c for c in self.activePack.getCards()], []) )
 		else: self.queue.append(pack)
 		
 	def draftCard(self, num):
@@ -80,6 +87,7 @@ class Player:
 		"""
 		self.activePack.chooseCard(num)
 		self.chosen.append(num)
+		self.choices[-1][1].append(num)
 		usedPack = self.activePack
 		self.activePack = None
 		if self.queueLen() != 0: self.pullFromQueue()
@@ -95,6 +103,7 @@ class Player:
 		self.chosen[self.chosen.index(cogwork)] = num
 		self.activePack.replaceCard(num, cogwork)
 		self.opentime += 10
+		self.choices[-1][1].append(num)
 	
 	def draftAllCards(self):
 		"""
@@ -105,3 +114,6 @@ class Player:
 				self.chosen.append(card)
 		self.chosen.sort()
 		self.unopened = []
+		
+	def giveChoices(self):
+		return self.choices

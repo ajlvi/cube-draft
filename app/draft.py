@@ -238,6 +238,7 @@ class Draft:
 			hd["queue"] = [P.getCards() for P in PlayerObj.getQueue()]
 			hd["unopened"] = [P.getCards() for P in PlayerObj.getUnopened()]
 			hd["chosen"] = PlayerObj.getChosen()
+			hd["choices"] = PlayerObj.giveChoices()
 			if PlayerObj.getActive() == None: hd["active"] = None
 			else: hd["active"] = PlayerObj.getActive().getCards()
 			hd["opentime"] = PlayerObj.getTime()
@@ -245,6 +246,17 @@ class Draft:
 		d["player_info"] = playd
 		return d
 		
+	def draftHistory(self, handle):
+		PlayerObj = self.players[self.handles.index(handle)]
+		raw_choices = PlayerObj.giveChoices()
+		out_dict = {"packs": {}, "picks": {}, "images": {}, "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self) }
+		for i in range(len(raw_choices)):
+			out_dict["packs"][i] = raw_choices[i][0]
+			out_dict["picks"][i] = raw_choices[i][1]
+			for card in raw_choices[i][0]:
+				if card not in out_dict["images"]: out_dict["images"][card] = self.cube.loc[card]["scryfall"]
+		return out_dict
+	
 def endPackNumber(draf):
 	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
 		return 2
@@ -266,6 +278,7 @@ def rebuildDraft(d, cube):
 		Pl.setUnopened([Pack(l) for l in d["player_info"][hand]["unopened"]])
 		Pl.setChosen(d["player_info"][hand]["chosen"])
 		Pl.setTime(d["player_info"][hand]['opentime'])
+		Pl.setChoices(d["player_info"][hand]["choices"])
 		if d["player_info"][hand]["active"] == None:
 			Pl.setActive(d["player_info"][hand]["active"])
 		else:
