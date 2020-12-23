@@ -199,7 +199,7 @@ def newdraft():
 def pickhistory():
 	r = redis_client
 	if 'player' in request.args:
-		draftid = request.args['draftid'].upper().strip().encode() #should be some sort of error handling if no draft id specified
+		draftid = request.args['draftid'].upper().strip() #should be some sort of error handling if no draft id specified
 		playername = escape(request.args['player'])
 		return render_template('pickhistory.html', playername=playername, draftid=draftid)
 		
@@ -207,7 +207,7 @@ def pickhistory():
 def renderhistory():
 	r = redis_client
 	if 'player' in request.args:
-		draftid = request.args['draftid'].upper().strip().encode() #should be some sort of error handling if no draft id specified
+		draftid = request.args['draftid'].encode() #should be some sort of error handling if no draft id specified
 		playername = escape(request.args['player'])
 		snapshot = json.loads(r.get(draftid)) #should be some sort of error handling if draftid not in database
 		cubeid = snapshot['cube_id']
