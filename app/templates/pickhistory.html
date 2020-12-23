@@ -5,7 +5,7 @@
 body {background: #CCCCCC} 
 .history-pick-cell { position : relative ; }
 .checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white  }
-.pick-number-cell {min-width : 50px }
+.pick-number-cell {min-width : 50px; font-size:11pt; color:black; text-align:center }
 .history-card-image {width : 150px; height: 209px; }
 tr.one-row-pack > td { padding: 5px 0px 5px 0px }
 tr.two-row-top > td { padding: 5px 0px 0px 0px }
@@ -93,6 +93,5 @@ function makeTable() {
 
 {% block content %}
 	<div class="upper-history-bar"></div>
-	<div id="table-loc">
-	</div>
+	<div id="table-loc"></div>
 {% endblock %}
