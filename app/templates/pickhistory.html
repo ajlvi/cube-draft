@@ -22,6 +22,7 @@ var pickData = null;
 $(document).ready(function(){
 	$.get('/renderhistory', {draftid : thisdraft, player : thisplayer}, function(response) {
 		pickData = response;
+		makeTable();
 	});
 });
 function makePickBlock(p) {
@@ -93,6 +94,5 @@ function makeTable() {
 {% block content %}
 	<div class="upper-history-bar"></div>
 	<div id="table-loc">
-	<script>makeTable()</script>
 	</div>
 {% endblock %}
