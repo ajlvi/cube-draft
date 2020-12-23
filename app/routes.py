@@ -197,7 +197,7 @@ def newdraft():
 		
 @app.route('/pickhistory', methods=['GET'])
 def pickhistory():
-	r = redis.client
+	r = redis_client
 	if 'player' in request.args:
 		draftid = request.args['draftid'].upper().strip().encode() #should be some sort of error handling if no draft id specified
 		playername = escape(request.args['player'])
