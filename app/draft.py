@@ -249,7 +249,7 @@ class Draft:
 	def draftHistory(self, handle):
 		PlayerObj = self.players[self.handles.index(handle)]
 		raw_choices = PlayerObj.giveChoices()
-		out_dict = {"packs": {}, "picks": {}, "images": {}, "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self) }
+		out_dict = {"packs": {}, "picks": {}, "images": {}, "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
 		for i in range(len(raw_choices)):
 			out_dict["packs"][i] = raw_choices[i][0]
 			out_dict["picks"][i] = raw_choices[i][1]

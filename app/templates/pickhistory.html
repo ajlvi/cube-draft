@@ -11,6 +11,7 @@ tr.one-row-pack > td { padding: 5px 0px 5px 0px }
 tr.two-row-top > td { padding: 5px 0px 0px 0px }
 tr.two-row-bot > td { padding: 0px 0px 5px 0px }
 .overtint { position:absolute; background-color: rgba(204, 204, 204, 0.35); width:150px; height:209px; }
+.draft-save-button { color: #20AA20; text-decoration: none } 
 --></style>
 
 <script>
@@ -79,19 +80,39 @@ function makePickBlock(p) {
 	}
 }
 
-function makeTable() {
+function tableString() {
 	output = "<table id='history-table'>"
 	for (i=0; i < Object.keys(pickData["picks"]).length; i++)
 		{ output = output + "\n" + makePickBlock(i) }
-//	$("table-loc").html(output); 
+	output = output + "</table>"
+	return output
+}
+
+function makeTable() {
 	loc = document.getElementById("table-loc")
-	loc.innerHTML = output; 
+	loc.innerHTML = tableString(); 
+}
+
+function saveDraft() {
+	var d = new Date();
+	var month = (1+d.getMonth()).toString().padStart(2, '0') ;
+	var day = d.getDate().toString().padStart(2, '0') ;
+	var year = (d.getYear()%100).toString()
+	var date_string = year + month + day
+	var filename = "pick-history-" + pickData["my_name"] + "-" + date_string + ".html"
+	
+	var outfile = "<html><head><title>Cube draft pick history for " + pickData["my_name"] + "</title>";
+	outfile = outfile + '<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">'
+	outfile = outfile + "<style><!-- body {background: #CCCCCC; margin: 0px }\n .history-pick-cell { position : relative ; }\n.checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white }\n.pick-number-cell {min-width : 50px; font-size:11pt; color:black; text-align:center; font-family: Ubuntu }\n.history-card-image {width : 150px; height: 209px; }\ntr.one-row-pack > td { padding: 5px 0px 5px 0px }\ntr.two-row-top > td { padding: 5px 0px 0px 0px }\ntr.two-row-bot > td { padding: 0px 0px 5px 0px }\n.overtint { position:absolute; background-color: rgba(204, 204, 204, 0.35); width:150px; height:209px; }";
+	outfile = outfile + "--></style></head><body>" + tableString() + "</body></html>";
+
+	download_file(outfile, filename, "text/csv")
 }
 </script>
 {% endblock %}
 
 
 {% block content %}
-	<div class="upper-history-bar"></div>
+	<div class="upper-history-bar">This page is being generated from the server. Heroku periodically flushes our database, so this link will not work in perpetuity. If you'd like to save this draft, <a href="javascript:saveDraft()" class="draft-save-button">click here</a>.</div>
 	<div id="table-loc"></div>
 {% endblock %}
