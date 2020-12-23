@@ -124,3 +124,15 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .cube-field select, .pack-scheme select { font-family: Ubuntu; font-size: 14pt }
 .created-response { width: 100%; text-align: center; font-family: Ubuntu;
 	font-size:14pt ; color: #990000 }
+	
+/* for pick history page */
+.history-pick-cell { position : relative ; }
+.checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white  }
+.pick-number-cell {min-width : 50px; font-size:11pt; color:black; text-align:center }
+.history-card-image {width : 150px; height: 209px; }
+tr.one-row-pack > td { padding: 5px 0px 5px 0px }
+tr.two-row-top > td { padding: 5px 0px 0px 0px }
+tr.two-row-bot > td { padding: 0px 0px 5px 0px }
+.overtint { position:absolute; background-color: rgba(204, 204, 204, 0.35); width:150px; height:209px; }
+.draft-save-button { color: #2020AA; text-decoration: none }
+.upper-history-bar { color: black; padding: 5px 0px 5px 25px }
