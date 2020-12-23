@@ -17,10 +17,11 @@ tr.two-row-bot > td { padding: 0px 0px 5px 0px }
 
 thisplayer = '{{ playername }}';
 thisdraft = '{{ draftid }}';
+var pickData = null;
 
 $(document).ready(function(){
 	$.get('/renderhistory', {draftid : thisdraft, player : thisplayer}, function(response) {
-		var pickData = response;
+		pickData = response;
 	});
 });
 function makePickBlock(p) {
