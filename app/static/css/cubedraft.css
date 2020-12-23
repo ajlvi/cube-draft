@@ -22,6 +22,7 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 #confirm:focus, #confirm:hover, #cogwork:focus, #cogwork:hover, .modobutton:focus, .modobutton:hover { background-color: #DDDDDD; }
 #confirm:active, #cogwork:active, .modobutton:active { background-color:#DDDDFF; }
 .fulltd { text-align : center ; font-family : Ubuntu; font-size : 11pt ; color: black; width:1090px;}
+.final-cell { padding: 98px 0px 0px 0px ; }
 
 .draft-picks {padding:3px 0px 0px 0px}
 .symbolimg-vert {height: 13px; width: 13px; padding: 0px 0px 0px 0px}
