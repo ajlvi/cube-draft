@@ -35,11 +35,12 @@ function midTableMessage(choice) {
 	if (choice == 0) { return '<tr class="fulltr"><td class="fulltd">Waiting for a player to pick a card.</tr>' ;}
 	else if (choice == 1) { return '<tr class="fulltr"><td class="fulltd">Waiting for players to join the draft.</tr>' ;}
 	else if (choice == 2) {
-		var outstring = '<tr class="fulltr"><td class="fulltd">' ;
+		var outstring = '<tr class="fulltr"><td class="fulltd final-cell">' ;
 		outstring = outstring + "The draft has ended. Use the following button to export your pool as a Magic Online .dek file.";
 		outstring = outstring + "<br>If you have cards in the bottom panel, the rest of your pool will be put in the sideboard.";
 		outstring = outstring + "<br>If the bottom panel is empty, all of your cards will appear in the main deck."
-		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button></td></tr>";
+		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button>"
+		outstring = outstring + "<br><br>You may review your draft via the following link.<br><br><a href='pickhistory?player=" + dataDump["my_name"] + '&draftid=' + dataDump['draft_key'] + "' <button class='modobutton'>pick history</button></a></td></tr>";
 		return outstring
 	}
 	else { return '' ;}
