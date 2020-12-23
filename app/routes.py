@@ -201,12 +201,19 @@ def pickhistory():
 	if 'player' in request.args:
 		draftid = request.args['draftid'].upper().strip().encode() #should be some sort of error handling if no draft id specified
 		playername = escape(request.args['player'])
+		return render_template('pickhistory.html', playername=playername, draftid=draftid)
+		
+@app.route('/renderhistory', methods=['GET', 'POST'])
+def renderhistory():
+	r = redis_client
+	if 'player' in request.args:
+		draftid = request.args['draftid'].upper().strip().encode() #should be some sort of error handling if no draft id specified
+		playername = escape(request.args['player'])
 		snapshot = json.loads(r.get(draftid)) #should be some sort of error handling if draftid not in database
 		cubeid = snapshot['cube_id']
 		cubeidbit = cubeid.encode()
 		cube = pd.read_json(r.get(cubeidbit))
 		DraftObj = draft.rebuildDraft(snapshot, cube)
 		output = DraftObj.draftHistory(playername)
-		data = jsonify(output)
-		return render_template('pickhistory.html', data=data)
+		return jsonify(output)
 		
