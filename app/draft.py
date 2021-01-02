@@ -336,30 +336,33 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		
 	elif scheme == "Adam" and len(cube) == 480:
 		if (packs, cardsper) == (24, 15):
-			stock = {}
-			mono = int( (360/len(cube)) * len(cube[cube["color"].isin(["W", "U", "B", "R", "G"])])/5)
-			for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
-			multi = int( (360/len(cube)) * len(cube[cube["color"] == "ally"]))
-			for color in ["ally", "enemy"]: stock[color] = multi
-			lands = int( (360/len(cube)) * len(cube[cube["color"] == "land"]))
-			other = int( (360/len(cube)) * len(cube[cube["color"] == "other"]))
-			stock["land"] = lands; stock["other"] = other
-			total = sum([stock[a] for a in stock])
-			if total < 24*15:
-				for addl in choices(list(stock), k=24*15-total): stock[addl] += 1
-			print(f"Mono: {mono}  Multi: {multi}  Other: {other}  Lands: {lands}")
-			print(f"Making packs with {stock}.")
-#			stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
-#					 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
+			stocksize = 360
+#		stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
+#				 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
 		elif (packs, cardsper) == (21, 15): #seven people
-			stock = {}
+			stocksize = 315
 		elif (packs, cardsper) == (24, 13): #six with tosses
-			stock = {}
+			stocksize = 312
 		elif (packs, cardsper) == (24, 11): #six without tosses
-			stock = {}
+			stocksize = 264
 		elif (packs, cardsper) == (24, 9): #four with tosses
-			stock = {}
-		else: return makePacks(cube, packs, cardsper, "random")
+			stocksize = 216
+		else: 
+			#the parameters weren't correct for ada-style packs I guess?
+			return makePacks(cube, packs, cardsper, "random")
+		stock = {}
+		mono = int( (stocksize/len(cube)) * len(cube[cube["color"].isin(["W", "U", "B", "R", "G"])])/5)
+		for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
+		multi = int( (stocksize/len(cube)) * len(cube[cube["color"] == "ally"]))
+		for color in ["ally", "enemy"]: stock[color] = multi
+		lands = int( (stocksize/len(cube)) * len(cube[cube["color"] == "land"]))
+		other = int( (stocksize/len(cube)) * len(cube[cube["color"] == "other"]))
+		stock["land"] = lands; stock["other"] = other
+		total = sum([stock[a] for a in stock])
+		if total < stocksize:
+			for addl in choices(list(stock), k=stocksize-total): stock[addl] += 1
+		print(f"Mono: {mono}  Multi: {multi}  Other: {other}  Lands: {lands}")
+		print(f"Making packs with {stock}.")
 		pool = []
 		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
 			slice = cube[cube["color"] == color]
