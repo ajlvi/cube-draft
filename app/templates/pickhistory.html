@@ -4,7 +4,7 @@
 <style><!--
 body {background: #CCCCCC; margin-right:0px ; margin-bottom:0px }  
 --></style>
-
+<script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='draft-review.js') }}"></script>
 <script>
 
 thisplayer = '{{ playername }}';
@@ -15,74 +15,12 @@ $(document).ready(function(){
 	$.get('/renderhistory', {draftid : thisdraft, player : thisplayer}, function(response) {
 		pickData = response;
 		makeTable();
+		if (window.location.hash & hashCheck(window.location.hash)) {
+			location.hash = window.location.hash
+		}
 	});
 });
-function makePickBlock(p) {
-	packno = 1 + Math.floor( p / (pickData["pack_size"] - pickData["tossed"]) );
-	pickno = 1 + p % (pickData["pack_size"] - pickData["tossed"]);
-	if ( pickData["packs"][p].length <= 8 )
-		{
-		var out = '<tr class="one-row-pack">';
-		out = out + '<td class="pick-number-cell">Pack ' + packno.toString() + '<br>Pick ' + pickno.toString() + '</td>'
-		for (pno = 0; pno < pickData["packs"][p].length; pno++) { 
-			var cardID = pickData["packs"][p][pno]
-			var wasPicked = false
-			if ( pickData["picks"][p].indexOf(cardID) >= 0 ) { wasPicked = true }
-			if ( wasPicked ) {
-			out = out + '<td class="history-pick-cell"><div class="overtint"></div><img src="' + pickData["images"][cardID] + '" class="history-card-image"><div class="checkbox">&check;</div></td>';
-				}
-			else {
-			out = out + '<td class="history-pick-cell"><img src="' + pickData["images"][cardID] + '" class="history-card-image"></td>';
-				}
-			}
-		var deficit = 8 - pickData["packs"][p].length
-		if (deficit >= 1) { out = out + "<td colspan=" + deficit + "></td>" }
-		out = out + "</tr>"; return out
-		}
-	else {
-		var out = '<tr class="two-row-top">';
-		out = out + '<td class="pick-number-cell">Pack ' + packno.toString() + '<br>Pick ' + pickno.toString() + '</td>'
-		for (pno = 0; pno < 8; pno++) { 
-			var cardID = pickData["packs"][p][pno]
-			var wasPicked = false
-			if ( pickData["picks"][p].indexOf(cardID) >= 0 ) { wasPicked = true }
-			if ( wasPicked ) {
-			out = out + '<td class="history-pick-cell"><div class="overtint"></div><img src="' + pickData["images"][cardID] + '" class="history-card-image"><div class="checkbox">&check;</div></td>';
-				}
-			else {
-			out = out + '<td class="history-pick-cell"><img src="' + pickData["images"][cardID] + '" class="history-card-image"></td>';
-				}
-			}
-		out = out + '</tr>\n<tr class="two-row-bot"><td></td>'
-		for (pno = 8; pno < pickData["packs"][p].length; pno++) { 
-			var cardID = pickData["packs"][p][pno]
-			var wasPicked = false
-			if ( pickData["picks"][p].indexOf(cardID) >= 0 ) { wasPicked = true }
-			if ( wasPicked ) {
-			out = out + '<td class="history-pick-cell"><div class="overtint"></div><img src="' + pickData["images"][cardID] + '" class="history-card-image"><div class="checkbox">&check;</div></td>';
-				}
-			else {
-			out = out + '<td class="history-pick-cell"><img src="' + pickData["images"][cardID] + '" class="history-card-image"></td>';
-				}
-			}
-		var deficit = 16 - pickData["packs"][p].length
-		if (deficit >= 1) { out = out + "<td colspan=" + deficit + "></td>" }
-		out = out + "</tr>"; return out
-	}
-}
 
-function tableString() {
-	output = "<table id='history-table'>"
-	for (i=0; i < Object.keys(pickData["picks"]).length; i++)
-		{ output = output + "\n" + makePickBlock(i) }
-	output = output + "</table>"
-	return output
-}
-
-function makeTable() {
-	loc = document.getElementById("table-loc")
-	loc.innerHTML = tableString(); 
-}
 
 function saveDraft() {
 	var d = new Date();
@@ -94,6 +32,7 @@ function saveDraft() {
 	
 	var outfile = "<html><head><title>Cube draft pick history for " + pickData["my_name"] + "</title>";
 	outfile = outfile + '<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">'
+	outfile = outfile + '<script charset="UTF-8" type="text/JavaScript" src="http://ajlvi-cube-draft.herokuapp.com/static/draft-review.js"></script>'
 	outfile = outfile + "<style><!-- body {background: #CCCCCC; margin: 0px }\n .history-pick-cell { position : relative ; }\n.checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white }\n.pick-number-cell {min-width : 50px; font-size:11pt; color:black; text-align:center; font-family: Ubuntu }\n.history-card-image {width : 150px; height: 209px; }\ntr.one-row-pack > td { padding: 5px 0px 5px 0px }\ntr.two-row-top > td { padding: 5px 0px 0px 0px }\ntr.two-row-bot > td { padding: 0px 0px 5px 0px }\n.overtint { position:absolute; background-color: rgba(204, 204, 204, 0.35); width:150px; height:209px; }";
 	outfile = outfile + "--></style></head><body>" + tableString() + "</body></html>";
 

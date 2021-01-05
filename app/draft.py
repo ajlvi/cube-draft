@@ -249,12 +249,14 @@ class Draft:
 	def draftHistory(self, handle):
 		PlayerObj = self.players[self.handles.index(handle)]
 		raw_choices = PlayerObj.giveChoices()
-		out_dict = {"packs": {}, "picks": {}, "images": {}, "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
+		out_dict = {"packs": {}, "picks": {}, "seen_df": '', "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
+		allCardsSeen = []
 		for i in range(len(raw_choices)):
 			out_dict["packs"][i] = raw_choices[i][0]
 			out_dict["picks"][i] = raw_choices[i][1]
 			for card in raw_choices[i][0]:
-				if card not in out_dict["images"]: out_dict["images"][card] = self.cube.loc[card]["scryfall"]
+				if card not in allCardsSeen: allCardsSeen.append(card)
+		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
 		return out_dict
 	
 def endPackNumber(draf):
@@ -295,9 +297,7 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 	If the scheme is "random", the list of cards is shuffled
 	and cut into segments and returned. If the scheme is "Adam", do what
 	Adam typically does to make his cube (deal out colors to each pack).
-	Right now "Adam" only works for 3x15 (8-man), 4x11 (6-man), and 5x9.
-	
-	Update 20.12.06: Inputting cardsper=90 gets sealed packs.
+	Right now "Adam" only works for 3x15 (8-man), 4x11/13 (6-man), and 5x9/11.
 	"""
 	if scheme == "random":
 		pool = cube.sample(packs * cardsper)

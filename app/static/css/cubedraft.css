@@ -43,7 +43,7 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .bottom-holder {width: 1085px; display: block; height:198px; margin-left: 3px}
 .cmc-stack {display: inline-block; float:left}
 .cmcbox {width : 180px ; display: inline-block }
-.critter { max-height:116px;}
+.critter { max-height:116px; padding: 1px 0px 0px 0px}
 .spell {max-height:76px; margin:10px 0px 0px 0px}
 .cost {border-style: dashed; border-width: 0px 0px 1px 0px ; border-color: black; text-align: center; font-size: 8pt}
 .critter, .spell { font-size: 10px ; }
@@ -128,7 +128,8 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 /* for pick history page */
 .history-pick-cell { position : relative ; }
 .checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white  }
-.pick-number-cell {min-width : 50px; font-size:11pt; color:black; text-align:center }
+.pick-number-cell {min-width : 55px; font-size:11pt; color:black; text-align:center }
+.review-permalink { font-size: 9pt; color: #2020AA ; text-decoration : none }
 .history-card-image {width : 150px; height: 209px; }
 tr.one-row-pack > td { padding: 5px 0px 5px 0px }
 tr.two-row-top > td { padding: 5px 0px 0px 0px }
@@ -136,3 +137,7 @@ tr.two-row-bot > td { padding: 0px 0px 5px 0px }
 .overtint { position:absolute; background-color: rgba(204, 204, 204, 0.35); width:150px; height:209px; }
 .draft-save-button { color: #2020AA; text-decoration: none }
 .upper-history-bar { color: black; padding: 5px 0px 5px 25px }
+
+.review-cell { padding: 0px 0px 0px 0px }
+.draft-review-table { padding: 0px 0px 0px 55px ; color : black }
+.draft-review-stack { width : 180px ; display: block ; float : left ; }
