@@ -15,7 +15,7 @@ $(document).ready(function(){
 	$.get('/renderhistory', {draftid : thisdraft, player : thisplayer}, function(response) {
 		pickData = response;
 		makeTable();
-		if (window.location.hash & hashCheck(window.location.hash)) {
+		if (window.location.hash && hashCheck(window.location.hash)) {
 			location.hash = window.location.hash
 		}
 	});
