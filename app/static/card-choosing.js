@@ -14,6 +14,10 @@ function isCreature(cardnum) {
 	return JSON.parse(dataDump["chosen_df"])["creature"][cardnum] == 1
 }
 
+function isLand(cardnum) {
+	return JSON.parse(dataDump["chosen_df"])["creature"][cardnum] == 2
+}
+
 /* note this either returns a single string or a list for split cards.*/
 function manaSpan(cost, loc, slashed=false) {
 	if (cost == null) { return "<span class='mana-" + loc + "'></span>" ; }
@@ -119,6 +123,7 @@ function writeCard(cardnum) {
 	var creatureQ = isCreature(cardnum) ;
 	var cardname = getName(cardnum) ;
 	if (creatureQ) { var spanid = "creatures-" + cardcmc ; }
+	else if ( isLand(cardnum) ) { var spanid = "land-block" ; }
 	else { var spanid = "noncreatures-" + cardcmc ; }
 	var docspan = document.getElementById(spanid) ;
 	var current = docspan.innerHTML;
@@ -140,12 +145,13 @@ function writeCMCs() {
 		if (!(deck[draftedCardIndex] in df)) { cutIdx.push(draftedCardIndex) }
 	}
 	if (cutIdx.length == 1) { deck.splice(cutIdx[0], 1); }
-	//okay whew, now let's write all the cards in the deck.
+	//okay whew, now let's write all the cards in the deck. start by clearing everything.
 	for (j=1; j<=6; j++) {
 		cspan = document.getElementById("creatures-" + j);
 		nspan = document.getElementById("noncreatures-" + j);
-		cspan.innerHTML = ''; nspan.innerHTML = ''
+		cspan.innerHTML = ''; nspan.innerHTML = '';
 	}
+	lspan = document.getElementById('land-block'); lspan.innerHTML = '';
 	for (k=0; k<deck.length; k++) {
 		writeCard(deck[k]);
 	}
