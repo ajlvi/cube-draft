@@ -124,7 +124,12 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .cube-field select, .pack-scheme select { font-family: Ubuntu; font-size: 14pt }
 .created-response { width: 100%; text-align: center; font-family: Ubuntu;
 	font-size:14pt ; color: #990000 }
-	
+.draft-parameters { font-size : 12pt ; padding-left : 5px }
+
+.toollink { position : relative }
+.toollink .tooltiptext { visibility: hidden; width: 205px; bottom: 100%; left: 50%; margin-left: -95px; font-size: 9.5pt ; background-color: #333333; color: #fff; text-align: center; padding: 5px 0; border-radius: 6px; position: absolute; z-index: 1; }
+.toollink:hover .tooltiptext { visibility: visible; }
+
 /* for pick history page */
 .history-pick-cell { position : relative ; }
 .checkbox { position : absolute; top: 20%; left:30%; font-size: 72pt; color : white  }

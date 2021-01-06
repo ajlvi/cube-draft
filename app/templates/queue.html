@@ -62,13 +62,14 @@ function validateForm() {
 	</span>
 
 	<span class="player-field">players<br><input type="text" size="3" name="players" /></span>
-	<span class="packs-field">packs/player<br><input type="text" size="3" name="packs" /></span>
-	<span class="cards-field">cards/pack<br><input type="text" size="3" name="cards" /></span>
+	<span class="packs-field"><span class="toollink">packs/player<sup>?</sup><span class="tooltiptext">choosing 1 pack of 90 cards will create sealed decks.</span></span><br><input type="text" size="3" name="packs" /></span>
+	<span class="cards-field"><span class="toollink">cards/pack<sup>?</sup><span class="tooltiptext">If the draft is Ada style, 6/4/13 and 4/6/9 will cause the last two cards of each pack to be tossed.</span></span><br><input type="text" size="3" name="cards" /></span>
 	
 	
 	
 	<span class="pack-scheme">
-	pack scheme<br><select name="packmethod">
+	<span class="toollink">pack scheme<sup>?</sup><span class="tooltiptext">Ada style packs are color balanced. JJ style is random.</span>
+	<br><select name="packmethod">
 		<option value="Adam">Ada style</option>
 		<option value="random">JJ style</option>
 		</select>
