@@ -35,7 +35,10 @@ def queue():
 		msg = 'Please enter a valid name. (Names cannot be blank.)'
 	elif 'draftcreated' in request.args:
 		if request.args['draftcreated'] == 'yes':
-			draftcreated = 'Draft has been created with ID ' + request.args['key']
+			r = redis_client
+			draftidbit = request.args['key'].encode()
+			snapshot = json.loads(r.get(draftidbit))
+			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' [parameters: ' + snapshot['cube_id'] + ', ' + snapshot['intended'] + ', ' + snapshot['total_packs'] + ', ' + snapshot['cards_per_pack'] + ', ' + snapshot['scheme'] + ']'
 	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
