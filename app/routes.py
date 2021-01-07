@@ -38,7 +38,7 @@ def queue():
 			r = redis_client
 			draftidbit = request.args['key'].encode()
 			snapshot = json.loads(r.get(draftidbit))
-			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' [parameters: ' + snapshot['cube_id'] + ', ' + snapshot['intended'] + ', ' + snapshot['total_packs'] + ', ' + snapshot['cards_per_pack'] + ', ' + snapshot['scheme'] + ']'
+			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' [parameters: ' + snapshot['cube_id'] + ', ' + str(snapshot['intended']) + ', ' + str(snapshot['total_packs']) + ', ' + str(snapshot['cards_per_pack']) + ', ' + snapshot['scheme'] + ']'
 	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
