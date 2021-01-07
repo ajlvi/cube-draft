@@ -175,15 +175,18 @@ def lostandfound():
 def newdraft():
 	r = redis_client
 	if 'submit' in request.form:
-		if request.form['cubes'] == 'ada':
-			url = 'app/static/cube.csv'
-			cubeid = 'ajlvi'
-		elif request.form['cubes'] == 'jacob':
-			url = 'app/static/jacob_cube.csv'
-			cubeid = 'jacob'
-		elif request.form['cubes'] == "andrew":
-			url = 'app/static/andrew_cube.csv'
-			cubeid = 'andrew'
+		if 'cubes' in request.form:
+			if request.form['cubes'] == 'ada':
+				url = 'app/static/cube.csv'
+				cubeid = 'ajlvi'
+			elif request.form['cubes'] == 'jacob':
+				url = 'app/static/jacob_cube.csv'
+				cubeid = 'jacob'
+			elif request.form['cubes'] == "andrew":
+				url = 'app/static/andrew_cube.csv'
+				cubeid = 'andrew'
+			else:
+				return redirect('/queue?draftcreated=no')
 		else:
 			return redirect('/queue?draftcreated=no')
 		cube = pd.read_csv(url)
