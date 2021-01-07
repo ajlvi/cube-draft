@@ -39,6 +39,8 @@ def queue():
 			draftidbit = request.args['key'].encode()
 			snapshot = json.loads(r.get(draftidbit))
 			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' [parameters: ' + snapshot['cube_id'] + ', ' + str(snapshot['intended']) + ', ' + str(snapshot['total_packs']) + ', ' + str(snapshot['cards_per_pack']) + ', ' + snapshot['scheme'] + ']'
+		else:
+			draftcreated = 'Something went wrong. Try again!'
 	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
@@ -182,10 +184,8 @@ def newdraft():
 		elif request.form['cubes'] == "andrew":
 			url = 'app/static/andrew_cube.csv'
 			cubeid = 'andrew'
-		#as a failsafe for now let's default to ada's cube
 		else:
-			url = 'app/static/cube.csv'
-			cubeid = 'ajlvi'
+			return redirect('/queue?draftcreated=no')
 		cube = pd.read_csv(url)
 		newdraft = draft.Draft(cube, cubeid, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
 		newdraftkey = newdraft.getKey()
