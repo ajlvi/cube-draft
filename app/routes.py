@@ -38,7 +38,7 @@ def queue():
 			r = redis_client
 			draftidbit = request.args['key'].encode()
 			snapshot = json.loads(r.get(draftidbit))
-			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' [parameters: ' + snapshot['cube_id'] + ', ' + str(snapshot['intended']) + ', ' + str(snapshot['total_packs']) + ', ' + str(snapshot['cards_per_pack']) + ', ' + snapshot['scheme'] + ']'
+			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' <span class="draft-parameters">[parameters: ' + snapshot['cube_id'] + ', ' + str(snapshot['intended']) + ', ' + str(snapshot['total_packs']) + ', ' + str(snapshot['cards_per_pack']) + ', ' + snapshot['scheme'] + ']</span>'
 		else:
 			draftcreated = 'Something went wrong. Try again!'
 	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
