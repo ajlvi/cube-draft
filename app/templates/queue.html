@@ -21,7 +21,7 @@ function validateForm() {
 	alertmsg += ' Please enter a valid number of cards per pack.';
 	oops = true;
 	}
-  if (playernum*packnum*cardnum > 450) {
+  if (playernum*packnum*cardnum > 480) {
      alertmsg += ' Your draft requires too many total cards.';
 	 oops = true;
   }
@@ -31,6 +31,7 @@ function validateForm() {
 	}
 };
 </script>
+<script charset="UTF-8" type="text/JavaScript" src="{{ url_for('static', filename='dek-upload.js') }}"></script>
 
 {% endblock %}
 
@@ -66,8 +67,6 @@ function validateForm() {
 	<span class="packs-field"><span class="toollink">packs/player<sup>?</sup><span class="tooltiptext">choosing 1 pack of 90 cards will create sealed decks.</span></span><br><input type="text" size="3" name="packs" /></span>
 	<span class="cards-field"><span class="toollink">cards/pack<sup>?</sup><span class="tooltiptext">If the draft is Ada style, 6/4/13 and 4/6/9 will cause the last two cards of each pack to be tossed.</span></span><br><input type="text" size="3" name="cards" /></span>
 	
-	
-	
 	<span class="pack-scheme">
 	<span class="toollink">pack scheme<sup>?</sup><span class="tooltiptext">Ada style packs are color balanced. JJ style is random.</span>
 	<br><select name="packmethod">
@@ -84,7 +83,39 @@ function validateForm() {
 <div class="created-response">{{ draftcreated }}</div>
 
 </div>
+
+<!-- for uploading dek files -->
+
+<div class="uploadblock">
+<form>
+
+<span class="upload-dek-field">
+	<label for="upload-input" class="upload-input-button">choose .dek file</label>
+	<input type="file" id="upload-input"> 
+	<span id="uploaded-filename" class="uploaded-file"></span>
+</span>	
+
+<span class="passcode-field">passcode<br><input type="text" name="passcode" /></span>
+
+<span class="upload-dek-button">
+	<input id="upload-dek-button" type="submit" name="submit" value="update cube" />
+</span>
+</form>
+
+<div class="upload-response-message" id="mainup">Success! All 480 cards in .dek file stored as cube.</div>
+<div class="card-deltas">
+	<span id="new-ins">
+		<div class="delta-header">In since last version</div>
+		<div class="card-delta-list">Fires of Yavimaya<br>Ogre Shaman</div>
+	</span>
+	<span id="new-outs">
+		<div class="delta-header">Out since last version</div>
+		<div class="card-delta-list">Stormbind<br>Ogre Enforcer</div>
+	</span>
 </div>
+</div>
+</div>
+
 <div class="queue-right-container">
 <div class="infoblock">
 <span class="info-header">Drafting</span>

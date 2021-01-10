@@ -103,11 +103,11 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .player-name-field input { width : 260px ; padding: 0px 0px 0px 5px }
 .draft-id-field, .player-name-field { margin-top: auto; margin-bottom:auto ;
 	padding: 0px 40px 0px 0px }
-#join-draft-button, #make-draft-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
+#join-draft-button, #make-draft-button, #upload-dek-button { font-family: Ubuntu; font-size: 15px; padding: 5px 10px 5px 10px;
 	border-radius: 6px 6px 6px 6px; border-width: 1px;
 	border-color: black; border-style: solid; background: #F0F0F0 }
-#join-draft-button:focus, #join-draft-button:hover, #make-draft-button:focus, #make-draft-button:hover { background-color: #DDDDDD; }
-#join-draft-button:active, #make-draft-button:active { background-color:#DDDDFF; }
+#join-draft-button:focus, #join-draft-button:hover, #make-draft-button:focus, #make-draft-button:hover, #upload-dek-button:focus, #upload-dek-button:hover { background-color: #DDDDDD; }
+#join-draft-button:active, #make-draft-button:active, #upload-dek-button:active { background-color:#DDDDFF; }
 
 .createblock { height: 180px ; width: 720px ; background: #CCCCCC; 
 	border-radius: 0px 25px 25px 0px; margin-top: 70px }
@@ -125,6 +125,26 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 .created-response { width: 100%; text-align: center; font-family: Ubuntu;
 	font-size:14pt ; color: #990000 }
 .draft-parameters { font-size : 12pt ; padding-left : 5px }
+
+.uploadblock { min-height: 180px ; width: 720px ; background: #CCCCCC; color : black;
+	font-family: Ubuntu; border-radius: 0px 25px 25px 0px; margin-top: 70px }
+.uploadblock form { width : 100% ; padding-top: 30px; display:table ; }
+
+.upload-dek-field { display: inline-block ; padding: 0px 0px 0px 33px ; width: 44% }
+.upload-input-button { font-size: 15px ; font-family:Ubuntu; border-color:black; border-width:1px; border-style:solid; border-radius: 6px 6px 6px 6px ; padding: 5px 10px 5px 10px; background: #F0F0F0; color: black }
+input[type="file"] {display : none} 
+.uploaded-file {font-size:12pt ; font-family:Ubuntu ; padding: 0px 0px 0px 10px }
+
+.passcode-field { display : inline-block ; font-size: 12pt; text-align:center }
+.passcode-field input { font-family: Ubuntu; font-size: 14pt; padding: 0px 0px 0px 5px ;
+	border-radius: 6px ; border-width: 1px ; border-style: solid ;
+	border-color: #999999; margin: 0px 0px 0px 5px ; width : 100px }
+	
+.upload-dek-button { display : inline-block ; padding: 0px 0px 0px 70px }
+.upload-response-message { color: #990000; font-size: 11pt; text-align:center ; margin-bottom:8px}
+.card-deltas { padding: 0px 0px 0px 100px ; }
+#new-ins, #new-outs { display: inline-block ; width: 40%; text-align: center; color:#990000 ; vertical-align: top; padding: 0px 0px 8px 0px }
+.delta-header { text-decoration: underline ; padding: 0px 0px 5px 0px }
 
 .toollink { position : relative }
 .toollink .tooltiptext { visibility: hidden; width: 205px; bottom: 100%; left: 50%; margin-left: -95px; font-size: 9.5pt ; background-color: #333333; color: #fff; text-align: center; padding: 5px 0; border-radius: 6px; position: absolute; z-index: 1; }
