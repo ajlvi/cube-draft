@@ -80,14 +80,14 @@ function validateForm() {
 	<input id="make-draft-button" type="submit" name="submit" value="create draft" />
 </div>
 </form>
-<div class="created-response">{{ draftcreated }}</div>
+<div class="created-response">{{ draftcreated|safe }}</div>
 
 </div>
 
 <!-- for uploading dek files -->
 
 <div class="uploadblock">
-<form>
+<form name="updatecube" action="queue" method="post">
 
 <span class="upload-dek-field">
 	<label for="upload-input" class="upload-input-button">choose .dek file</label>
@@ -96,22 +96,35 @@ function validateForm() {
 </span>	
 
 <span class="passcode-field">passcode<br><input type="text" name="passcode" /></span>
+<input id="linesinput" type="hidden" name="lines" value="" />
 
 <span class="upload-dek-button">
 	<input id="upload-dek-button" type="submit" name="submit" value="update cube" />
 </span>
 </form>
 
-<div class="upload-response-message" id="mainup">Success! All 480 cards in .dek file stored as cube.</div>
+<div class="upload-response-message" id="mainup">{{ resultmsg|safe }}</div>
+{% if resultmsg %}
 <div class="card-deltas">
 	<span id="new-ins">
 		<div class="delta-header">In since last version</div>
-		<div class="card-delta-list">Fires of Yavimaya<br>Ogre Shaman</div>
+		<div class="card-delta-list">{% for cardname in ins%}
+		{{ cardname }}<br/>
+		{% else %}
+		[None]
+		
+		{% endfor %}
+		</div>
 	</span>
 	<span id="new-outs">
 		<div class="delta-header">Out since last version</div>
-		<div class="card-delta-list">Stormbind<br>Ogre Enforcer</div>
+		<div class="card-delta-list">{% for cardname in outs %}
+		{{cardname}}<br/>
+		{% else %}
+		[None]
+		{% endfor %}</div>
 	</span>
+{% endif %}
 </div>
 </div>
 </div>

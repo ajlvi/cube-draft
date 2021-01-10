@@ -1,5 +1,5 @@
 from app import app
-from app import draft, player, pack, redis_client
+from app import draft, player, pack, cube_parse, redis_client
 import pandas as pd
 from flask import render_template, jsonify, request, redirect, url_for, escape
 import json 
@@ -14,13 +14,16 @@ import time
 def index():
 	return redirect('/queue')
 
-@app.route('/queue', methods=['GET'])
+@app.route('/queue', methods=['GET', 'POST'])
 def queue():
 	msg = ''
 	playername = ''
 	draftid = ''
 	hiddenform = ''
 	draftcreated = ''
+	resultmsg = ''
+	ins = []
+	outs = []
 	if 'playerexists' in request.args:
 		msg = 'There is already a player in that draft with that name. If it\'s you, submit the form again to rejoin. Otherwise, pick a different name!'
 		playername = request.args['name']
@@ -41,7 +44,20 @@ def queue():
 			draftcreated = 'Draft has been created with ID ' + request.args['key'] + ' <span class="draft-parameters">[parameters: ' + snapshot['cube_id'] + ', ' + str(snapshot['intended']) + ', ' + str(snapshot['total_packs']) + ', ' + str(snapshot['cards_per_pack']) + ', ' + snapshot['scheme'] + ']</span>'
 		else:
 			draftcreated = 'Something went wrong. Try again!'
-	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated)
+	elif 'submit' in request.form:
+		lines = request.form['lines']
+		passcode = request.form['passcode']
+		deltas = cube_parse.makeCSV(lines, passcode)
+		if len(deltas['skips']) == 0:
+			resultmsg = f"Success! All {str(deltas['cards'])} cards in .dek file stored as cube."
+		else:
+			resultmsg = "There was an issue with the following IDs:"
+			for mtgoid in deltas['skips']:
+				resultmsg += f" {mtgoid}, "
+			resultmsg = resultmsg[:-2]
+		ins = deltas['ins']
+		outs = deltas['outs']
+	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated, resultmsg=resultmsg, ins=ins, outs=outs)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
 def displaydraft():

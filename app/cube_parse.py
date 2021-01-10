@@ -109,6 +109,7 @@ def output_df(rows):
 
 def makeCSV(lines, key='', table=False):
 	#assuming lines comes from a .dek file
+	lines = lines.split("\n")
 	adam = False
 	if key == "ajlvii": csvname = "ajlvi_cube"; adam=True
 	elif key == "AjeEight": csvname = "andrew_cube"
@@ -119,7 +120,7 @@ def makeCSV(lines, key='', table=False):
 	old_cube = pd.read_csv("temp.csv")
 
 	#do the things
-	sfall = pd.read_csv("static/scryfall-trimmed.csv")
+	sfall = pd.read_csv("app/static/scryfall-trimmed.csv")
 	rows = [makeRow(i, sfall, adam) for i in lines[4:-1]]
 	skips = [r[5] for r in rows if r[0] == None]
 	rows = [r for r in rows if r[0] != None]
