@@ -100,6 +100,7 @@ function cardDiv(cardID) {
 	var cardname = JSON.parse(pickData["seen_df"])["card"][cardID]
 	if (cardname == "Cogwork Librarian") { cardname = "<b>" + cardname + "</b>" }
 	var manacost = manaSpan( cardcost, "bot" )
+	if (cardcost.indexOf("//") >= 0) { manacost = manacost[0] }
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}
 	else {var bufferspace = '';}
