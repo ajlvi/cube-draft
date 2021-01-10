@@ -144,5 +144,7 @@ tr.two-row-bot > td { padding: 0px 0px 5px 0px }
 .upper-history-bar { color: black; padding: 5px 0px 5px 25px }
 
 .review-cell { padding: 0px 0px 0px 0px }
+.review-critter { padding: 1px 0px 0px 0px }
+.review-spell { margin:10px 0px 0px 0px }
 .draft-review-table { padding: 0px 0px 0px 55px ; color : black }
 .draft-review-stack { width : 180px ; display: block ; float : left ; }

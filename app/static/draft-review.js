@@ -82,10 +82,10 @@ function snapshotTable(p) {
 		draftTable = draftTable + '<div class="draft-review-stack">'
 		if (cmc == 1) { var cmcRep = '0-1'; } else { var cmcRep = cmc.toString() ; }
 		draftTable = draftTable + '<span class="cost cmcbox">' + cmcRep + "</span>";
-		draftTable = draftTable + '<span class="critter cmcbox">'
+		draftTable = draftTable + '<span class="review-critter cmcbox">'
 		for ( i = 0 ; i < creat[cmc].length; i++ ) { 
 			draftTable = draftTable + cardDiv(creat[cmc][i]) ; }
-		draftTable = draftTable + '</span><span class="spell cmcbox">'
+		draftTable = draftTable + '</span><span class="review-spell cmcbox">'
 		for ( i = 0 ; i < noncreat[cmc].length; i++) {
 			draftTable = draftTable + cardDiv(noncreat[cmc][i]) ; }
 		draftTable = draftTable + "</span></div>"
