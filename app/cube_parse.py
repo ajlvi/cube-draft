@@ -30,12 +30,12 @@ def makeRow(l, sc, adam=False):
 				colors = parseColors(cardser["color_identity"])
 #				print(f"Eldrazi! {rawn} {colors}")
 			else: colors = parseColors(cardser["colors"])
-		elif "/" in rawn or cardser["layout"] == "adventure": #split or adventure
+		elif "/" in rawn or cardser["layout"] in ["adventure", "flip"]: #split or adventure
 #			print(f"Split! {rawn}")
 			image = cardser["normal_image"]
 			back = ''
 			colors = parseColors(cardser["colors"])
-			if cardser["layout"] == "adventure":
+			if cardser["layout"] in ["adventure", "flip"]: #I don't want the other side of these
 				name = name.split(" // ")[0]
 				cost = cost.split(" // ")[0]
 		else: #regular DFC
