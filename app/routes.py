@@ -2,9 +2,11 @@ from app import app
 from app import draft, player, pack, cube_parse, redis_client
 import pandas as pd
 from flask import render_template, jsonify, request, redirect, url_for, escape
+import time ; import os
 import json 
 import redis
-import time
+import boto3
+s3_client = boto3.client("s3")
 
 #url = 'app/static/cube.csv'
 #cube = pd.read_csv(url)
@@ -198,19 +200,21 @@ def newdraft():
 	if 'submit' in request.form:
 		if 'cubes' in request.form:
 			if request.form['cubes'] == 'ada':
-				url = 'app/static/cube.csv'
+				fname = 'ajlvi_cube.csv'
 				cubeid = 'ajlvi'
-			elif request.form['cubes'] == 'jacob':
-				url = 'app/static/jacob_cube.csv'
-				cubeid = 'jacob'
 			elif request.form['cubes'] == "andrew":
-				url = 'app/static/andrew_cube.csv'
+				fname = 'andrew_cube.csv'
 				cubeid = 'andrew'
+#			elif request.form['cubes'] == 'jacob':
+#				fname = 'jacob_cube.csv'
+#				cubeid = 'jacob'
 			else:
 				return redirect('/queue?draftcreated=no')
 		else:
 			return redirect('/queue?draftcreated=no')
-		cube = pd.read_csv(url)
+		cubefile = s3_client.download_file("cube-draft-csvs", fname, "temp.csv")
+		cube = pd.read_csv("temp.csv"); os.remove("temp.csv")
+
 		newdraft = draft.Draft(cube, cubeid, int(request.form['packs']), int(request.form['cards']), int(request.form['players']), request.form['packmethod'])
 		newdraftkey = newdraft.getKey()
 		draftdict = json.dumps(newdraft.export())
