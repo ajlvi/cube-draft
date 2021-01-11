@@ -164,20 +164,20 @@ class Draft:
 		PlayerObj = self.players[self.handles.index(handle)]
 		if PlayerObj.isDelinquent(): #autopicking
 			self.autoPick(PlayerObj.getname())
-			return self.status(PlayerObj.getname())
+			return -1 * self.status(PlayerObj.getname()) -1
 		if PlayerObj.hasPack():
 			return PlayerObj.queueLen() + 1
 		else: return 0
-		
+
 	def statusCheck(self):
 		"""A "global" version of status, for assessing the whole draft."""
 		output = []
 		for handle in self.handles:
 			PlayerObj = self.players[self.handles.index(handle)]
-			if PlayerObj.isDelinquent():
-				self.status(handle); return self.statusCheck()
-			else:
-				output.append(self.status(handle))
+			output.append(self.status(handle)) #doesn't this already handle delinquency?
+#			if PlayerObj.isDelinquent():
+#				self.status(handle); return self.statusCheck()
+#			else:
 		return output
 
 	def handleIncoming(self, handle, num, cogwork=False):

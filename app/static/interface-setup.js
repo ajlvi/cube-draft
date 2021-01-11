@@ -35,7 +35,13 @@ function flowBar(input=1) {
 		if (dataDump.has_cogwork == handle) {
 			cogtext = '<span class="undertext">cogwork</span>' }
 		else { var cogtext = '' ; }
-		output = output + "<span class='" + spanclass + "'><span class='drafter-name'>" + handle + "</span><span class='overtext'>" + "&bull;".repeat(dataDump.status[pers]) + "</span>" + cogtext + "</span>" + arrowbox ;
+		if (dataDump.status[pers] < 0) { 
+			var heldPacks = -1 * dataDump.status[pers] - 1; 
+			var delinq = ' delinquent' }
+		else { 
+	        var heldPacks = dataDump.status[pers]; 
+			var delinq = '' }
+		output = output + "<span class='" + spanclass + "'><span class='drafter-name" + delinq + "'>" + handle + "</span><span class='overtext'>" + "&bull;".repeat(heldPacks) + "</span>" + cogtext + "</span>" + arrowbox ;
 	}
 	$('#flow-info').html(output) ;
 }
