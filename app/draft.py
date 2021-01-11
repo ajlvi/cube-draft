@@ -334,7 +334,7 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 #			pool.append(list(slice.sample(stock[color]).index))
 #		return divvy(pool, packs)
 		
-	elif scheme == "Adam" and len(cube) == 480:
+	elif scheme == "Adam":
 		if (packs, cardsper) == (24, 15):
 			stocksize = 360
 #		stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
