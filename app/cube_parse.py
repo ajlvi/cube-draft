@@ -3,6 +3,7 @@ import pandas as pd
 from sys import argv
 import os
 import boto3
+from botocore.exceptions import ClientError
 s3_client = boto3.client("s3")
 
 adam_backs = {"Pursuit of Knowledge": "https://i.imgur.com/f3v6QuK.png", "Write into Being": "https://i.imgur.com/s48jeOw.png", "Taigam's Strike": "https://i.imgur.com/41cLK5q.png", "Savage Punch": "https://i.imgur.com/MBE07lp.png", "Angelic Purge": "https://i.imgur.com/htIuV9C.png", "Trail of Mystery": "https://i.imgur.com/PsXVoU8.png", "The Mending of Dominaria": "https://i.imgur.com/g70POfW.png", "Burst Lightning": "https://c1.scryfall.com/file/scryfall-cards/normal/front/2/d/2dc16614-5cf8-444d-a5ae-cac25018af68.jpg?1562610949"}
@@ -113,11 +114,16 @@ def makeCSV(lines, key='', table=False):
 	adam = False
 	if key == "ajlvii": csvname = "ajlvi_cube"; adam=True
 	elif key == "AjeEight": csvname = "andrew_cube"
-	else: raise ValueError("Unrecognized key")
+	elif key == "Gr3zes": csvname = "felix_cube"
+	else: #password issue
+		return {"cards": -1, "skips": [], "outs": [], "ins": []}
 	
 	#make old cube for comparison
-	old_file = s3_client.download_file("cube-draft-csvs", f"{csvname}.csv", "temp.csv")
-	old_cube = pd.read_csv("temp.csv")
+	try:
+		old_file = s3_client.download_file("cube-draft-csvs", f"{csvname}.csv", "temp.csv")
+		old_cube = pd.read_csv("temp.csv")
+	except ClientError:
+		old_cube = pd.DataFrame(columns=["card"])
 
 	#do the things
 	sfall = pd.read_csv("app/static/scryfall-trimmed.csv")
