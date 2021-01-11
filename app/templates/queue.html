@@ -104,7 +104,7 @@ function validateForm() {
 </form>
 
 <div class="upload-response-message" id="mainup">{{ resultmsg|safe }}</div>
-{% if resultmsg %}
+{% if updated %}
 <div class="card-deltas">
 	<span id="new-ins">
 		<div class="delta-header">In since last version</div>
@@ -112,7 +112,6 @@ function validateForm() {
 		{{ cardname }}<br/>
 		{% else %}
 		[None]
-		
 		{% endfor %}
 		</div>
 	</span>

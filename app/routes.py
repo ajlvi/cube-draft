@@ -24,6 +24,7 @@ def queue():
 	resultmsg = ''
 	ins = []
 	outs = []
+	updated = False
 	if 'playerexists' in request.args:
 		msg = 'There is already a player in that draft with that name. If it\'s you, submit the form again to rejoin. Otherwise, pick a different name!'
 		playername = request.args['name']
@@ -48,16 +49,20 @@ def queue():
 		lines = request.form['lines']
 		passcode = request.form['passcode']
 		deltas = cube_parse.makeCSV(lines, passcode)
-		if len(deltas['skips']) == 0:
+		if deltas['cards'] == -1:
+			resultmsg = "There was an issue with the passcode. Please try again."
+		elif len(deltas['skips']) == 0:
 			resultmsg = f"Success! All {str(deltas['cards'])} cards in .dek file stored as cube."
+			updated = True
 		else:
 			resultmsg = "There was an issue with the following IDs:"
 			for mtgoid in deltas['skips']:
 				resultmsg += f" {mtgoid}, "
 			resultmsg = resultmsg[:-2]
+			updated = True
 		ins = deltas['ins']
 		outs = deltas['outs']
-	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated, resultmsg=resultmsg, ins=ins, outs=outs)
+	return render_template('queue.html', msg=msg, playername=playername, draftid=draftid, hiddenform=hiddenform, draftcreated=draftcreated, resultmsg=resultmsg, ins=ins, outs=outs, updated=updated)
 
 @app.route('/draftviewer', methods=['GET', 'POST'])
 def displaydraft():
