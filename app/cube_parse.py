@@ -112,9 +112,10 @@ def makeCSV(lines, key='', table=False):
 	#assuming lines comes from a .dek file
 	lines = lines.split("\n")
 	adam = False
-	if key == "ajlvii": csvname = "ajlvi_cube"; adam=True
+	if key == "ajlv!i": csvname = "ajlvi_cube"; adam=True
 	elif key == "AjeEight": csvname = "andrew_cube"
 	elif key == "Gr3zes": csvname = "felix_cube"
+	elif key == "R!chCali": csvname = "rich_cube"
 	else: #password issue
 		return {"cards": -1, "skips": [], "outs": [], "ins": []}
 	
