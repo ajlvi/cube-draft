@@ -135,7 +135,8 @@ def makeCSV(lines, key='', table=False):
 	new_cube_df = output_df(srows)
 	new_cube_df.to_csv(f"{csvname}.csv", header=True, index=False)
 	s3_client.upload_file(f"{csvname}.csv", "cube-draft-csvs", f"{csvname}.csv")
-	os.remove("temp.csv"); os.remove(f"{csvname}.csv")
+	if "temp.csv" in os.listdir("."): os.remove("temp.csv")
+	os.remove(f"{csvname}.csv")
 
 #	put some information in the logs
 	if len(skips) != 0:
