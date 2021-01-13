@@ -104,7 +104,7 @@ class Draft:
 	def readyForNextPack(self):
 		"""Decides if we're ready for the next pack."""
 		return (self.fullyDrafted == len(self.players)) and (self.currentPack < self.total_packs)
-		
+	
 	def nextPack(self):
 		"""Moves everyone onto the next pack."""
 		for Person in self.players:
@@ -126,8 +126,10 @@ class Draft:
 			PlayerObj.cogworkPick(num, self.cogworkIdx)
 		else:
 			usedPack = PlayerObj.draftCard(num)
-			if len(usedPack) == endPackNumber(self):
+			if len(usedPack) == endPackNumber(self): #player has finished with this pack
 				self.fullyDrafted += 1
+				if len(PlayerObj.getUnopened()) == 0: #this should mean they're done drafting
+					PlayerObj.convertChoices(self.cube)
 				if self.readyForNextPack(): self.nextPack()
 			else:
 				nextPlayer = self.successor(handle)
@@ -251,14 +253,32 @@ class Draft:
 		raw_choices = PlayerObj.giveChoices()
 		out_dict = {"packs": {}, "picks": {}, "seen_df": '', "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
 		allCardsSeen = []
+		sfall = pd.read_csv("app/static/scryfall-trimmed.csv")
 		for i in range(len(raw_choices)):
 			out_dict["packs"][i] = raw_choices[i][0]
 			out_dict["picks"][i] = raw_choices[i][1]
 			for card in raw_choices[i][0]:
 				if card not in allCardsSeen: allCardsSeen.append(card)
-		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
+#		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
+		out_df = sfall[(sfall["mtgo_id"].isin(allCardsSeen)) | (sfall["mtgo_foil_id"].isin(allCardsSeen))].copy()
+		out_df.loc[:, "creature"] = out_df["type_line"].apply(lambda s: int("Creature" in s)).copy()
+		out_df = out_df.rename({"name": "card", "mana_cost" : "cost"}, axis='columns')
+		out_df.loc[:, "scryfall"] = out_df.apply(lambda row: trimImage(row), axis=1)
+		out_df.loc[:, "mtgo_index"] = out_df.apply(lambda row: MTGOidfy(row, allCardsSeen), axis=1)
+		out_df.set_index("mtgo_index", drop=True, inplace=True)
+		out_dict["seen_df"] = out_df[["scryfall", "card", "cost", "creature"]].to_json()
 		return out_dict
 	
+def trimImage(row):
+	#for scryfall.
+	if len(str(row.normal_image)) >= 4: return row.normal_image
+	else: return eval(row["card_faces"])[0]["image_uris"]["normal"]
+	
+def MTGOidfy(row, seen):
+	if row.mtgo_id in seen: return int(row.mtgo_id)
+	elif row.mtgo_foil_id in seen: return int(row.mtgo_foil_id)
+	raise ValueError("MTGO ID weirdness")
+
 def endPackNumber(draf):
 	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
 		return 2
