@@ -68,6 +68,7 @@ def parseColors(col):
 	else: return out
 
 def cmc(row):
+	if str(row[2]) == "nan": return 0
 	cost = row[2].split("/")[0]
 	tot = 0
 	for ch in cost: 
