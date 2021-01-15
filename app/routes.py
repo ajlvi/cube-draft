@@ -148,10 +148,10 @@ def makepick():
 						pass
 			except IndexError: #we get here if the player isn't in the draft
 				return 'https://ajlvi-cube-draft.herokuapp.com/queue'
-			except ValueError: #card not in pack!?!?!
+			except (ValueError, AttributeError) as e: #card not in pack -- happens with rapid double-selects
 				#check whether the card being picked is the most recent pick by the player
 				if DraftObj.lookupByHandle(playername).getChosen()[-1] == num:
-					print('Duplicate pack!!')
+					print('Duplicate pick!!')
 					output = DraftObj.handleIncoming(playername, -1, cog)
 					return jsonify(output)
 				else:
