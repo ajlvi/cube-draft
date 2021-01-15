@@ -38,7 +38,10 @@ def queue():
 		draftid = request.args['id']
 	elif 'invalidname' in request.args:
 		draftid = request.args['id']
-		msg = 'Please enter a valid name. (Names cannot be blank.)'
+		if request.args['invalidname'] == 'blank':
+			msg = 'Please enter a valid name. (Names cannot be blank.)'
+		else:
+			msg = 'Please enter a valid name. (Names cannot include the special characters >, <, &, or ;.)'
 	elif 'draftcreated' in request.args:
 		if request.args['draftcreated'] == 'yes':
 			r = redis_client
@@ -71,7 +74,8 @@ def displaydraft():
 	r = redis_client
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
-		playername = escape(request.form['name']) #sanitize this here
+		playername = request.form['name'].strip()
+		badchars = ['<', '>', ';', '&']
 		draftid = request.form['id'].upper().strip()
 		draftidbit = draftid.encode()
 		if r.exists(draftidbit):
@@ -82,6 +86,9 @@ def displaydraft():
 			DraftObj = draft.rebuildDraft(snapshot, cube)
 			if playername == '':
 				url = '/queue?invalidname=blank&id='+draftid
+				return redirect(url)
+			elif any([c in playername for c in badchars]):
+				url = '/queue?invalidname=yes&id='+draftid
 				return redirect(url)
 			elif DraftObj.hasPlayer(playername):
 				if 'rejoin' in request.form:
@@ -107,7 +114,7 @@ def makepick():
 	r = redis_client
 	if 'player' in request.args:
 		draftid = request.args['draftid'].upper().strip().encode()
-		playername = escape(request.args['player'])
+		playername = request.args['player']
 		num = int(request.args['pickid'])
 		if 'isCogwork' in request.args:
 			if request.args['isCogwork'] == 'yes':
@@ -154,7 +161,7 @@ def makepick():
 			return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 	elif 'player' in request.form:
 		draftid = escape(request.form['draftid']).upper().strip().encode()
-		playername = escape(request.form['player'])
+		playername = request.form['player']
 		num = int(request.form['pickid'])
 		if 'isCogwork' in request.form:
 			if request.form['isCogwork'] == 'yes':
@@ -247,7 +254,7 @@ def pickhistory():
 	r = redis_client
 	if 'player' in request.args:
 		draftid = request.args['draftid'].upper().strip() #should be some sort of error handling if no draft id specified
-		playername = escape(request.args['player'])
+		playername = request.args['player']
 		return render_template('pickhistory.html', playername=playername, draftid=draftid)
 		
 @app.route('/renderhistory', methods=['GET', 'POST'])
@@ -255,7 +262,7 @@ def renderhistory():
 	r = redis_client
 	if 'player' in request.args:
 		draftid = request.args['draftid'].encode() #should be some sort of error handling if no draft id specified
-		playername = escape(request.args['player'])
+		playername = request.args['player']
 		snapshot = json.loads(r.get(draftid)) #should be some sort of error handling if draftid not in database
 		cubeid = snapshot['cube_id']
 		cubeidbit = cubeid.encode()
