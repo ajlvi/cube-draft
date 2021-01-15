@@ -7,6 +7,9 @@ var startTime = null;
 
 function ping() {
 	$.get('/makepick', {draftid : thisdraft, player : thisplayer, pickid : -1, isCogwork : 'no'}, function(response) {
+		if (typeof(response) == 'string') {
+			window.location.replace(response);
+		}
 		dataDump = response;
 		if (!vertbardone) {
 			var tossed = dataDump['thrown_picks'] ;

@@ -71,7 +71,7 @@ def displaydraft():
 	r = redis_client
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
-		playername = request.form['name'] #sanitize this here
+		playername = escape(request.form['name']) #sanitize this here
 		draftid = request.form['id'].upper().strip()
 		draftidbit = draftid.encode()
 		if r.exists(draftidbit):
@@ -140,15 +140,21 @@ def makepick():
 						print('watch error!!!')
 						pass
 			except IndexError: #we get here if the player isn't in the draft
-				return redirect('/queue')
+				return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 			except ValueError: #card not in pack!?!?!
-				return redirect('/lostandfound')
+				#check whether the card being picked is the most recent pick by the player
+				if DraftObj.lookupByHandle(playername).getChosen()[-1] == num:
+					print('Duplicate pack!!')
+					output = DraftObj.handleIncoming(playername, -1, cog)
+					return jsonify(output)
+				else:
+					return 'https://ajlvi-cube-draft.herokuapp.com/lostandfound'
 		else:
 		#draft not in alldrafts
-			return redirect('/queue')
+			return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 	elif 'player' in request.form:
 		draftid = escape(request.form['draftid']).upper().strip().encode()
-		playername = request.form['player']
+		playername = escape(request.form['player'])
 		num = int(request.form['pickid'])
 		if 'isCogwork' in request.form:
 			if request.form['isCogwork'] == 'yes':
@@ -181,14 +187,18 @@ def makepick():
 						print('watch error!!!')
 						pass
 			except IndexError: #we get here if the player isn't in the draft
-				return redirect('/queue')
+				return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 			except ValueError: #card not in pack!?!?!
-				return redirect('/lostandfound')
+				#check whether the card being picked is the most recent pick by the player
+				if DraftObj.lookupByHandle(playername).getChosen()[-1] == num:
+					print('duplicate pick!!')
+					output = DraftObj.handleIncoming(playername, -1, cog)
+					return jsonify(output)
+				else:
+					return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 		else:
 		#draft not in alldrafts
-			return redirect('/queue')		
-	else:
-		return redirect('/queue')
+			return 'https://ajlvi-cube-draft.herokuapp.com/queue'
 		
 @app.route('/lostandfound')
 def lostandfound():
