@@ -74,7 +74,7 @@ def displaydraft():
 	r = redis_client
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
-		playername = request.form['name'].strip()
+		playername = request.form['name'].strip().replace("'", "\'")
 		badchars = ['<', '>', ';', '&']
 		draftid = request.form['id'].upper().strip()
 		draftidbit = draftid.encode()
