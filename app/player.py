@@ -115,5 +115,18 @@ class Player:
 		self.chosen.sort()
 		self.unopened = []
 		
-	def giveChoices(self):
-		return self.choices
+	def giveChoices(self): return self.choices
+		
+	def convertChoices(self, cube):
+		"""
+		This method will replace all the ID numbers in choices with corresponding MTGO IDs.
+		The intention here is to change what's being stored into something that's resistant
+		to changes in the cube composition. (Using cube indexes will cause eventual drift.)
+		The parent draft object will run this on each user after the draft has ended.
+		"""
+		newchosen = []
+		for tup in self.choices:
+			newpack = [int(cube.loc[x]["mtgo"]) for x in tup[0]]
+			newchoice = [int(cube.loc[x]["mtgo"]) for x in tup[1]]
+			newchosen.append( (newpack, newchoice) )
+		self.choices = newchosen

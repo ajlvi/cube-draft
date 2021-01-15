@@ -104,7 +104,7 @@ class Draft:
 	def readyForNextPack(self):
 		"""Decides if we're ready for the next pack."""
 		return (self.fullyDrafted == len(self.players)) and (self.currentPack < self.total_packs)
-		
+	
 	def nextPack(self):
 		"""Moves everyone onto the next pack."""
 		for Person in self.players:
@@ -126,8 +126,10 @@ class Draft:
 			PlayerObj.cogworkPick(num, self.cogworkIdx)
 		else:
 			usedPack = PlayerObj.draftCard(num)
-			if len(usedPack) == endPackNumber(self):
+			if len(usedPack) == endPackNumber(self): #player has finished with this pack
 				self.fullyDrafted += 1
+				if len(PlayerObj.getUnopened()) == 0: #this should mean they're done drafting
+					PlayerObj.convertChoices(self.cube)
 				if self.readyForNextPack(): self.nextPack()
 			else:
 				nextPlayer = self.successor(handle)
@@ -251,14 +253,32 @@ class Draft:
 		raw_choices = PlayerObj.giveChoices()
 		out_dict = {"packs": {}, "picks": {}, "seen_df": '', "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
 		allCardsSeen = []
+		sfall = pd.read_csv("app/static/scryfall-trimmed.csv")
 		for i in range(len(raw_choices)):
 			out_dict["packs"][i] = raw_choices[i][0]
 			out_dict["picks"][i] = raw_choices[i][1]
 			for card in raw_choices[i][0]:
 				if card not in allCardsSeen: allCardsSeen.append(card)
-		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
+#		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
+		out_df = sfall[(sfall["mtgo_id"].isin(allCardsSeen)) | (sfall["mtgo_foil_id"].isin(allCardsSeen))].copy()
+		out_df.loc[:, "creature"] = out_df["type_line"].apply(lambda s: int("Creature" in s)).copy()
+		out_df = out_df.rename({"name": "card", "mana_cost" : "cost"}, axis='columns')
+		out_df.loc[:, "scryfall"] = out_df.apply(lambda row: trimImage(row), axis=1)
+		out_df.loc[:, "mtgo_index"] = out_df.apply(lambda row: MTGOidfy(row, allCardsSeen), axis=1)
+		out_df.set_index("mtgo_index", drop=True, inplace=True)
+		out_dict["seen_df"] = out_df[["scryfall", "card", "cost", "creature"]].to_json()
 		return out_dict
 	
+def trimImage(row):
+	#for scryfall.
+	if len(str(row.normal_image)) >= 4: return row.normal_image
+	else: return eval(row["card_faces"])[0]["image_uris"]["normal"]
+	
+def MTGOidfy(row, seen):
+	if row.mtgo_id in seen: return int(row.mtgo_id)
+	elif row.mtgo_foil_id in seen: return int(row.mtgo_foil_id)
+	raise ValueError("MTGO ID weirdness")
+
 def endPackNumber(draf):
 	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
 		return 2
@@ -334,9 +354,11 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 #			pool.append(list(slice.sample(stock[color]).index))
 #		return divvy(pool, packs)
 		
-	elif scheme == "Adam" and len(cube) == 480:
+	elif scheme == "Adam":
+		stock = {}
 		if (packs, cardsper) == (24, 15):
 			stocksize = 360
+			if len(cube) == 360: stock = {x : len(cube[cube["color"] == x]) for x in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]}
 #		stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 #				 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
 		elif (packs, cardsper) == (21, 15): #seven people
@@ -350,19 +372,24 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 		else: 
 			#the parameters weren't correct for ada-style packs I guess?
 			return makePacks(cube, packs, cardsper, "random")
-		stock = {}
-		mono = int( (stocksize/len(cube)) * len(cube[cube["color"].isin(["W", "U", "B", "R", "G"])])/5)
-		for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
-		multi = int( (stocksize/len(cube)) * len(cube[cube["color"] == "ally"]))
-		for color in ["ally", "enemy"]: stock[color] = multi
-		lands = int( (stocksize/len(cube)) * len(cube[cube["color"] == "land"]))
-		other = int( (stocksize/len(cube)) * len(cube[cube["color"] == "other"]))
-		stock["land"] = lands; stock["other"] = other
-		total = sum([stock[a] for a in stock])
-		if total < stocksize:
-			for addl in choices(list(stock), k=stocksize-total): stock[addl] += 1
-		print(f"Mono: {mono}  Multi: {multi}  Other: {other}  Lands: {lands}")
-		print(f"Making packs with {stock}.")
+		if len(stock) == 0: #giving up on doing this for 360/360 since we'd have to run perfect
+			mono = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["W", "U", "B", "R", "G"] ] )
+			for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
+			multi = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["ally", "enemy"] ] )
+			for color in ["ally", "enemy"]: stock[color] = multi
+			lands = int( (stocksize/len(cube)) * len(cube[cube["color"] == "land"]))
+			other = int( (stocksize/len(cube)) * len(cube[cube["color"] == "other"]))
+			stock["land"] = lands; stock["other"] = other
+			total = sum([stock[a] for a in stock])
+			acceptable = False
+			while not acceptable:
+				teststock = dict(stock)
+				if total < stocksize:
+					for addl in choices(list(stock), k=stocksize-total): teststock[addl] += 1
+				if not any([teststock[a] > len(cube[cube["color"] == a]) for a in teststock]):
+					acceptable = True; stock = teststock
+			print(f"Mono: {mono}  Multi: {multi}  Other: {other}  Lands: {lands}")
+			print(f"Making packs with {stock}.")
 		pool = []
 		for color in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]:
 			slice = cube[cube["color"] == color]

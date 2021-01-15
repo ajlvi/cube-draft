@@ -30,12 +30,12 @@ def makeRow(l, sc, adam=False):
 				colors = parseColors(cardser["color_identity"])
 #				print(f"Eldrazi! {rawn} {colors}")
 			else: colors = parseColors(cardser["colors"])
-		elif "/" in rawn or cardser["layout"] == "adventure": #split or adventure
+		elif "/" in rawn or cardser["layout"] in ["adventure", "flip"]: #split or adventure
 #			print(f"Split! {rawn}")
 			image = cardser["normal_image"]
 			back = ''
 			colors = parseColors(cardser["colors"])
-			if cardser["layout"] == "adventure":
+			if cardser["layout"] in ["adventure", "flip"]: #I don't want the other side of these
 				name = name.split(" // ")[0]
 				cost = cost.split(" // ")[0]
 		else: #regular DFC
@@ -68,6 +68,7 @@ def parseColors(col):
 	else: return out
 
 def cmc(row):
+	if str(row[2]) == "nan": return 0
 	cost = row[2].split("/")[0]
 	tot = 0
 	for ch in cost: 
@@ -112,9 +113,10 @@ def makeCSV(lines, key='', table=False):
 	#assuming lines comes from a .dek file
 	lines = lines.split("\n")
 	adam = False
-	if key == "ajlvii": csvname = "ajlvi_cube"; adam=True
+	if key == "ajlv!i": csvname = "ajlvi_cube"; adam=True
 	elif key == "AjeEight": csvname = "andrew_cube"
 	elif key == "Gr3zes": csvname = "felix_cube"
+	elif key == "R!chCali": csvname = "rich_cube"
 	else: #password issue
 		return {"cards": -1, "skips": [], "outs": [], "ins": []}
 	
@@ -134,7 +136,8 @@ def makeCSV(lines, key='', table=False):
 	new_cube_df = output_df(srows)
 	new_cube_df.to_csv(f"{csvname}.csv", header=True, index=False)
 	s3_client.upload_file(f"{csvname}.csv", "cube-draft-csvs", f"{csvname}.csv")
-	os.remove("temp.csv"); os.remove(f"{csvname}.csv")
+	if "temp.csv" in os.listdir("."): os.remove("temp.csv")
+	os.remove(f"{csvname}.csv")
 
 #	put some information in the logs
 	if len(skips) != 0:
