@@ -41,7 +41,7 @@ def queue():
 		if request.args['invalidname'] == 'blank':
 			msg = 'Please enter a valid name.<span class="draft-parameters">(Names cannot be blank.)</span>'
 		else:
-			msg = 'Please enter a valid name.<span class="draft-parameters">(Names cannot include the special characters >, <, &, ;, or ".)</span>'
+			msg = 'Please enter a valid name.<span class="draft-parameters">(Names cannot include the special characters >, <, &, ;, &#92;, or ".)</span>'
 	elif 'draftcreated' in request.args:
 		if request.args['draftcreated'] == 'yes':
 			r = redis_client
@@ -75,7 +75,7 @@ def displaydraft():
 	if 'submit' in request.form:
 		#initialize new player object if it doesn't exist, otherwise find player and draft ids
 		playername = request.form['name'].strip().replace("'", "\'")
-		badchars = ['<', '>', ';', '&', '"']
+		badchars = ['<', '>', ';', '&', '"', '\\']
 		draftid = request.form['id'].upper().strip()
 		draftidbit = draftid.encode()
 		if r.exists(draftidbit):
