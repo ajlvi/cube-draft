@@ -44,7 +44,7 @@ function validateForm() {
 	<span class="player-name-field">name <input type="text" name="name" value="{{ playername }}"/></span>
 	<span class="join-draft-button"><input id="join-draft-button" type="submit" name="submit" value="join" /></span>
 	{{ hiddenform|safe }}
-	<div class="upper-message">{{ msg }}</div>
+	<div class="upper-message">{{ msg|safe }}</div>
 </form>
 </div>
 
