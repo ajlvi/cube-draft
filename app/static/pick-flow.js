@@ -47,7 +47,7 @@ function midTableMessage(choice) {
 		outstring = outstring + "<br>If the bottom panel is empty, all of your cards will appear in the main deck."
 		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button>"
 		if (dataDump["cards_per_pack"] <= 15) {
-		outstring = outstring + "<br><br>You may review your draft via the following link.<br><br><a class='pick-history-button' target='_blank' href='pickhistory?player=" + dataDump["my_name"] + '&draftid=' + dataDump['draft_key'] + "'><button class='modobutton'>pick history</button></a></td></tr>"; }
+		outstring = outstring + "<br><br>You may review your draft via the following link.<br><br><a class=\"pick-history-button\" target=\"_blank\" href=\"pickhistory?player=" + dataDump["my_name"] + "&draftid=" + dataDump['draft_key'] + "\"><button class=\"modobutton\">pick history</button></a></td></tr>"; }
 		return outstring
 	}
 	else { return '' ;}
