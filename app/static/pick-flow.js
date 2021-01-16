@@ -1,6 +1,7 @@
 var dataDump = null;
 var reservedid = -1;
 var timer = null;
+var delay = null;
 var vertbardone = false;
 var draftover = false;
 var startTime = null;
@@ -21,7 +22,9 @@ function ping() {
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
 			else if (dataDump.chosen_cards.length == dataDump.total_packs * (dataDump.cards_per_pack - dataDump.thrown_picks)) { $('#packdisp').html(midTableMessage(2)); draftover=true;}
 			else {$('#packdisp').html(midTableMessage(0)) ; }
-			if (!draftover) {setTimeout(function() {ping(); }, 2000);}
+			if (!draftover) {
+				clearTimeout(delay);
+				delay = setTimeout(function() {ping(); }, 2000);}
 			}
 		else {
 			//this means we have to populate the table!
@@ -198,7 +201,8 @@ function makePick(playername, dnum, pnum, cogwork='no') {
 		$('#timer').html('');
 		if (response['my_status']==0) {
 			$('#packdisp').html(midTableMessage(0)); //change this later
-			setTimeout(function() {ping(); }, 2000);
+			clearTimeout(delay);
+			delay = setTimeout(function() {ping(); }, 2000);
 			}
 		else {
 			//this means we have to populate the table!
