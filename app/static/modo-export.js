@@ -9,7 +9,7 @@ function MODOExport(){
 		modo_id = JSON.parse(dataDump["chosen_df"])["mtgo"][cube_id]
 		card_name = JSON.parse(dataDump["chosen_df"])["card"][cube_id].replace(" // ", "/")
 		if (card_name == "Cogwork Librarian") { card_name = "Gilded Sentinel" }
-		if (deck.length == 	0) { var sbloc = "false" }
+		if (deck.length == 0) { var sbloc = "false" }
 		else if ( deck.includes(cube_id) ) { var sbloc = "false" }
 		else { var sbloc = "true" }
 		outfile = outfile + '\n  <Cards CatID="' + modo_id.toString() + '" Quantity="1" Sideboard="' + sbloc + '" Name="' + card_name + '" />'
@@ -20,7 +20,8 @@ function MODOExport(){
 	var day = d.getDate().toString().padStart(2, '0') ;
 	var year = (d.getYear()%100).toString()
 	var date_string = year + "-" + month + "-" + day
-	var filename = "cube-draft-" + dataDump["my_name"] + "-" + date_string + ".dek"
+	var sanitized_name = dataDump["my_name"].split(".").join("").split("/").join("")
+	var filename = "cube-draft-" + sanitized_name + "-" + date_string + ".dek"
 	download_file(outfile, filename, "text/csv")
 }
 
