@@ -17,7 +17,7 @@ function validateForm() {
 	alertmsg += ' Please enter a valid number of packs.';
 	oops = true;
 	}
-  if (isNaN(cardnum) || cardnum < 1 || cardnum > 225) {
+  if (isNaN(cardnum) || cardnum <= 1 || (cardnum > 15 && cardnum != 90) ) {
 	alertmsg += ' Please enter a valid number of cards per pack.';
 	oops = true;
 	}
