@@ -249,7 +249,7 @@ class Draft:
 		return d
 		
 	def draftHistory(self, handle):
-		PlayerObj = self.players[self.handles.index(handle)]
+		PlayerObj = self.players[self.handles.index(handle.replace("&#39;", "'"))]
 		raw_choices = PlayerObj.giveChoices()
 		out_dict = {"packs": {}, "picks": {}, "seen_df": '', "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
 		allCardsSeen = []
