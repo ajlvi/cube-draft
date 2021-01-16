@@ -18,7 +18,7 @@ function validateForm() {
 	oops = true;
 	}
   if (isNaN(cardnum) || cardnum <= 1 || (cardnum > 15 && cardnum != 90) ) {
-	alertmsg += ' Please enter a valid number of cards per pack.';
+	alertmsg += ' Acceptable cards per pack are between 2-15 or 90.';
 	oops = true;
 	}
   if (playernum*packnum*cardnum > 480) {
