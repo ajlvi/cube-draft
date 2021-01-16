@@ -244,8 +244,8 @@ function addSideOverlays() {
 //			$(this).closest('div').children('span.image-overlay').css("right", rightWidth);
 			
 			var divtop = $(this).closest('div').position()["top"]
-			if ( divtop + 320 > $(window).height() ) {
-				$(this).closest('div').children('span.image-overlay').css("bottom", ($(window).height() - divtop + 8).toString() + "px"); }
+			if ( divtop + 320 > $(document).height() ) {
+				$(this).closest('div').children('span.image-overlay').css("top", (divtop - 300).toString() + "px"); }
 			else { $(this).closest('div').children('span.image-overlay').css("top", (divtop+16).toString() + "px"); }
 			
 			$(this).closest('div').children('span.image-overlay').css("z-index", "1");
