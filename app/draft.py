@@ -359,25 +359,16 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 #			pool.append(list(slice.sample(stock[color]).index))
 #		return divvy(pool, packs)
 		
-	elif scheme == "Adam":
-		stock = {}
-		if (packs, cardsper) == (24, 15):
-			stocksize = 360
-			if len(cube) == 360: stock = {x : len(cube[cube["color"] == x]) for x in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]}
 #		stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 #				 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
-		elif (packs, cardsper) == (21, 15): #seven people
-			stocksize = 315
-		elif (packs, cardsper) == (24, 13): #six with tosses
-			stocksize = 312
-		elif (packs, cardsper) == (24, 11): #six without tosses
-			stocksize = 264
-		elif (packs, cardsper) == (24, 9): #four with tosses
-			stocksize = 216
-		else: 
-			#the parameters weren't correct for ada-style packs I guess?
-			return makePacks(cube, packs, cardsper, "random")
-		if len(stock) == 0: #giving up on doing this for 360/360 since we'd have to run perfect
+
+	elif scheme == "Adam": #21.01.18 now works for any parameters
+		stocksize = packs * cardsper
+		#if the cube has 360 cards, let's not try to randomly hit the right configuration
+		if len(cube) == 360 and stocksize == 360:
+			stock = {x : len(cube[cube["color"] == x]) for x in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]}
+		else: #giving up on doing this for 360/360 since we'd have to run perfect
+			stock = {}
 			mono = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["W", "U", "B", "R", "G"] ] )
 			for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
 			multi = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["ally", "enemy"] ] )
