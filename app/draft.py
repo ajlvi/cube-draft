@@ -262,9 +262,10 @@ class Draft:
 #		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
 		out_df = sfall[(sfall["mtgo_id"].isin(allCardsSeen)) | (sfall["mtgo_foil_id"].isin(allCardsSeen))].copy()
 		out_df.loc[:, "creature"] = out_df["type_line"].apply(lambda s: int("Creature" in s)).copy()
-		out_df = out_df.rename({"name": "card", "mana_cost" : "cost"}, axis='columns')
+		out_df = out_df.rename({"name": "card"}, axis='columns')
 		out_df.loc[:, "scryfall"] = out_df.apply(lambda row: trimImage(row), axis=1)
 		out_df.loc[:, "mtgo_index"] = out_df.apply(lambda row: MTGOidfy(row, allCardsSeen), axis=1)
+		out_df.loc[:, "cost"] = out_df.apply(lambda row: findManaCost(row), axis=1)
 		out_df.set_index("mtgo_index", drop=True, inplace=True)
 		out_dict["seen_df"] = out_df[["scryfall", "card", "cost", "creature"]].to_json()
 		return out_dict
@@ -278,6 +279,10 @@ def MTGOidfy(row, seen):
 	if row.mtgo_id in seen: return int(row.mtgo_id)
 	elif row.mtgo_foil_id in seen: return int(row.mtgo_foil_id)
 	raise ValueError("MTGO ID weirdness")
+	
+def findManaCost(row):
+	if row.layout == "transform": return eval(row.card_faces)[0]["mana_cost"]
+	else: return row.mana_cost
 
 def endPackNumber(draf):
 	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
