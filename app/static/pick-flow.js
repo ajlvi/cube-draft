@@ -17,7 +17,7 @@ function ping() {
 			vertBar(dataDump['total_packs'], dataDump['cards_per_pack'] - tossed);
 		}
 		updatePicks(); flowBar() //update the list of existing picks
-		if (response['my_status']==0) {
+		if (response['my_status']==0 || response['my_status'] == -1) {
 			//0: wait for picks; 1: wait for players; 2: modo export message
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
 			else if (dataDump.chosen_cards.length == dataDump.total_packs * (dataDump.cards_per_pack - dataDump.thrown_picks)) { $('#packdisp').html(midTableMessage(2)); draftover=true;}

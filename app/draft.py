@@ -144,6 +144,7 @@ class Draft:
 		PlayerObj = self.players[self.handles.index(handle)]
 		theirPack = PlayerObj.getActive()
 		card = theirPack.randomCard()
+		PlayerObj.setDelinq(True)
 		self.makePick(handle, card, False)
 	
 	def hasCogwork(self):
@@ -162,14 +163,19 @@ class Draft:
 		--- A returned value of 0 means the player is waiting for a pack.
 		If the player is delinquent, this method will force them to make a pick,
 		then reassess.
+		--- A returned value of -N-1 means "delinquent with N packs in queue."
+		    So a -1 means "not picking and delinquent."
 		"""
 		PlayerObj = self.players[self.handles.index(handle)]
-		if PlayerObj.isDelinquent(): #autopicking
+		if PlayerObj.isDelinquent(): #autopicking -- delinq is set in autoPick
 			self.autoPick(PlayerObj.getname())
-			return -1 * self.status(PlayerObj.getname()) -1
+			return -1 * self.status(PlayerObj.getname()) -1 #rerun status; may/may not have pack
 		if PlayerObj.hasPack():
-			return PlayerObj.queueLen() + 1
-		else: return 0
+			if PlayerObj.getDelinq(): return -1 * (PlayerObj.queueLen() + 1) - 1
+			else: return PlayerObj.queueLen() + 1
+		else: 
+			if PlayerObj.getDelinq(): return -1
+			else: return 0
 
 	def statusCheck(self):
 		"""A "global" version of status, for assessing the whole draft."""
@@ -194,9 +200,11 @@ class Draft:
 		print(f"Player {handle} is pinging with card-id {num}.")
 	#if HANDLE not here -- raise IndexError
 	#if CARD not here -- raise ValueError
-		if num >= 0: self.makePick(handle, num, cogwork)
-		stat = self.statusCheck()
 		PlayerObj = self.players[self.handles.index(handle)]
+		if num >= 0: # a "legit" pick, so we'll set delinq to False
+			self.makePick(handle, num, cogwork)
+			PlayerObj.setDelinq(False)
+		stat = self.statusCheck()
 		chosen_cards = PlayerObj.getChosen()
 		chosen_df = self.cube.loc[PlayerObj.getChosen()].to_json()
 		if PlayerObj.getActive() != None:
@@ -241,6 +249,7 @@ class Draft:
 			hd["unopened"] = [P.getCards() for P in PlayerObj.getUnopened()]
 			hd["chosen"] = PlayerObj.getChosen()
 			hd["choices"] = PlayerObj.giveChoices()
+			hd["delinq"] = PlayerObj.getDelinq()
 			if PlayerObj.getActive() == None: hd["active"] = None
 			else: hd["active"] = PlayerObj.getActive().getCards()
 			hd["opentime"] = PlayerObj.getTime()
@@ -306,6 +315,7 @@ def rebuildDraft(d, cube):
 		Pl.setChosen(d["player_info"][hand]["chosen"])
 		Pl.setTime(d["player_info"][hand]['opentime'])
 		Pl.setChoices(d["player_info"][hand]["choices"])
+		Pl.setDelinq(d["player_info"][hand]["delinq"])
 		if d["player_info"][hand]["active"] == None:
 			Pl.setActive(d["player_info"][hand]["active"])
 		else:
