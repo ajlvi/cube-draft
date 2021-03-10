@@ -119,6 +119,7 @@ def makeCSV(lines, key='', table=False):
 	elif key == "R!chCali": csvname = "rich_cube"
 	elif key == "SFVC++": csvname = "sfvc_cube"
 	elif key == "Chao5!": csvname = "cnc_cube"
+	elif key == "H@nnes!": csvname = "hannes_cube"
 	else: #password issue
 		return {"cards": -1, "skips": [], "outs": [], "ins": []}
 	
