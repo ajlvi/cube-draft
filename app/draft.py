@@ -69,7 +69,13 @@ class Draft:
 		if self.cards_per_pack == 90 and self.scheme != "random":
 			self.startSealed(); return
 		packstock = makePacks(self.cube, self.total_packs*self.intended, self.cards_per_pack, self.scheme)
-		shuffle(self.players); shuffle(packstock)
+		shuffle(packstock)
+		if len(self.players) == 6 and len([nam for nam in self.players if nam[:2].upper() in ["A-", "B-"]]) == 6:
+			teamA = [nam for nam in self.players if nam[:2].upper() == "A-"]
+			teamB = [nam for nam in self.players if nam[:2].upper() == "B-"]
+			shuffle(teamA); shuffle(teamB);
+			self.players = [teamA[0], teamB[0], teamA[1], teamB[1], teamA[2], teamB[2]]
+		else: shuffle(self.players)
 		self.handles = [Person.getname() for Person in self.players]
 		assert len(packstock) % len(self.players) == 0
 		packsper = int(len(packstock) / len(self.players))
