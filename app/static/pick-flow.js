@@ -30,7 +30,6 @@ function ping() {
 			//this means we have to populate the table!
 			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
-			clearInterval(timer);
 			setTimer(response['time_remaining']);
 			packAndPickNos();
 			} 
@@ -75,6 +74,7 @@ function setTimer(time) {
 	var d = new Date();
 	startTime = d.getTime();
 	timeFloor = Math.floor(time);
+	clearInterval(timer);
 	timer = setInterval(function() {runTimer(timeFloor);}, 1000);
 };
 	
@@ -197,7 +197,7 @@ function makePick(playername, dnum, pnum, cogwork='no') {
 		reservedid = -1;
 		dataDump = response;
 		updatePicks(); //update the list of existing picks
-		packAndPickNos(); //clear the pack and pick numbers
+		packAndPickNos(); //clear or update the pack and pick numbers
 		$('#zoom-box').html(''); //in case any card image was zoomed in
 		$('#timer').html('');
 		if (response['my_status']==0) {
