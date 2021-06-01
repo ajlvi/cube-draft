@@ -30,6 +30,7 @@ function ping() {
 			//this means we have to populate the table!
 			reservedid = response['current_pack'][0];
 			populateTable(response['current_pack'],response['current_df']);
+			clearInterval(timer);
 			setTimer(response['time_remaining']);
 			packAndPickNos();
 			} 
