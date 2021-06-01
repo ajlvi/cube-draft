@@ -17,7 +17,7 @@ function ping() {
 			vertBar(dataDump['total_packs'], dataDump['cards_per_pack'] - tossed);
 		}
 		updatePicks(); flowBar() //update the list of existing picks
-		if (response['my_status']==0) {
+		if (response['my_status']==0 || response['my_status'] == -1) {
 			//0: wait for picks; 1: wait for players; 2: modo export message
 			if (dataDump.packno == 0) { $('#packdisp').html(midTableMessage(1)) ; }
 			else if (dataDump.chosen_cards.length == dataDump.total_packs * (dataDump.cards_per_pack - dataDump.thrown_picks)) { $('#packdisp').html(midTableMessage(2)); draftover=true;}
@@ -48,7 +48,7 @@ function midTableMessage(choice) {
 		outstring = outstring + "<br>If the bottom panel is empty, all of your cards will appear in the main deck."
 		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button>"
 		if (dataDump["cards_per_pack"] <= 15) {
-		outstring = outstring + "<br><br>You may review your draft via the following link.<br><br><a class='pick-history-button' target='_blank' href='pickhistory?player=" + dataDump["my_name"] + '&draftid=' + dataDump['draft_key'] + "'><button class='modobutton'>pick history</button></a></td></tr>"; }
+		outstring = outstring + "<br><br>You may review your draft via the following link.<br><br><a class=\"pick-history-button\" target=\"_blank\" href=\"pickhistory?player=" + dataDump["my_name"] + "&draftid=" + dataDump['draft_key'] + "\">pick history</a></td></tr>"; }
 		return outstring
 	}
 	else { return '' ;}
@@ -245,8 +245,8 @@ function addSideOverlays() {
 //			$(this).closest('div').children('span.image-overlay').css("right", rightWidth);
 			
 			var divtop = $(this).closest('div').position()["top"]
-			if ( divtop + 320 > $(window).height() ) {
-				$(this).closest('div').children('span.image-overlay').css("bottom", ($(window).height() - divtop + 8).toString() + "px"); }
+			if ( divtop + 320 > $(document).height() ) {
+				$(this).closest('div').children('span.image-overlay').css("top", (divtop - 300).toString() + "px"); }
 			else { $(this).closest('div').children('span.image-overlay').css("top", (divtop+16).toString() + "px"); }
 			
 			$(this).closest('div').children('span.image-overlay').css("z-index", "1");

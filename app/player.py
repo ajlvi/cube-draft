@@ -12,7 +12,8 @@ class Player:
 		self.unopened = []
 		self.choices = [] #these are pairs ([pack], [chosen])
 		self.opentime = 0 #refreshes each time a pack is opened
-
+		self.delinquency = False
+		
 	def __repr__(self):
 		out = f"Player {self.handle} participating in draft."
 		out += f"\nI currently possess cards: {self.chosen}."
@@ -25,6 +26,7 @@ class Player:
 	def getUnopened(self): return self.unopened
 	def getQueue(self): return self.queue
 	def getTime(self): return self.opentime
+	def getDelinq(self): return self.delinquency
 	
 	def setChosen(self, l): self.chosen = l
 	def setActive(self, ap): self.activePack = ap
@@ -32,6 +34,7 @@ class Player:
 	def setQueue(self, q): self.queue = q
 	def setTime(self, t): self.opentime = t
 	def setChoices(self, c): self.choices = c
+	def setDelinq(self, d): self.delinquency = d
 
 	def takeUnopened(self, packs):
 		"""
@@ -53,7 +56,9 @@ class Player:
 		return picktimes[len(self.activePack)] - (time() - self.opentime)
 		
 	def isDelinquent(self):
-		"""Says `yes` presently if you're more than three seconds beyond the limit."""
+		"""Says `yes` presently if you're more than three seconds beyond the limit.
+		   This is a test based on the status of the player; the delinquency variable
+		   is keeping track of whether you were delinquent at your last pick."""
 		if self.hasPack(): return self.timeLeft() < -3
 		return False
 		

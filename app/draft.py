@@ -69,7 +69,13 @@ class Draft:
 		if self.cards_per_pack == 90 and self.scheme != "random":
 			self.startSealed(); return
 		packstock = makePacks(self.cube, self.total_packs*self.intended, self.cards_per_pack, self.scheme)
-		shuffle(self.players); shuffle(packstock)
+		shuffle(packstock)
+		if len(self.players) == 6 and len([han for han in self.players if han.getname()[:2].upper() in ["A-", "B-"]]) == 6:
+			teamA = [han for han in self.players if han.getname()[:2].upper() == "A-"]
+			teamB = [han for han in self.players if han.getname()[:2].upper() == "B-"]
+			shuffle(teamA); shuffle(teamB);
+			self.players = [teamA[0], teamB[0], teamA[1], teamB[1], teamA[2], teamB[2]]
+		else: shuffle(self.players)
 		self.handles = [Person.getname() for Person in self.players]
 		assert len(packstock) % len(self.players) == 0
 		packsper = int(len(packstock) / len(self.players))
@@ -144,6 +150,7 @@ class Draft:
 		PlayerObj = self.players[self.handles.index(handle)]
 		theirPack = PlayerObj.getActive()
 		card = theirPack.randomCard()
+		PlayerObj.setDelinq(True)
 		self.makePick(handle, card, False)
 	
 	def hasCogwork(self):
@@ -162,14 +169,19 @@ class Draft:
 		--- A returned value of 0 means the player is waiting for a pack.
 		If the player is delinquent, this method will force them to make a pick,
 		then reassess.
+		--- A returned value of -N-1 means "delinquent with N packs in queue."
+		    So a -1 means "not picking and delinquent."
 		"""
 		PlayerObj = self.players[self.handles.index(handle)]
-		if PlayerObj.isDelinquent(): #autopicking
+		if PlayerObj.isDelinquent(): #autopicking -- delinq is set in autoPick
 			self.autoPick(PlayerObj.getname())
-			return -1 * self.status(PlayerObj.getname()) -1
+			return -1 * self.status(PlayerObj.getname()) -1 #rerun status; may/may not have pack
 		if PlayerObj.hasPack():
-			return PlayerObj.queueLen() + 1
-		else: return 0
+			if PlayerObj.getDelinq(): return -1 * (PlayerObj.queueLen() + 1) - 1
+			else: return PlayerObj.queueLen() + 1
+		else: 
+			if PlayerObj.getDelinq(): return -1
+			else: return 0
 
 	def statusCheck(self):
 		"""A "global" version of status, for assessing the whole draft."""
@@ -194,9 +206,11 @@ class Draft:
 		print(f"Player {handle} is pinging with card-id {num}.")
 	#if HANDLE not here -- raise IndexError
 	#if CARD not here -- raise ValueError
-		if num >= 0: self.makePick(handle, num, cogwork)
-		stat = self.statusCheck()
 		PlayerObj = self.players[self.handles.index(handle)]
+		if num >= 0: # a "legit" pick, so we'll set delinq to False
+			self.makePick(handle, num, cogwork)
+			PlayerObj.setDelinq(False)
+		stat = self.statusCheck()
 		chosen_cards = PlayerObj.getChosen()
 		chosen_df = self.cube.loc[PlayerObj.getChosen()].to_json()
 		if PlayerObj.getActive() != None:
@@ -241,6 +255,7 @@ class Draft:
 			hd["unopened"] = [P.getCards() for P in PlayerObj.getUnopened()]
 			hd["chosen"] = PlayerObj.getChosen()
 			hd["choices"] = PlayerObj.giveChoices()
+			hd["delinq"] = PlayerObj.getDelinq()
 			if PlayerObj.getActive() == None: hd["active"] = None
 			else: hd["active"] = PlayerObj.getActive().getCards()
 			hd["opentime"] = PlayerObj.getTime()
@@ -249,7 +264,7 @@ class Draft:
 		return d
 		
 	def draftHistory(self, handle):
-		PlayerObj = self.players[self.handles.index(handle)]
+		PlayerObj = self.players[self.handles.index(handle.replace("&#39;", "'"))]
 		raw_choices = PlayerObj.giveChoices()
 		out_dict = {"packs": {}, "picks": {}, "seen_df": '', "tot_packs": self.total_packs, "pack_size": self.cards_per_pack, "tossed": endPackNumber(self), "my_name": handle }
 		allCardsSeen = []
@@ -262,9 +277,10 @@ class Draft:
 #		out_dict["seen_df"] = self.cube.loc[allCardsSeen][["scryfall", "card", "cost", "creature"]].to_json()
 		out_df = sfall[(sfall["mtgo_id"].isin(allCardsSeen)) | (sfall["mtgo_foil_id"].isin(allCardsSeen))].copy()
 		out_df.loc[:, "creature"] = out_df["type_line"].apply(lambda s: int("Creature" in s)).copy()
-		out_df = out_df.rename({"name": "card", "mana_cost" : "cost"}, axis='columns')
+		out_df = out_df.rename({"name": "card"}, axis='columns')
 		out_df.loc[:, "scryfall"] = out_df.apply(lambda row: trimImage(row), axis=1)
 		out_df.loc[:, "mtgo_index"] = out_df.apply(lambda row: MTGOidfy(row, allCardsSeen), axis=1)
+		out_df.loc[:, "cost"] = out_df.apply(lambda row: findManaCost(row), axis=1)
 		out_df.set_index("mtgo_index", drop=True, inplace=True)
 		out_dict["seen_df"] = out_df[["scryfall", "card", "cost", "creature"]].to_json()
 		return out_dict
@@ -278,6 +294,10 @@ def MTGOidfy(row, seen):
 	if row.mtgo_id in seen: return int(row.mtgo_id)
 	elif row.mtgo_foil_id in seen: return int(row.mtgo_foil_id)
 	raise ValueError("MTGO ID weirdness")
+	
+def findManaCost(row):
+	if row.layout == "transform": return eval(row.card_faces)[0]["mana_cost"]
+	else: return row.mana_cost
 
 def endPackNumber(draf):
 	if draf.getScheme() == "Adam" and draf.getPackData() in [(6, 4, 13), (4, 6, 9)]:
@@ -301,6 +321,7 @@ def rebuildDraft(d, cube):
 		Pl.setChosen(d["player_info"][hand]["chosen"])
 		Pl.setTime(d["player_info"][hand]['opentime'])
 		Pl.setChoices(d["player_info"][hand]["choices"])
+		Pl.setDelinq(d["player_info"][hand]["delinq"])
 		if d["player_info"][hand]["active"] == None:
 			Pl.setActive(d["player_info"][hand]["active"])
 		else:
@@ -354,25 +375,16 @@ def makePacks(cube, packs, cardsper, scheme="random"):
 #			pool.append(list(slice.sample(stock[color]).index))
 #		return divvy(pool, packs)
 		
-	elif scheme == "Adam":
-		stock = {}
-		if (packs, cardsper) == (24, 15):
-			stocksize = 360
-			if len(cube) == 360: stock = {x : len(cube[cube["color"] == x]) for x in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]}
 #		stock = {"W": 43, "U": 43, "B": 43, "R": 43, "G": 43, \
 #				 "ally": 34, "enemy": 34, 'other': 38, 'land': 39}
-		elif (packs, cardsper) == (21, 15): #seven people
-			stocksize = 315
-		elif (packs, cardsper) == (24, 13): #six with tosses
-			stocksize = 312
-		elif (packs, cardsper) == (24, 11): #six without tosses
-			stocksize = 264
-		elif (packs, cardsper) == (24, 9): #four with tosses
-			stocksize = 216
-		else: 
-			#the parameters weren't correct for ada-style packs I guess?
-			return makePacks(cube, packs, cardsper, "random")
-		if len(stock) == 0: #giving up on doing this for 360/360 since we'd have to run perfect
+
+	elif scheme == "Adam": #21.01.18 now works for any parameters
+		stocksize = packs * cardsper
+		#if the cube has 360 cards, let's not try to randomly hit the right configuration
+		if len(cube) == 360 and stocksize == 360:
+			stock = {x : len(cube[cube["color"] == x]) for x in ["W", "U", "B", "R", "G", "ally", "enemy", "other", "land"]}
+		else: #giving up on doing this for 360/360 since we'd have to run perfect
+			stock = {}
 			mono = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["W", "U", "B", "R", "G"] ] )
 			for color in ["W", "U", "B", "R", "G"]: stock[color] = mono
 			multi = min( [ int( stocksize/len(cube) * len(cube[cube["color"] == x])) for x in ["ally", "enemy"] ] )
