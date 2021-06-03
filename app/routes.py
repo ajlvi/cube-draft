@@ -234,9 +234,9 @@ def newdraft():
 			elif request.form['cubes'] == "hannes":
 				fname = 'hannes_cube.csv'
 				cubeid = 'hannes'
-#			elif request.form['cubes'] == 'jacob':
-#				fname = 'jacob_cube.csv'
-#				cubeid = 'jacob'
+			elif request.form['cubes'] == 'jon':
+				fname = 'jon_cube.csv'
+				cubeid = 'jon'
 			else:
 				return redirect('/queue?draftcreated=no')
 		else:
