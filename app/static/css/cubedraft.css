@@ -64,7 +64,12 @@ body {margin-left: 0; margin-top: 0 ; overflow-x: auto; overflow-y: auto}
 
 .under-pack-info { height : 198px ; width: 1086px ; }
 .draft-flow-bar { width: 954px ; display : table ; text-align : center ; float : left ; height : 100% }
-#flow-info { width: 100% ; height: 100%;  vertical-align: middle; display : table-cell } 
+.flow-upper-row { display: table-row ; height: 88%}
+#flow-info { width: 100% ; vertical-align: middle; display : table-cell } 
+.flow-under-row { display: table-row ; height: 12%; text-align: left }
+#card-counting { vertical-align: middle; display:inline-block; background: #333333; height: 100%; 
+	border-radius: 0px 5px 0px 0px ; padding: 4px 4px 4px 4px ; font-size : 9pt; min-width: 200px; }
+.card-quantity { font-weight: bold ; padding: 0px 8px 0px 0px }
 .drafter-box { color : black ; font-size : 12pt ; font-family : Ubuntu; position : relative ; padding: 0px 10px 0px 10px ; }
 .overtext { position: absolute; top: -75%; width: 100%; text-align:center; left: 0 }
 .undertext { position: absolute; bottom: -75%; width: 100%; text-align:center; left: 0; font-variant : small-caps; font-size: 8pt }

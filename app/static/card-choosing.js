@@ -155,6 +155,26 @@ function writeCMCs() {
 	for (k=0; k<deck.length; k++) {
 		writeCard(deck[k]);
 	}
+	deckCardTypes();
+}
+
+function deckCardTypes() {
+	var df = JSON.parse(dataDump.chosen_df).creature
+	var lands = 0;
+	var creatures = 0;
+	var total = 0;
+	for (c = 0; c < deck.length; c++) {
+		total++;
+		if(df[deck[c]] == 2) { lands++; }
+		else if (df[deck[c]] == 1) { creatures++; }
+	}
+	var spells = total - creatures - lands ;
+	var outstring = 'total <span class="card-quantity">' + total + '</span>';
+	outstring += 'creatures <span class="card-quantity">' + creatures + '</span>';
+	outstring += 'spells <span class="card-quantity">' + spells + '</span>';
+	outstring += 'lands <span class="card-quantity">' + lands + '</span>';
+	countspan = document.getElementById('card-counting');
+	countspan.innerHTML = outstring;
 }
 
 /* these functions were used for the stream draft overlay and are not used presently. 

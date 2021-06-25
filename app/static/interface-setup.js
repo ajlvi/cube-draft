@@ -18,6 +18,7 @@ function vertBar(packs, picks) {
 	vertContainer = document.getElementById('vertbar');
 	vertContainer.innerHTML = outstring;
 	vertbardone = true;
+	deckCardTypes(); 
 }
 
 function flowBar(input=1) {
