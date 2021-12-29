@@ -222,6 +222,9 @@ def newdraft():
 			elif request.form['cubes'] == "andrew":
 				fname = 'andrew_cube.csv'
 				cubeid = 'andrew'
+			elif request.form['cubes'] == "lsv":
+				fname = 'lsv_cube.csv'
+				cubeid = 'lsv'
 			elif request.form['cubes'] == "felix":
 				fname = 'felix_cube.csv'
 				cubeid = 'felix'

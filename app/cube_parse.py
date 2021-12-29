@@ -114,6 +114,7 @@ def makeCSV(lines, key='', table=False):
 	lines = lines.split("\n")
 	adam = False
 	if key == "ajlv!i": csvname = "ajlvi_cube"; adam=True
+	elif key == "EllEssV33": csvname = "lsv_cube"
 	elif key == "AjeEight": csvname = "andrew_cube"
 	elif key == "Gr3zes": csvname = "felix_cube"
 	elif key == "R!chCali": csvname = "rich_cube"
