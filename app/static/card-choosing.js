@@ -78,6 +78,7 @@ function cmc(cardnum) {
 	if (cost == '') {return 1;}
 	if (cost.indexOf("//") != -1) { cost = cost.split(" // ")[0] ; }
 	if (cost.indexOf("}{") == -1) {
+		if (cost.length == 4) { return 6; } /* fixes Eldrazi issue */
 		if (parseInt(cost[1]) > 0) { return Math.min(6, parseInt(cost[1])); }
 		else { return 1 ; }
 	}
@@ -131,7 +132,7 @@ function writeCard(cardnum) {
 	var current = docspan.innerHTML;
 	var present = '<div class="bottom-card">'
 	var manacost = manaSpan(getCost(cardnum), "bot")
-	if (cost.indexOf("//") != -1 & !cardname.includes("Pathway")) {manacost = manacost[0]; }
+	if (getCost(cardnum).indexOf("//") != -1 & !cardname.includes("Pathway")) {manacost = manacost[0]; }
 	if (manacost.split(".png").length > 4) {
 		var bufferspace = ' style="padding:0px 0px 0px 3px"';}
 	else {var bufferspace = '';}
