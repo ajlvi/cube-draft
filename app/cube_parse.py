@@ -157,7 +157,7 @@ def makeCSV(lines, key='', table=False):
 	rows = [makeRow(i, sfall, adam) for i in lines[4:-1]]
 	skips = [r[5] for r in rows if r[0] == None]
 	rows = [r for r in rows if r[0] != None]
-	if csvname = "lsv_cube": srows = rarity_arrange(rows, sfall)
+	if csvname == "lsv_cube": srows = rarity_arrange(rows, sfall)
 	else: srows = arrange(rows)
 	new_cube_df = output_df(srows)
 	new_cube_df.to_csv(f"{csvname}.csv", header=True, index=False)
