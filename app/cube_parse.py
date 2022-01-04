@@ -88,7 +88,26 @@ def arrange(rows):
 	rows = sorted(rows, key=creat_sort) #sort by creatures/non
 	rows = sorted(rows, key=color_key) #sort by color identity
 	return rows
-	
+
+def rarity_arrange(rows, sc):
+	"""I'll be honest, we are grafting this onto some other species's exoskeleton.
+	   rows consists of [card, color, mana, creature, image, mtgo_id, back] lists.
+	   We'll use the mtgo_id to figure out rarity. Then sort by rarity first, then name.
+	   Then we cover our tracks."""
+	for i in range(len(rows)):
+		mtgo = rows[i][5]
+		sfall = sc[(sc["mtgo_id"] == mtgo) | (sc["mtgo_foil_id"] == mtgo)]
+		assert len(sfall) == 1 #we cleared problems already but let's just be safe
+		rows[i] = rows[i] + (sfall.iloc[0].rarity,)
+	power_nine = ["Black Lotus", "Mox Pearl", "Mox Sapphire", "Mox Jet", "Mox Ruby", "Mox Emerald", "Ancestral Recall", "Time Walk", "Timetwister"]
+	sorted_rarities = ["b", "s", "m", "r", "u", "c"]
+	rarity_key = lambda r: sorted_rarities.index(r[-1])
+	power_key = lambda r: power_nine.index(r[0])
+	rows = sorted(rows, key = itemgetter(0)) #sort by name first
+	rows = sorted(rows, key = rarity_key) #then by rarity
+	rows[:9] = sorted(rows[:9], key = power_key) #fix the power nine
+	return [r[:-1] for r in rows]
+
 def makeTestTable(rows):
 	f = open("check-table.html", 'w')
 	f.write("<html><head><title>Test table</title></head><body><table>\n")
@@ -138,7 +157,8 @@ def makeCSV(lines, key='', table=False):
 	rows = [makeRow(i, sfall, adam) for i in lines[4:-1]]
 	skips = [r[5] for r in rows if r[0] == None]
 	rows = [r for r in rows if r[0] != None]
-	srows = arrange(rows)
+	if csvname = "lsv_cube": srows = rarity_arrange(rows, sfall)
+	else: srows = arrange(rows)
 	new_cube_df = output_df(srows)
 	new_cube_df.to_csv(f"{csvname}.csv", header=True, index=False)
 	s3_client.upload_file(f"{csvname}.csv", "cube-draft-csvs", f"{csvname}.csv")
