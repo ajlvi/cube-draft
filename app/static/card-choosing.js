@@ -3,7 +3,9 @@ var deck = [] ;
 var costdict = {"W/U": "azorius", "U/B": "dimir", "B/R": "rakdos", "R/G": "gruul", "G/W": "selesnya", "W/B": "orzhov", "B/G": "golgari", "G/U": "simic", "U/R": "izzet", "R/W": "boros", "W/P": "phw", "U/P": "phu", "B/P": "phb", "R/P": "phr", "G/P": "phg", "2/W": "2W", "2/U": "2U", "2/B": "2B", "2/R": "2R", "2/G": "2G"};
 
 function getCost(cardnum) {
-	return JSON.parse(dataDump["chosen_df"])["cost"][cardnum];
+	var dfCost = JSON.parse(dataDump["chosen_df"])["cost"][cardnum];
+	if (!dfCost) { return ""; }
+	else { return dfCost; }
 }
 
 function getName(cardnum) {
