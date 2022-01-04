@@ -159,6 +159,7 @@ function writeCMCs() {
 		writeCard(deck[k]);
 	}
 	deckCardTypes();
+	grayDeck();
 }
 
 function deckCardTypes() {
@@ -178,6 +179,22 @@ function deckCardTypes() {
 	outstring += 'lands <span class="card-quantity">' + lands + '</span>';
 	countspan = document.getElementById('card-counting');
 	countspan.innerHTML = outstring;
+}
+
+function grayDeck() {
+	for (cd = 0; cd < dataDump["chosen_cards"].length; cd++) {
+		picked_card = dataDump["chosen_cards"][cd];
+		packno = 1 + Math.floor( (cd+1) / dataDump["cards_per_pack"] )
+		pickno = (cd+1) % dataDump["cards_per_pack"]
+		if(pickno == 0) { pickno = dataDump["cards_per_pack"] }
+		divname = "#pick-" + packno + "-" + pickno ;
+		if (deck.includes(picked_card)) {
+			$(divname).find(".tooltip").css("color", "BBB")
+		}
+		else {
+			$(divname).find(".tooltip").css("color", "")
+		}
+	}
 }
 
 /* these functions were used for the stream draft overlay and are not used presently. 
