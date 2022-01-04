@@ -66,9 +66,8 @@ function updatePicks() {
 		if (thispick < picks - tossed) {thispick++;}
 		else {thispick = 1; thispack++;}
 	}
-	addSideOverlays();
+	addSideOverlays(); grayDeck();
 };
-
 
 function setTimer(time) {
 	var d = new Date();
