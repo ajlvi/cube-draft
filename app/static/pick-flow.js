@@ -42,8 +42,8 @@ function midTableMessage(choice) {
 	else if (choice == 1) { return '<tr class="fulltr"><td class="fulltd">Waiting for players to join the draft.</tr>' ;}
 	else if (choice == 2) {
 		var outstring = '<tr class="fulltr"><td class="fulltd final-cell">' ;
-		outstring = outstring + "The draft has ended. Use the following button to export your pool as a Magic Online .dek file.";
-		outstring = outstring + "<br>If you have cards in the bottom panel, the rest of your pool will be put in the sideboard.";
+		outstring = outstring + "The draft has ended. Use the button below to export your pool as a Magic Online .dek file.";
+		outstring = outstring + "<br>If you have cards in the bottom panel, that's your deck; the rest of your pool will be put in the sideboard.";
 		outstring = outstring + "<br>If the bottom panel is empty, all of your cards will appear in the main deck."
 		outstring = outstring + "<br><br><button class='modobutton' onClick='javascript:MODOExport()'>export</button>"
 		if (dataDump["cards_per_pack"] <= 15) {
