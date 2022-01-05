@@ -102,9 +102,7 @@ function makeJSPick(cardnum, packno, pickno) {
 	var spans = $(pickdiv).children() ;
 	var i = 0 ;
 	while (!$(spans[i]).hasClass("cardname")) {
-		tot = tot - $(spans[i]).width() ; 
-		if ($(spans[i]).hasClass("slashspan")) { tot = tot - 6 ; }
-		if ($(spans[i]).hasClass("arrows")) { tot = tot - 6 ; }
+		tot = tot - $(spans[i]).innerWidth() ;  //22.01.05 this now accounts for padding
 		i ++; }
 	if ( tot < 170 ) { $(spans[i]).css("max-width", tot) ;}
 }
