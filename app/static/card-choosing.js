@@ -104,7 +104,8 @@ function makeJSPick(cardnum, packno, pickno) {
 	while (!$(spans[i]).hasClass("cardname")) {
 		tot = tot - $(spans[i]).innerWidth() ;  //22.01.05 this now accounts for padding
 		i ++; }
-	if ( tot < 170 ) { $(spans[i]).css("max-width", tot) ;}
+	var secretPadding = $(spans[i]).innerWidth() - $(spans[i]).width();
+	if ( tot < 170 ) { $(spans[i]).css("max-width", tot-secretPadding()) ;}
 }
 	
 //functions below have to do with moving the cards to and from the deck 
