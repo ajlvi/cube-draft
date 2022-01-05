@@ -183,7 +183,7 @@ function deckCardTypes() {
 function grayDeck() {
 	for (cd = 0; cd < dataDump["chosen_cards"].length; cd++) {
 		picked_card = dataDump["chosen_cards"][cd];
-		packno = 1 + Math.floor( (cd+1) / dataDump["cards_per_pack"] )
+		packno = 1 + Math.floor( cd / dataDump["cards_per_pack"] )
 		pickno = (cd+1) % dataDump["cards_per_pack"]
 		if(pickno == 0) { pickno = dataDump["cards_per_pack"] }
 		divname = "#pick-" + packno + "-" + pickno ;
