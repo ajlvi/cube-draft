@@ -9,7 +9,7 @@ function validateForm() {
   var playernum = document.forms["createdraft"]["players"].value;
   var packnum = document.forms["createdraft"]["packs"].value;
   var cardnum = document.forms["createdraft"]["cards"].value;
-  if (isNaN(playernum) || playernum < 2 || playernum > 450) {
+  if (isNaN(playernum) || playernum < 2 || playernum > 16) {
 	alertmsg += 'Please enter a valid number of players (at least two).';
 	oops = true;
 	}
@@ -21,7 +21,8 @@ function validateForm() {
 	alertmsg += ' Acceptable cards per pack are between 2-15 or 90.';
 	oops = true;
 	}
-  if (playernum*packnum*cardnum > 480) {
+  /* for testing LSV's draft I'm going to allow 540, but this should be reworked */
+  if (playernum*packnum*cardnum > 540) {
      alertmsg += ' Your draft requires too many total cards.';
 	 oops = true;
   }
