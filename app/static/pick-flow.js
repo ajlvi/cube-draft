@@ -191,8 +191,11 @@ function initializePack() {
 
 //a function for actually making a pick -- sends player name, draft id, pick number
 function makePick(playername, dnum, pnum, cogwork='no') {
-		clearInterval(timer);
-		$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum, isCogwork: cogwork}, function(response) {
+	clearInterval(timer);
+	$.get('/makepick', {player : playername, draftid: dnum, pickid: pnum, isCogwork: cogwork}, function(response) {
+		if (typeof(response) == 'string') {
+			window.location.replace(response);
+		}
 		reservedid = -1;
 		dataDump = response;
 		updatePicks(); //update the list of existing picks
@@ -210,8 +213,8 @@ function makePick(playername, dnum, pnum, cogwork='no') {
 			flowBar(); //we got some data back so we'll update what we know
 			populateTable(response['current_pack'],response['current_df']);
 			setTimer(response['time_remaining']);
-			} 
-		});	
+		} 
+	});	
 };
 
 function packAndPickNos() {
