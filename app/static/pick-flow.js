@@ -13,7 +13,7 @@ function ping() {
 		}
 		dataDump = response;
 		if (!vertbardone) {
-			var tossed = dataDump['thrown_picks'] ;
+			var tossed = dataDump['thrown_picks'] ; //for ada-style drafts with burned cards
 			vertBar(dataDump['total_packs'], dataDump['cards_per_pack'] - tossed);
 		}
 		updatePicks(); flowBar() //update the list of existing picks
