@@ -23,6 +23,7 @@ function isLand(cardnum) {
 /* note this either returns a single string or a list for split cards.*/
 function manaSpan(cost, loc, slashed=false) {
 	if (cost == "") { return "<span class='mana-" + loc + "'></span>" ; }
+	else if (cost == null) { return "<span class='mana-" + loc + "'></span>" ; }
 	else if (cost.indexOf("//") == -1) {
 		splitcost = cost.slice(1, cost.length-1).split("}{")
 		if (slashed) { var slash = "-slashed" ; } else { var slash = '' ; }

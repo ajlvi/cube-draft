@@ -296,7 +296,7 @@ def MTGOidfy(row, seen):
 	raise ValueError("MTGO ID weirdness")
 	
 def findManaCost(row):
-	if row.layout == "transform": return eval(row.card_faces)[0]["mana_cost"]
+	if row.layout in ["transform", "modal_dfc"]: return eval(row.card_faces)[0]["mana_cost"]
 	else: return row.mana_cost
 
 def endPackNumber(draf):
